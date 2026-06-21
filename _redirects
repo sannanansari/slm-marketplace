@@ -1,1 +1,14 @@
+# Cloudflare Pages _redirects
+# 
+# IMPORTANT — CF Pages behaviour:
+#   - CF automatically serves explore.html when you visit /explore
+#     (it strips .html and serves the file natively — NO rule needed)
+#   - So we do NOT need 200 rewrites for clean URLs — CF handles this
+#   - 404 status is NOT allowed in _redirects (only 200/301/302/303/307/308)
+#   - Wildcard /* → /index.html 200 causes infinite loop (CF strips .html internally)
+#
+# SOLUTION: Remove all the clean-URL rewrites (CF does them automatically)
+# and remove the catch-all (use 404.html via CF Pages built-in mechanism instead)
 
+# Only keep explicit redirects that CF does NOT handle automatically
+# (none needed for this site — CF Pages handles .html stripping natively)
