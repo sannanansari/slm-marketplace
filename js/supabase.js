@@ -22,40 +22,60 @@
 (function () {
   'use strict';
 
-  let _client = null;
+  let client = null;
 
   function getConfig() {
     const cfg = window.__SLM_CONFIG;
-    if (!cfg || !cfg.url || cfg.url.includes('YOUR_PROJECT') ||
-        !cfg.key || cfg.key.includes('YOUR_ANON')) {
-      return null;   // not configured — fall back to mock data
+
+    if (!cfg) {
+      console.error('Supabase config not found');
+      return null;
     }
+
+    if (!cfg.supabaseUrl || !cfg.supabaseAnonKey) {
+      console.error('Supabase config incomplete');
+      return null;
+    }
+
     return cfg;
   }
 
   function initSupabase() {
-    if (_client) return _client;
+    if (client) {
+      return client;
+    }
+
     const cfg = getConfig();
-    if (!cfg) return null;
-    if (typeof supabase === 'undefined') {
+
+    if (!cfg) {
       return null;
     }
-    _client = supabase.createClient(cfg.url, cfg.key, {
-      auth: {
-        autoRefreshToken: true,
-        persistSession: true,
-        detectSessionInUrl: true,
-      },
-    });
-    return _client;
+
+    if (typeof supabase === 'undefined') {
+      console.error('Supabase SDK not loaded');
+      return null;
+    }
+
+    client = supabase.createClient(
+      cfg.supabaseUrl,
+      cfg.supabaseAnonKey,
+      {
+        auth: {
+          autoRefreshToken: true,
+          persistSession: true,
+          detectSessionInUrl: true
+        }
+      }
+    );
+
+    return client;
   }
 
   function getSupabaseClient() {
-    return _client || initSupabase();
+    return client || initSupabase();
   }
 
-  // Expose to global scope (needed by other scripts on same page)
-  window.initSupabase      = initSupabase;
+  window.initSupabase = initSupabase;
   window.getSupabaseClient = getSupabaseClient;
 
   initSupabase();
