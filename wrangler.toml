@@ -1,0 +1,6 @@
+name = "slm-marketplace"
+main = "_worker.js"
+compatibility_date = "2026-06-21"
+
+[assets]
+directory = "."
