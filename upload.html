@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Upload Model — SLM Marketplace</title>
+  <link rel="canonical" href="https://slm-market.sannan.app/upload">
+  <meta property="og:url" content="https://slm-market.sannan.app/upload">
+  <meta property="og:image" content="https://slm-market.sannan.app/assets/og-image.svg">
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+  <link rel="apple-touch-icon" href="assets/favicon.svg">
+  <meta name="description" content="Share your Small Language Model with the community. Upload to SLM Marketplace and get discovered by industry professionals.">
+  <meta name="theme-color" content="#F97316">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Upload Model — SLM Marketplace">
+  <meta property="og:description" content="Discover and share Small Language Models built by the community.">
+  <meta property="og:site_name" content="SLM Marketplace">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Upload Model — SLM Marketplace">
+  <meta name="twitter:description" content="Discover and share Small Language Models built by the community.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <!-- Async font load: media=print trick avoids render-blocking -->
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap">
+  <link rel="stylesheet" media="print" onload="this.media='all'" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap">
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"></noscript>
+  <link rel="stylesheet" href="css/global.css">
+  <link rel="stylesheet" href="css/upload.css">
+</head>
+<body>
+<div class="page-wrapper">
+
+  <main class="main-content" id="main-content">
+    <div class="upload-wrap">
+      <h1 class="upload-title">Upload Your Model</h1>
+      <p class="upload-subtitle">Share your SLM with the community.</p>
+
+      <div class="upload-layout">
+
+        <!-- ============== FORM ============== -->
+        <div class="upload-form" role="main">
+
+          <!-- Row 1: Name + Category -->
+          <div class="form-row-2">
+            <div class="form-group">
+              <label class="form-label form-label-required" for="model-name">Model Name</label>
+              <input
+                type="text"
+                id="model-name"
+                class="form-input"
+                placeholder="e.g. Legal-SLM-3B"
+                maxlength="80"
+                autocomplete="off"
+                aria-required="true"
+              >
+            </div>
+            <div class="form-group">
+              <label class="form-label form-label-required" for="category">Category</label>
+              <select id="category" class="form-select" aria-required="true">
+                <option value="" disabled selected>Select category</option>
+                <option value="legal">Legal</option>
+                <option value="healthcare">Healthcare</option>
+                <option value="coding">Coding</option>
+                <option value="finance">Finance</option>
+                <option value="general">General</option>
+                <option value="education">Education</option>
+                <option value="multilingual">Multilingual</option>
+                <option value="security">Security</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Short Description -->
+          <div class="form-group">
+            <label class="form-label form-label-required" for="short-desc">Short Description</label>
+            <textarea
+              id="short-desc"
+              class="form-textarea"
+              placeholder="A short summary of your model (max 150 characters)…"
+              maxlength="160"
+              rows="3"
+              aria-required="true"
+            ></textarea>
+            <div class="char-counter" id="desc-counter">0/150</div>
+          </div>
+
+          <!-- GitHub URL -->
+          <div class="form-group">
+            <label class="form-label" for="github-url">GitHub Repository URL</label>
+            <input
+              type="url"
+              id="github-url"
+              class="form-input"
+              placeholder="https://github.com/username/repo"
+              autocomplete="off"
+            >
+          </div>
+
+          <!-- Tags -->
+          <div class="form-group">
+            <label class="form-label" for="tag-input">Tags</label>
+            <div class="tags-input-wrap" id="tags-container" onclick="document.getElementById('tag-input').focus()">
+              <input
+                type="text"
+                id="tag-input"
+                class="tags-input-field"
+                placeholder="Add tags and press Enter…"
+                autocomplete="off"
+                aria-label="Add a tag"
+              >
+            </div>
+            <div id="suggested-tags" class="suggested-tags" aria-label="Suggested tags">
+              <!-- Populated by upload.js when category is selected -->
+              <span class="suggested-tag-hint">Select a category to see tag suggestions</span>
+            </div>
+          </div>
+
+          <!-- Actions -->
+          <div class="form-actions">
+            <button type="button" id="continue-btn" class="btn btn-primary btn-lg">Continue</button>
+            <button type="button" id="draft-btn"    class="btn btn-secondary btn-lg">Save Draft</button>
+          </div>
+        </div>
+
+        <!-- ============== GUIDELINES ============== -->
+        <aside class="guidelines-box" aria-label="Upload guidelines">
+          <div class="guidelines-title">
+            <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="color:var(--color-primary)">
+              <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+            </svg>
+            Guidelines
+          </div>
+          <div class="guidelines-list">
+            <div class="guideline-item">
+              <div class="guideline-dot"></div>
+              <span>Ensure your model is open-source and complies with licenses.</span>
+            </div>
+            <div class="guideline-item">
+              <div class="guideline-dot"></div>
+              <span>Provide accurate benchmarks and descriptions.</span>
+            </div>
+            <div class="guideline-item">
+              <div class="guideline-dot"></div>
+              <span>Add clear documentation and usage examples.</span>
+            </div>
+            <div class="guideline-item">
+              <div class="guideline-dot"></div>
+              <span>No harmful or illegal content.</span>
+            </div>
+          </div>
+          <a href="#" class="guidelines-link">
+            View full guidelines
+            <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+              <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
+            </svg>
+          </a>
+        </aside>
+
+      </div>
+    </div>
+  </main>
+
+</div>
+
+<script src="config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.4/dist/umd/supabase.min.js" integrity="sha384-YEteyAKbjYSLDrpbBY0aFgK1CrQHo0Erb5XT/MU5FYvkb3SmPSZSisW7LOYTKvTx" crossorigin="anonymous"></script>
+<script src="js/supabase.js" defer></script>
+<script src="js/global.js" defer></script>
+<script src="js/upload.js" defer></script>
+</body>
+</html>

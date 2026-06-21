@@ -1,0 +1,361 @@
+/* ============================================================
+   MODEL DETAIL PAGE (model.html)
+   ============================================================ */
+
+.model-detail-wrap {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 var(--space-6) var(--space-12);
+}
+
+/* ============================================================
+   MODEL HERO
+   ============================================================ */
+.model-hero {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-5);
+  padding: var(--space-6) 0 var(--space-5);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.model-hero-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.model-hero-name {
+  font-size: 26px;
+  font-weight: 800;
+  color: var(--color-text-primary);
+  letter-spacing: -0.5px;
+  margin-bottom: var(--space-2);
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+}
+
+.model-hero-username {
+  font-size: 14px;
+  color: var(--color-text-secondary);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-bottom: var(--space-3);
+}
+
+.model-hero-username a {
+  color: var(--color-text-secondary);
+  font-weight: 500;
+  transition: color var(--transition-fast);
+}
+
+.model-hero-username a:hover { color: var(--color-primary); }
+
+.model-hero-desc {
+  font-size: 14px;
+  color: var(--color-text-secondary);
+  line-height: 1.6;
+  margin-bottom: var(--space-4);
+  max-width: 640px;
+}
+
+/* Stats row */
+.model-stats-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-6);
+  flex-wrap: wrap;
+  margin-bottom: var(--space-5);
+}
+
+.model-stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.model-stat-value {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--color-text-primary);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.model-stat-value .star-filled {
+  font-size: 14px;
+}
+
+.model-stat-label {
+  font-size: 11px;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+/* Action buttons */
+.model-actions {
+  display: flex;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+}
+
+/* Bookmark top-right */
+.model-hero-bookmark {
+  flex-shrink: 0;
+}
+
+/* ============================================================
+   TABS SECTION
+   ============================================================ */
+.model-tabs-wrap {
+  margin-top: var(--space-5);
+}
+
+/* ============================================================
+   OVERVIEW TAB — 3 columns
+   ============================================================ */
+.overview-grid {
+  display: grid;
+  grid-template-columns: 2fr 1.5fr 1fr;
+  gap: var(--space-6);
+  padding: var(--space-6) 0;
+}
+
+.overview-col-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--color-text-primary);
+  margin-bottom: var(--space-3);
+}
+
+.model-full-desc {
+  font-size: 14px;
+  color: var(--color-text-secondary);
+  line-height: 1.7;
+  margin-bottom: var(--space-4);
+}
+
+.model-tags-row {
+  display: flex;
+  gap: var(--space-1);
+  flex-wrap: wrap;
+  margin-top: var(--space-2);
+}
+
+/* Benchmarks mini-table in overview */
+.bench-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.bench-table tr {
+  border-bottom: 1px solid var(--color-border-light);
+}
+
+.bench-table tr:last-child {
+  border-bottom: none;
+}
+
+.bench-table td {
+  padding: var(--space-2) 0;
+  font-size: 13px;
+}
+
+.bench-table td:first-child {
+  color: var(--color-text-secondary);
+}
+
+.bench-table td:last-child {
+  text-align: right;
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+/* Links column */
+.links-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.link-item-label {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  color: var(--color-text-muted);
+  margin-bottom: 2px;
+}
+
+.link-item-value {
+  font-size: 13px;
+  color: var(--color-text-primary);
+  font-weight: 500;
+}
+
+.link-item-value a {
+  color: var(--color-primary);
+  font-size: 12px;
+}
+
+.link-item-value a:hover {
+  text-decoration: underline;
+}
+
+/* ============================================================
+   BENCHMARKS TAB
+   ============================================================ */
+.benchmarks-full {
+  padding: var(--space-6) 0;
+}
+
+.bench-full-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.bench-full-table th {
+  text-align: left;
+  padding: var(--space-3) var(--space-4);
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--color-text-secondary);
+  background: var(--color-bg-secondary);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.bench-full-table td {
+  padding: var(--space-3) var(--space-4);
+  border-bottom: 1px solid var(--color-border-light);
+  color: var(--color-text-primary);
+}
+
+.bench-full-table tr:last-child td { border-bottom: none; }
+
+.bench-full-table .metric-value {
+  font-weight: 700;
+  color: #16A34A;
+}
+
+/* ============================================================
+   DETAILS TAB
+   ============================================================ */
+.details-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-4);
+  padding: var(--space-6) 0;
+}
+
+.detail-card {
+  background: var(--color-bg-secondary);
+  border-radius: var(--radius-lg);
+  padding: var(--space-4);
+}
+
+.detail-card-label {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--color-text-muted);
+  margin-bottom: var(--space-1);
+}
+
+.detail-card-value {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--color-text-primary);
+}
+
+.detail-card-sub {
+  font-size: 12px;
+  color: var(--color-text-secondary);
+  margin-top: 2px;
+}
+
+/* ============================================================
+   REVIEWS TAB
+   ============================================================ */
+.reviews-section {
+  padding: var(--space-6) 0;
+}
+
+.review-item {
+  padding: var(--space-4) 0;
+  border-bottom: 1px solid var(--color-border-light);
+}
+
+.review-item:last-child { border-bottom: none; }
+
+.review-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-2);
+}
+
+.review-author {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.review-avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: var(--radius-full);
+  background: var(--color-bg-tertiary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--color-text-secondary);
+}
+
+.review-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.review-date {
+  font-size: 12px;
+  color: var(--color-text-muted);
+}
+
+.review-text {
+  font-size: 13px;
+  color: var(--color-text-secondary);
+  line-height: 1.6;
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width: 900px) {
+  .overview-grid {
+    grid-template-columns: 1fr;
+  }
+  .details-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .model-detail-wrap { padding: 0 var(--space-4) var(--space-8); }
+  .model-hero { flex-direction: column; }
+  .model-hero-name { font-size: 20px; }
+  .model-stats-row { gap: var(--space-4); }
+  .model-actions { flex-direction: column; }
+  .details-grid { grid-template-columns: 1fr; }
+}

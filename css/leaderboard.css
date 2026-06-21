@@ -1,0 +1,217 @@
+/* ============================================================
+   LEADERBOARD PAGE (leaderboard.html)
+   ============================================================ */
+
+.leaderboard-wrap {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: var(--space-8) var(--space-6) var(--space-12);
+}
+
+/* Page header */
+.leaderboard-page-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: var(--space-6);
+  flex-wrap: wrap;
+  gap: var(--space-4);
+}
+
+.leaderboard-title {
+  font-size: 26px;
+  font-weight: 800;
+  color: var(--color-text-primary);
+  letter-spacing: -0.4px;
+  margin-bottom: var(--space-1);
+}
+
+.leaderboard-subtitle {
+  font-size: 14px;
+  color: var(--color-text-secondary);
+}
+
+.time-filter-select {
+  height: 36px;
+  padding: 0 var(--space-8) 0 var(--space-3);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--color-text-primary);
+  background: white;
+  cursor: pointer;
+  outline: none;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%236B7280' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+  min-width: 130px;
+}
+
+.time-filter-select:focus {
+  border-color: var(--color-primary);
+}
+
+/* ============================================================
+   LEADERBOARD TABLE
+   ============================================================ */
+.lb-table-wrap {
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  margin-top: var(--space-4);
+}
+
+.lb-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.lb-table thead th {
+  padding: var(--space-3) var(--space-4);
+  text-align: left;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  color: var(--color-text-secondary);
+  background: var(--color-bg-secondary);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.lb-table tbody tr {
+  border-bottom: 1px solid var(--color-border-light);
+  transition: background var(--transition-fast);
+  cursor: pointer;
+}
+
+.lb-table tbody tr:last-child {
+  border-bottom: none;
+}
+
+.lb-table tbody tr:hover {
+  background: var(--color-bg-secondary);
+}
+
+.lb-table td {
+  padding: var(--space-4);
+  font-size: 13px;
+  color: var(--color-text-primary);
+  vertical-align: middle;
+}
+
+/* Rank column */
+.rank-cell {
+  width: 60px;
+  text-align: center;
+  font-weight: 700;
+}
+
+.medal {
+  font-size: 18px;
+  line-height: 1;
+}
+
+.rank-num {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-text-secondary);
+}
+
+/* Engineer cell */
+.lb-engineer-cell {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.lb-avatar {
+  width: 34px;
+  height: 34px;
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 700;
+  color: white;
+  flex-shrink: 0;
+}
+
+.lb-name {
+  font-weight: 600;
+  font-size: 13px;
+}
+
+.lb-username {
+  font-size: 11px;
+  color: var(--color-text-muted);
+}
+
+/* Number cells */
+.lb-number {
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.lb-number-sub {
+  font-size: 11px;
+  color: var(--color-text-muted);
+  font-weight: 400;
+}
+
+/* Score + progress bar */
+.score-cell {
+  min-width: 140px;
+}
+
+.score-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.score-value {
+  font-weight: 700;
+  font-size: 13px;
+  color: var(--color-text-primary);
+  min-width: 40px;
+  text-align: right;
+}
+
+.score-bar-wrap {
+  flex: 1;
+  height: 6px;
+  background: var(--color-bg-tertiary);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+}
+
+.score-bar {
+  height: 100%;
+  background: var(--color-primary);
+  border-radius: var(--radius-full);
+  transition: width 0.5s ease;
+}
+
+/* View full link row */
+.lb-footer {
+  padding: var(--space-4);
+  text-align: center;
+  border-top: 1px solid var(--color-border-light);
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width: 768px) {
+  .leaderboard-wrap { padding: var(--space-6) var(--space-4) var(--space-8); }
+  .lb-table td, .lb-table th { padding: var(--space-3); }
+  .score-cell { display: none; }
+}
+
+@media (max-width: 480px) {
+  .lb-table .lb-number-col { display: none; }
+}

@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Leaderboard — SLM Marketplace</title>
+  <link rel="canonical" href="https://slm-market.sannan.app/leaderboard">
+  <meta property="og:url" content="https://slm-market.sannan.app/leaderboard">
+  <meta property="og:image" content="https://slm-market.sannan.app/assets/og-image.svg">
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+  <link rel="apple-touch-icon" href="assets/favicon.svg">
+  <meta name="description" content="Top engineers and most downloaded Small Language Models ranked by downloads, ratings, and community score.">
+  <meta name="theme-color" content="#F97316">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Leaderboard — SLM Marketplace">
+  <meta property="og:description" content="Discover and share Small Language Models built by the community.">
+  <meta property="og:site_name" content="SLM Marketplace">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Leaderboard — SLM Marketplace">
+  <meta name="twitter:description" content="Discover and share Small Language Models built by the community.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <!-- Async font load: media=print trick avoids render-blocking -->
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap">
+  <link rel="stylesheet" media="print" onload="this.media='all'" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap">
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"></noscript>
+  <link rel="stylesheet" href="css/global.css">
+  <link rel="stylesheet" href="css/leaderboard.css">
+</head>
+<body>
+<div class="page-wrapper">
+
+  <main class="main-content" id="main-content">
+    <div class="leaderboard-wrap">
+
+      <!-- Page Header -->
+      <div class="leaderboard-page-header">
+        <div>
+          <h1 class="leaderboard-title">Leaderboard</h1>
+          <p class="leaderboard-subtitle">Top contributors building and sharing the best SLMs.</p>
+        </div>
+        <select class="time-filter-select" id="time-filter" aria-label="Filter by time period">
+          <option value="month">This Month</option>
+          <option value="week">This Week</option>
+          <option value="all">All Time</option>
+        </select>
+      </div>
+
+      <!-- Tabs -->
+      <div class="tabs-bar" id="lb-tabs" role="tablist">
+        <button class="tab-btn active" data-tab="engineers" role="tab" aria-selected="true">Top Engineers</button>
+        <button class="tab-btn"         data-tab="models"    role="tab" aria-selected="false">Top Models</button>
+        <button class="tab-btn"         data-tab="trending"  role="tab" aria-selected="false">Trending Models</button>
+      </div>
+
+      <!-- Table container -->
+      <div class="lb-table-wrap">
+        <table class="lb-table" aria-label="Leaderboard">
+          <thead id="lb-thead">
+            <tr>
+              <th>Rank</th>
+              <th>Engineer</th>
+              <th class="lb-number-col">Models</th>
+              <th class="lb-number-col">Downloads</th>
+              <th class="lb-number-col">Avg. Rating</th>
+              <th class="score-cell">Score</th>
+            </tr>
+          </thead>
+          <tbody id="lb-tbody">
+            <!-- Injected by leaderboard.js -->
+          </tbody>
+        </table>
+        <div class="lb-footer">
+          <a href="explore.html" class="view-all-link">
+            View full leaderboard →
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+</div>
+
+<script src="config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.4/dist/umd/supabase.min.js" integrity="sha384-YEteyAKbjYSLDrpbBY0aFgK1CrQHo0Erb5XT/MU5FYvkb3SmPSZSisW7LOYTKvTx" crossorigin="anonymous"></script>
+<script src="js/supabase.js" defer></script>
+<script src="js/global.js" defer></script>
+<script src="js/leaderboard.js" defer></script>
+</body>
+</html>

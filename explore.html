@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Explore Models — SLM Marketplace</title>
+  <link rel="canonical" href="https://slm-market.sannan.app/explore">
+  <meta property="og:url" content="https://slm-market.sannan.app/explore">
+  <meta property="og:image" content="https://slm-market.sannan.app/assets/og-image.svg">
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+  <link rel="apple-touch-icon" href="assets/favicon.svg">
+  <meta name="description" content="Browse and filter Small Language Models by category, rating, and date. Find the perfect SLM for legal, healthcare, coding, finance and more.">
+  <meta name="theme-color" content="#F97316">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Explore Models — SLM Marketplace">
+  <meta property="og:description" content="Discover and share Small Language Models built by the community.">
+  <meta property="og:site_name" content="SLM Marketplace">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Explore Models — SLM Marketplace">
+  <meta name="twitter:description" content="Discover and share Small Language Models built by the community.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <!-- Async font load: media=print trick avoids render-blocking -->
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap">
+  <link rel="stylesheet" media="print" onload="this.media='all'" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap">
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"></noscript>
+  <link rel="stylesheet" href="css/global.css">
+  <link rel="stylesheet" href="css/explore.css">
+</head>
+<body>
+<div class="page-wrapper">
+
+  <main class="main-content" id="main-content">
+    <div class="explore-layout">
+
+      <!-- ===================== SIDEBAR FILTERS ===================== -->
+      <aside class="filters-sidebar" aria-label="Search filters">
+        <div class="filters-header">
+          <span class="filters-title">Filters</span>
+          <button class="filters-clear" id="clear-filters">Clear all</button>
+        </div>
+
+        <!-- Category -->
+        <div class="filter-group">
+          <div class="filter-group-title">Category</div>
+          <div class="check-item">
+            <input type="checkbox" id="cat-all" class="cat-checkbox" data-cat="all" checked>
+            <label for="cat-all">All Categories <span class="check-count">245</span></label>
+          </div>
+          <div class="check-item">
+            <input type="checkbox" id="cat-healthcare" class="cat-checkbox" data-cat="healthcare">
+            <label for="cat-healthcare">Healthcare <span class="check-count">48</span></label>
+          </div>
+          <div class="check-item">
+            <input type="checkbox" id="cat-legal" class="cat-checkbox" data-cat="legal">
+            <label for="cat-legal">Legal <span class="check-count">39</span></label>
+          </div>
+          <div class="check-item">
+            <input type="checkbox" id="cat-coding" class="cat-checkbox" data-cat="coding">
+            <label for="cat-coding">Coding <span class="check-count">67</span></label>
+          </div>
+          <div class="check-item">
+            <input type="checkbox" id="cat-finance" class="cat-checkbox" data-cat="finance">
+            <label for="cat-finance">Finance <span class="check-count">33</span></label>
+          </div>
+          <div class="check-item">
+            <input type="checkbox" id="cat-general" class="cat-checkbox" data-cat="general">
+            <label for="cat-general">General <span class="check-count">55</span></label>
+          </div>
+          <div class="check-item">
+            <input type="checkbox" id="cat-education" class="cat-checkbox" data-cat="education">
+            <label for="cat-education">Education <span class="check-count">27</span></label>
+          </div>
+          <div class="check-item">
+            <input type="checkbox" id="cat-multilingual" class="cat-checkbox" data-cat="multilingual">
+            <label for="cat-multilingual">Multilingual <span class="check-count">13</span></label>
+          </div>
+          <div class="check-item">
+            <input type="checkbox" id="cat-security" class="cat-checkbox" data-cat="security">
+            <label for="cat-security">Security <span class="check-count">18</span></label>
+          </div>
+        </div>
+
+        <!-- Rating -->
+        <div class="filter-group">
+          <div class="filter-group-title">Rating</div>
+          <label class="rating-row">
+            <input type="radio" name="rating" class="rating-radio" value="5">
+            <span class="stars-display">
+              <svg class="star-filled" width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              <svg class="star-filled" width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              <svg class="star-filled" width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              <svg class="star-filled" width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              <svg class="star-filled" width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            </span>
+            <span class="rating-row-label">&amp; up</span>
+          </label>
+          <label class="rating-row">
+            <input type="radio" name="rating" class="rating-radio" value="4">
+            <span class="stars-display">
+              <svg class="star-filled" width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              <svg class="star-filled" width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              <svg class="star-filled" width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              <svg class="star-filled" width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              <svg class="star-empty" width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            </span>
+            <span class="rating-row-label">&amp; up</span>
+          </label>
+          <label class="rating-row">
+            <input type="radio" name="rating" class="rating-radio" value="3">
+            <span class="stars-display">
+              <svg class="star-filled" width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              <svg class="star-filled" width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              <svg class="star-filled" width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              <svg class="star-empty" width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              <svg class="star-empty" width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            </span>
+            <span class="rating-row-label">&amp; up</span>
+          </label>
+          <label class="rating-row">
+            <input type="radio" name="rating" class="rating-radio" value="2">
+            <span class="stars-display">
+              <svg class="star-filled" width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              <svg class="star-filled" width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              <svg class="star-empty" width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              <svg class="star-empty" width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              <svg class="star-empty" width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            </span>
+            <span class="rating-row-label">&amp; up</span>
+          </label>
+          <label class="rating-row">
+            <input type="radio" name="rating" class="rating-radio" value="1">
+            <span class="stars-display">
+              <svg class="star-filled" width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              <svg class="star-empty" width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              <svg class="star-empty" width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              <svg class="star-empty" width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              <svg class="star-empty" width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            </span>
+            <span class="rating-row-label">&amp; up</span>
+          </label>
+        </div>
+
+        <!-- Date Uploaded -->
+        <div class="filter-group">
+          <div class="filter-group-title">Date Uploaded</div>
+          <div class="date-options">
+            <label class="check-item">
+              <input type="radio" name="date" class="date-radio" value="any" checked>
+              <label>Any Time</label>
+            </label>
+            <label class="check-item">
+              <input type="radio" name="date" class="date-radio" value="24h">
+              <label>Last 24 Hours</label>
+            </label>
+            <label class="check-item">
+              <input type="radio" name="date" class="date-radio" value="7d">
+              <label>Last 7 Days</label>
+            </label>
+            <label class="check-item">
+              <input type="radio" name="date" class="date-radio" value="30d">
+              <label>Last 30 Days</label>
+            </label>
+            <label class="check-item">
+              <input type="radio" name="date" class="date-radio" value="6m">
+              <label>Last 6 Months</label>
+            </label>
+          </div>
+        </div>
+      </aside>
+
+      <!-- ===================== RESULTS ===================== -->
+      <section aria-label="Model results">
+        <div class="results-header">
+          <span class="results-count" id="result-count">Loading…</span>
+          <div style="display:flex;align-items:center;gap:8px">
+            <span style="font-size:13px;color:var(--color-text-secondary)">Sort by</span>
+            <select class="sort-select" id="sort-select" aria-label="Sort results">
+              <option value="created_at:desc">Most Recent</option>
+              <option value="download_count:desc">Most Downloads</option>
+              <option value="rating:desc">Highest Rated</option>
+              <option value="view_count:desc">Most Viewed</option>
+              <option value="created_at:asc">Oldest First</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Cards -->
+        <div id="models-grid" role="list" aria-live="polite" aria-label="Model list">
+          <!-- Injected by explore.js -->
+        </div>
+
+        <!-- Pagination -->
+        <div id="pagination" class="pagination" role="navigation" aria-label="Results pagination">
+          <!-- Injected by explore.js -->
+        </div>
+      </section>
+    </div>
+  </main>
+
+</div>
+
+<script src="config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.4/dist/umd/supabase.min.js" integrity="sha384-YEteyAKbjYSLDrpbBY0aFgK1CrQHo0Erb5XT/MU5FYvkb3SmPSZSisW7LOYTKvTx" crossorigin="anonymous"></script>
+<script src="js/supabase.js" defer></script>
+<script src="js/global.js" defer></script>
+<script src="js/explore.js" defer></script>
+</body>
+</html>

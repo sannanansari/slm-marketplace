@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Model Detail — SLM Marketplace</title>
+  <link rel="canonical" href="https://slm-market.sannan.app/model">
+  <meta property="og:url" content="https://slm-market.sannan.app/model">
+  <meta property="og:image" content="https://slm-market.sannan.app/assets/og-image.svg">
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+  <link rel="apple-touch-icon" href="assets/favicon.svg">
+  <meta name="description" content="View benchmarks, download counts, reviews and full details for this Small Language Model on SLM Marketplace.">
+  <meta name="theme-color" content="#F97316">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Model Detail — SLM Marketplace">
+  <meta property="og:description" content="Discover and share Small Language Models built by the community.">
+  <meta property="og:site_name" content="SLM Marketplace">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Model Detail — SLM Marketplace">
+  <meta name="twitter:description" content="Discover and share Small Language Models built by the community.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <!-- Async font load: media=print trick avoids render-blocking -->
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap">
+  <link rel="stylesheet" media="print" onload="this.media='all'" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap">
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"></noscript>
+  <link rel="stylesheet" href="css/global.css">
+  <link rel="stylesheet" href="css/model.css">
+</head>
+<body>
+<div class="page-wrapper">
+
+  <main class="main-content" id="main-content">
+    <div class="model-detail-wrap">
+
+      <!-- Breadcrumb -->
+      <nav class="breadcrumb" id="breadcrumb" aria-label="Breadcrumb">
+        <!-- Injected by model.js -->
+      </nav>
+
+      <!-- Hero -->
+      <div class="model-hero" id="model-hero">
+        <!-- Injected by model.js -->
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="model-actions" id="model-actions" style="margin-top: 20px;">
+        <!-- Injected by model.js -->
+      </div>
+
+      <!-- Tabs -->
+      <div class="model-tabs-wrap">
+        <div class="tabs-bar" id="model-tabs" role="tablist">
+          <button class="tab-btn active" data-tab="overview"   role="tab" aria-selected="true">Overview</button>
+          <button class="tab-btn"         data-tab="benchmarks" role="tab" aria-selected="false">Benchmarks</button>
+          <button class="tab-btn"         data-tab="details"    role="tab" aria-selected="false">Details</button>
+          <button class="tab-btn"         data-tab="reviews"    role="tab" aria-selected="false">Reviews (128)</button>
+        </div>
+
+        <div id="tab-overview"    class="tab-panel active" role="tabpanel"><!-- overview --></div>
+        <div id="tab-benchmarks"  class="tab-panel"        role="tabpanel"><!-- benchmarks --></div>
+        <div id="tab-details"     class="tab-panel"        role="tabpanel"><!-- details --></div>
+        <div id="tab-reviews"     class="tab-panel"        role="tabpanel"><!-- reviews --></div>
+      </div>
+
+    </div>
+  </main>
+
+</div>
+
+<script src="config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.4/dist/umd/supabase.min.js" integrity="sha384-YEteyAKbjYSLDrpbBY0aFgK1CrQHo0Erb5XT/MU5FYvkb3SmPSZSisW7LOYTKvTx" crossorigin="anonymous"></script>
+<script src="js/supabase.js" defer></script>
+<script src="js/global.js" defer></script>
+<script src="js/model.js" defer></script>
+</body>
+</html>
