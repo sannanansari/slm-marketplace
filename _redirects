@@ -1,13 +1,1 @@
-# Cloudflare Pages _redirects
-# Clean URLs (no .html extension needed)
-/explore       /explore.html      200
-/leaderboard   /leaderboard.html  200
-/upload        /upload.html       200
-/auth          /auth.html         200
-/model         /model.html        200
-/profile       /profile.html      200
 
-# www → apex redirect (also set in CF dashboard)
-
-# Catch-all 404
-# /*  /404.html  301
