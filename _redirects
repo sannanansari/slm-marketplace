@@ -10,4 +10,4 @@
 # www → apex redirect (also set in CF dashboard)
 
 # Catch-all 404
-/*  /index.html  200
+# /*  /404.html  301
