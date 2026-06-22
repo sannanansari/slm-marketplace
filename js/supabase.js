@@ -1,82 +1,59 @@
 /**
- * supabase.js — Production-safe Supabase client.
+ * supabase.js
+ * Reads window.__SLM_CONFIG (injected by _worker.js at /config.js)
+ * and creates the Supabase client once, on demand.
  *
- * CREDENTIALS: Never hardcode keys here.
- * Set these as environment variables in your host:
- *   Vercel:  Settings → Environment Variables
- *   Netlify: Site settings → Environment variables
- *   CF Pages: Settings → Environment variables
+ * Load order in HTML (all defer):
+ *   1. config.js   — sets window.__SLM_CONFIG
+ *   2. supabase CDN — defines window.supabase
+ *   3. supabase.js — reads both, creates client
+ *   4. global.js, page.js — use getSupabaseClient()
  *
- * For local dev, create a .env file (never commit it):
- *   SUPABASE_URL=https://xxxx.supabase.co
- *   SUPABASE_ANON_KEY=eyJ...
- *
- * For Vanilla JS static sites (no build step), we use a
- * runtime config file (config.js) that IS gitignored:
- *   window.__SLM_CONFIG = { url: '...', key: '...' }
- *
- * config.js is loaded before this file in each HTML page.
- * config.example.js is committed as a safe template.
+ * All scripts are defer so they run in DOM order after parse.
+ * This file therefore always runs AFTER config.js and supabase CDN.
  */
 
 (function () {
   'use strict';
 
-  let client = null;
+  let _client = null;
 
   function getConfig() {
     const cfg = window.__SLM_CONFIG;
-
-    if (!cfg) {
-      console.error('Supabase config not found');
+    if (!cfg || !cfg.url || !cfg.key ||
+        cfg.url.includes('YOUR_PROJECT') || cfg.key.includes('YOUR_ANON') ||
+        cfg.url === '' || cfg.key === '') {
       return null;
     }
-
-    if (!cfg.supabaseUrl || !cfg.supabaseAnonKey) {
-      console.error('Supabase config incomplete');
-      return null;
-    }
-
     return cfg;
   }
 
   function initSupabase() {
-    if (client) {
-      return client;
-    }
-
+    if (_client) return _client;
+    if (typeof window.supabase === 'undefined') return null;
     const cfg = getConfig();
+    if (!cfg) return null;
 
-    if (!cfg) {
-      return null;
-    }
-
-    if (typeof supabase === 'undefined') {
-      console.error('Supabase SDK not loaded');
-      return null;
-    }
-
-    client = supabase.createClient(
-      cfg.supabaseUrl,
-      cfg.supabaseAnonKey,
-      {
-        auth: {
-          autoRefreshToken: true,
-          persistSession: true,
-          detectSessionInUrl: true
-        }
-      }
-    );
-
-    return client;
+    _client = window.supabase.createClient(cfg.url, cfg.key, {
+      auth: {
+        autoRefreshToken:  true,
+        persistSession:    true,
+        detectSessionInUrl: true,
+        storageKey:        'slm-auth',
+        flowType:          'pkce',        // required for OAuth on custom domains
+      },
+    });
+    return _client;
   }
 
   function getSupabaseClient() {
-    return client || initSupabase();
+    return _client || initSupabase();
   }
 
-  window.initSupabase = initSupabase;
+  window.initSupabase      = initSupabase;
   window.getSupabaseClient = getSupabaseClient;
 
+  // Init immediately — by the time this deferred script runs,
+  // config.js and supabase CDN (both earlier in <head>) are already done.
   initSupabase();
 })();

@@ -22,6 +22,7 @@ create table if not exists users (
   title text,
   bio text,
   location text,
+  avatar_url text,
   github_url text,
   join_date timestamptz default now(),
   is_verified boolean default false,
@@ -48,6 +49,7 @@ create table if not exists models (
   )),
   engineer_id uuid references users(id) on delete cascade,
   engineer_username text,                 -- denormalized for fast reads
+  avatar_url text,
   github_url text,
   tags text[] default '{}',
   accuracy numeric(5,2),
