@@ -163,4 +163,4 @@ function renderSkeletonRows(count) {
 }
 
 /* Boot */
-document.addEventListener('DOMContentLoaded', initHomePage);
+initHomePage();

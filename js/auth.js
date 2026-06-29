@@ -21,7 +21,7 @@ const SITE_URL = 'https://slm-market.sannan.app';
 /* ============================================================
    BOOT — runs first on every auth page load
    ============================================================ */
-document.addEventListener('DOMContentLoaded', async function () {
+(async function () {
   // STEP 1: Handle any OAuth / email callback first
   const handled = await handleAuthCallback();
   if (handled) return; // redirecting — don't render the form
@@ -39,7 +39,7 @@ document.addEventListener('DOMContentLoaded', async function () {
   if (mode === 'reset')  showResetPasswordForm();
 
   wireAuthForm();
-});
+})();
 
 /* ============================================================
    OAUTH + EMAIL CALLBACK HANDLER

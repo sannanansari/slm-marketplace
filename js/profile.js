@@ -462,4 +462,4 @@ function showProfileNotFound() {
 }
 
 /* Boot */
-document.addEventListener('DOMContentLoaded', initProfilePage);
+initProfilePage();

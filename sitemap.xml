@@ -21,4 +21,10 @@
     <priority>0.7</priority>
     <lastmod>2026-06-19</lastmod>
   </url>
+  <url>
+    <loc>https://slm-market.sannan.app/docs/</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <lastmod>2026-06-24</lastmod>
+  </url>
 </urlset>

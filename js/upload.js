@@ -389,4 +389,4 @@ function clearError(input) {
 }
 
 /* Boot */
-document.addEventListener('DOMContentLoaded', initUploadPage);
+initUploadPage();

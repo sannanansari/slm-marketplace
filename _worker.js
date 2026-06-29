@@ -35,6 +35,11 @@ export default {
       });
     }
 
+    // /docs without trailing slash → redirect to /docs/
+    if (url.pathname === '/docs') {
+      return Response.redirect(url.origin + '/docs/', 301);
+    }
+
     // Everything else → serve static asset normally
     return env.ASSETS.fetch(request);
   },

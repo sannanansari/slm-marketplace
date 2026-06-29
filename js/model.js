@@ -643,4 +643,4 @@ function showModelNotFound() {
 }
 
 /* Boot */
-document.addEventListener('DOMContentLoaded', initModelPage);
+initModelPage();

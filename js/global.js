@@ -24,6 +24,7 @@
     { href: 'index.html',       label: 'Categories',   id: 'categories' },
     { href: 'leaderboard.html', label: 'Leaderboard',  id: 'leaderboard' },
     { href: 'upload.html',      label: 'Upload Model', id: 'upload' },
+    { href: 'docs/',            label: 'Docs',          id: 'docs' },
   ];
 
   /* ============================================================

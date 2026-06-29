@@ -1,18 +1,14 @@
 /**
  * supabase.js
- * Reads window.__SLM_CONFIG (injected by _worker.js at /config.js)
- * and creates the Supabase client once, on demand.
+ * Creates the Supabase client from window.__SLM_CONFIG
+ * (injected by _worker.js at /config.js).
  *
- * Load order in HTML (all defer):
- *   1. config.js   — sets window.__SLM_CONFIG
- *   2. supabase CDN — defines window.supabase
- *   3. supabase.js — reads both, creates client
- *   4. global.js, page.js — use getSupabaseClient()
- *
- * All scripts are defer so they run in DOM order after parse.
- * This file therefore always runs AFTER config.js and supabase CDN.
+ * KEY FIXES:
+ *   - No custom storageKey (use Supabase default: sb-PROJECT-auth-token)
+ *   - No flowType override (Supabase auto-selects correct flow)
+ *   - detectSessionInUrl: true handles OAuth ?code= callbacks
+ *   - persistSession: true keeps user logged in across page loads
  */
-
 (function () {
   'use strict';
 
@@ -21,9 +17,9 @@
   function getConfig() {
     const cfg = window.__SLM_CONFIG;
     if (!cfg || !cfg.url || !cfg.key ||
-        cfg.url.includes('YOUR_PROJECT') || cfg.key.includes('YOUR_ANON') ||
-        cfg.url === '' || cfg.key === '') {
-      return null;
+        cfg.url === '' || cfg.key === '' ||
+        cfg.url.includes('YOUR_PROJECT') || cfg.key.includes('YOUR_ANON')) {
+      return null; // not configured — mock data mode
     }
     return cfg;
   }
@@ -36,11 +32,11 @@
 
     _client = window.supabase.createClient(cfg.url, cfg.key, {
       auth: {
-        autoRefreshToken:  true,
-        persistSession:    true,
+        autoRefreshToken:   true,
+        persistSession:     true,
         detectSessionInUrl: true,
-        storageKey:        'slm-auth',
-        flowType:          'pkce',        // required for OAuth on custom domains
+        // NO custom storageKey — use Supabase default
+        // NO flowType override — Supabase picks correct one automatically
       },
     });
     return _client;
@@ -53,7 +49,7 @@
   window.initSupabase      = initSupabase;
   window.getSupabaseClient = getSupabaseClient;
 
-  // Init immediately — by the time this deferred script runs,
-  // config.js and supabase CDN (both earlier in <head>) are already done.
+  // Runs synchronously when this deferred script executes.
+  // By this point: config.js and supabase CDN are both done (they are sync).
   initSupabase();
 })();

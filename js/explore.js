@@ -481,4 +481,4 @@ async function handleBookmark(btn, modelId) {
 }
 
 /* Boot */
-document.addEventListener('DOMContentLoaded', initExplorePage);
+initExplorePage();

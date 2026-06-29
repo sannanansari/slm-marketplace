@@ -226,4 +226,4 @@ function renderTableSkeletons(rows, cols) {
 }
 
 /* Boot */
-document.addEventListener('DOMContentLoaded', initLeaderboardPage);
+initLeaderboardPage();
