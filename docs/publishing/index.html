@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Publishing Your SLM — HuggingFace & SLM Marketplace Guide</title>
+<meta name="description" content="How to publish your fine-tuned SLM on HuggingFace Hub and SLM Marketplace. Model cards, licensing, versioning, and building an audience.">
+<link rel="canonical" href="https://slm-market.sannan.app/docs/publishing/">
+<link rel="icon" type="image/svg+xml" href="../../assets/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" media="print" onload="this.media='all'" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"></noscript>
+<style>#reading-progress-wrap{position:fixed;top:60px;left:0;right:0;height:2px;z-index:199}#reading-progress{height:2px;background:#F97316;width:0;transition:width .1s}</style>
+<link rel="stylesheet" href="../../docs/docs.css">
+</head>
+<body>
+<div id="reading-progress-wrap"><div id="reading-progress"></div></div>
+<header class="docs-header">
+  <div class="docs-header-inner">
+    <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="Open menu">
+      <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+    </button>
+    <a href="../../index.html" class="docs-logo">
+      <span class="docs-logo-slm">SLM</span><span class="docs-logo-name">Marketplace</span>
+      <span class="docs-logo-sep">/</span><span class="docs-logo-docs">Docs</span>
+    </a>
+    <div class="docs-header-search">
+      <svg class="search-icon-wrap" width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input type="search" id="docs-search" placeholder="Search docs… (Press /)" autocomplete="off" aria-label="Search docs">
+      <div class="search-results" id="search-results" aria-live="polite"></div>
+    </div>
+    <nav class="docs-header-nav" aria-label="Site navigation">
+      <a href="../../explore.html">Explore Models</a>
+      <a href="../../upload.html">Upload Model</a>
+      <a href="../../auth.html" class="btn-cta">Sign Up Free</a>
+    </nav>
+  </div>
+</header>
+<div class="docs-layout">
+<nav class="docs-sidebar" id="docs-sidebar" aria-label="Documentation navigation">
+  <div class="nav-section"><div class="nav-section-title">Getting Started</div>
+    <a href="../../docs/getting-started/" class="nav-link">🌐 Introduction to SLMs</a>
+  </div>
+  <div class="nav-section"><div class="nav-section-title">Roadmap</div>
+    <a href="../../docs/roadmap/" class="nav-link">🗺️ 6-Month Roadmap</a>
+  </div>
+  <div class="nav-section"><div class="nav-section-title">Setup</div>
+    <a href="../../docs/setup/" class="nav-link">⚙️ Environment Setup</a>
+  </div>
+  <div class="nav-section"><div class="nav-section-title">Academies</div>
+    <a href="../../docs/fine-tuning/" class="nav-link">⚡ Fine-Tuning</a>
+    <a href="../../docs/datasets/" class="nav-link">📦 Datasets</a>
+    <a href="../../docs/evaluation/" class="nav-link">📊 Evaluation</a>
+    <a href="../../docs/quantization/" class="nav-link">💾 Quantization</a>
+    <a href="../../docs/inference/" class="nav-link">🚀 Inference</a>
+    <a href="../../docs/deployment/" class="nav-link">☁️ Deployment</a>
+    <a href="../../docs/rag/" class="nav-link">🔍 RAG</a>
+  </div>
+  <div class="nav-section"><div class="nav-section-title">Reference</div>
+    <a href="../../docs/hardware/" class="nav-link">🎮 Hardware Guide</a>
+    <a href="../../docs/costs/" class="nav-link">💰 Cost Guide</a>
+    <a href="../../docs/publishing/" class="nav-link active" aria-current="page">📤 Publishing Guide</a>
+    <a href="../../docs/best-practices/" class="nav-link">🛡️ Best Practices</a>
+    <a href="../../docs/troubleshooting/" class="nav-link">🔴 Troubleshooting</a>
+  </div>
+</nav>
+<main class="docs-content" id="main-content">
+
+<div class="breadcrumb"><a href="../../docs/">Docs</a> &rsaquo; <span>Publishing Guide</span></div>
+
+<div class="page-hero">
+  <div class="page-label">📤 Publishing Guide</div>
+  <h1 class="page-title">Publish Your SLM to the World</h1>
+  <p class="page-desc">A model nobody can find helps nobody. This guide covers the complete publishing workflow: writing a compelling model card, choosing a license, uploading to HuggingFace Hub, and listing on SLM Marketplace so your work reaches the people who need it.</p>
+  <div class="page-meta">
+    <span class="page-meta-item">⏱ 20 min read</span>
+    <span class="page-meta-item">🎯 Beginner-friendly</span>
+    <span class="page-meta-item">🏆 Build your reputation</span>
+  </div>
+</div>
+
+<hr class="page-divider">
+
+<h2 id="why-publish">Why Publishing Matters</h2>
+
+<p>Every model you publish does three things simultaneously:</p>
+<ol style="line-height:2.2;margin:16px 0 16px 20px">
+  <li><strong>Helps other engineers</strong> who need the same domain capability</li>
+  <li><strong>Builds your reputation</strong> as a practitioner — downloads are a real signal</li>
+  <li><strong>Forces rigor</strong> — writing a model card makes you actually evaluate your model properly</li>
+</ol>
+
+<div class="callout callout-info">
+  <strong>The SLM Marketplace difference:</strong> HuggingFace has 800K+ models. It's hard to get discovered. SLM Marketplace is domain-specific — smaller, higher-intent audience, purpose-built for exactly what you've built.
+</div>
+
+<h2 id="before-publishing">Before You Publish — Checklist</h2>
+
+<div class="callout callout-warning">
+  <strong>Run through this before pushing to Hub:</strong>
+  <ul style="margin:12px 0 0;padding-left:20px;line-height:2.2">
+    <li>✅ Model evaluated on at least 50 held-out test examples</li>
+    <li>✅ Eval metrics documented (perplexity, accuracy, ROUGE, or domain-specific)</li>
+    <li>✅ 10+ qualitative examples showing real model outputs</li>
+    <li>✅ Compared to base model on same tasks</li>
+    <li>✅ Tested for obvious failure modes / harmful outputs</li>
+    <li>✅ License chosen and reviewed</li>
+    <li>✅ Training dataset card exists (or dataset is documented)</li>
+    <li>✅ GGUF quantized version ready</li>
+    <li>✅ Model card written (template below)</li>
+  </ul>
+</div>
+
+<h2 id="choosing-license">Choosing a License</h2>
+
+<div style="overflow-x:auto;margin:24px 0">
+<table class="comparison-table">
+  <thead><tr><th>License</th><th>Commercial use</th><th>Derivative works</th><th>Share-alike</th><th>Best for</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><strong>MIT</strong></td>
+      <td>✅ Yes</td>
+      <td>✅ Yes</td>
+      <td>❌ No</td>
+      <td>Maximum openness. Most popular for small models. Phi-3 uses MIT.</td>
+    </tr>
+    <tr>
+      <td><strong>Apache 2.0</strong></td>
+      <td>✅ Yes</td>
+      <td>✅ Yes</td>
+      <td>❌ No</td>
+      <td>Like MIT but includes patent grant. Gemma, Qwen, Mistral use Apache 2.0.</td>
+    </tr>
+    <tr>
+      <td><strong>CC BY 4.0</strong></td>
+      <td>✅ Yes</td>
+      <td>✅ Yes (with credit)</td>
+      <td>❌ No</td>
+      <td>Good for research models. Attribution required.</td>
+    </tr>
+    <tr>
+      <td><strong>CC BY-SA 4.0</strong></td>
+      <td>✅ Yes</td>
+      <td>✅ Yes</td>
+      <td>✅ Yes</td>
+      <td>Copyleft — derivatives must use same license.</td>
+    </tr>
+    <tr>
+      <td><strong>CC BY-NC 4.0</strong></td>
+      <td>❌ No</td>
+      <td>✅ Yes</td>
+      <td>❌ No</td>
+      <td>Research only. No commercial use by anyone.</td>
+    </tr>
+    <tr>
+      <td><strong>Llama 3.2 Community</strong></td>
+      <td>⚠️ Conditional</td>
+      <td>⚠️ Conditional</td>
+      <td>—</td>
+      <td>Fine-tunes of Llama 3.2 must use this license (Meta requires it).</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<div class="callout callout-warning">
+  <strong>Critical:</strong> If your model is fine-tuned from Llama, Gemma, or Phi-3, your model's license <em>must be at least as restrictive</em> as the base model's license. You cannot use MIT if the base model is Llama 3.2 (which requires the Llama Community License). Always check the base model's license first.
+</div>
+
+<h2 id="model-card">Writing Your Model Card</h2>
+
+<p>A model card is your README. It's the first thing every potential user reads. A bad model card means zero downloads. Here is a production-quality template:</p>
+
+<div class="code-block">
+  <div class="code-block-header"><span class="code-lang">markdown</span><button class="code-copy-btn">Copy</button></div>
+  <pre>---
+license: apache-2.0
+language:
+- en
+tags:
+- llama
+- legal
+- contract-analysis
+- fine-tuned
+- qlora
+base_model: meta-llama/Llama-3.2-1B-Instruct
+datasets:
+- your-username/legal-contracts-dataset
+pipeline_tag: text-generation
+---
+
+# LegalEagle-1B — Contract Analysis SLM
+
+A 1B parameter SLM fine-tuned on 1,200 legal contract examples for
+clause identification, risk assessment, and plain-English explanation.
+
+## Quick Start
+
+```python
+from transformers import AutoTokenizer, AutoModelForCausalLM
+import torch
+
+model = AutoModelForCausalLM.from_pretrained(
+    "your-username/legaleagle-1b",
+    torch_dtype=torch.float16,
+    device_map="auto"
+)
+tokenizer = AutoTokenizer.from_pretrained("your-username/legaleagle-1b")
+
+messages = [
+    {"role": "system", "content": "You are a legal contract analyst."},
+    {"role": "user", "content": "Analyze: 'Either party may terminate with 30 days notice.'"}
+]
+text = tokenizer.apply_chat_template(messages, tokenize=False, add_generation_prompt=True)
+inputs = tokenizer(text, return_tensors="pt").to(model.device)
+outputs = model.generate(**inputs, max_new_tokens=300, temperature=0.3)
+print(tokenizer.decode(outputs[0], skip_special_tokens=True))
+```
+
+## Run with Ollama (GGUF version)
+
+```bash
+ollama run hf.co/your-username/legaleagle-1b-GGUF:Q4_K_M
+```
+
+## Model Details
+
+| Property | Value |
+|----------|-------|
+| Base model | Llama 3.2-1B-Instruct |
+| Parameters | 1.24B |
+| Fine-tuning method | QLoRA (r=16, alpha=32) |
+| Training data | 1,200 legal contract examples |
+| Training steps | 500 (3 epochs) |
+| Context length | 4,096 tokens |
+| Training hardware | 1× NVIDIA T4 (Google Colab) |
+| Training time | ~45 minutes |
+
+## Evaluation Results
+
+Evaluated on 120 held-out legal clause examples (not in training data).
+
+| Metric | Base Model | This Model | Improvement |
+|--------|-----------|------------|-------------|
+| Clause identification accuracy | 41% | 87% | +112% |
+| Risk level accuracy (Low/Med/High) | 38% | 82% | +116% |
+| ROUGE-L vs expert annotation | 0.31 | 0.74 | +139% |
+| Hallucination rate (factual Qs) | 34% | 8% | -76% |
+
+## Example Outputs
+
+**Input:** "Licensor grants Licensee a non-exclusive, non-transferable right to use
+the Software solely for internal business purposes."
+
+**Base model output:** "This is a software license. It gives you permission to use
+the software."
+
+**This model output:**
+```
+**License Grant Analysis**
+
+• **Type:** Non-exclusive, non-transferable software license
+• **Scope:** Internal business use ONLY — no external deployment, SaaS, or resale
+• **Key restrictions:**
+  - Non-exclusive: licensor can grant same rights to others (competitors included)
+  - Non-transferable: cannot assign to subsidiaries without separate agreement
+  - Internal only: significantly limits commercial exploitation
+
+**Risk Level: Medium** — The "internal use only" restriction is narrower than many
+assume. Verify whether your use case qualifies before signing.
+
+*Not legal advice. Consult a licensed attorney for binding interpretation.*
+```
+
+## Training Data
+
+Fine-tuned on [legal-contracts-dataset](https://huggingface.co/datasets/your-username/legal-contracts-dataset):
+- 900 training examples (annotated contract clauses with expert analysis)
+- 150 validation examples
+- 150 test examples
+- Sources: public domain contracts, Creative Commons legal texts, synthetic examples
+
+## Intended Use
+
+✅ **Suitable for:**
+- Legal document pre-screening
+- Contract clause identification and categorization
+- Plain-English explanation of legal terms
+- First-pass risk flagging before attorney review
+- Legal education and training tools
+
+❌ **Not suitable for:**
+- Replacing licensed legal counsel
+- Binding legal interpretation
+- Jurisdictions outside common law systems
+- Criminal or family law matters
+
+## Limitations
+
+- Trained primarily on U.S. and U.K. commercial contracts
+- May not recognize jurisdiction-specific provisions (EU, APAC)
+- Does not understand context beyond the provided clause text
+- Performance degrades on highly technical IP or financial contracts
+
+## Training Details
+
+```
+Base model:  meta-llama/Llama-3.2-1B-Instruct
+Method:      QLoRA via Unsloth
+LoRA rank:   16
+LoRA alpha:  32
+LR:          2e-4
+Epochs:      3
+Batch size:  2 (effective: 8 with grad accumulation)
+Hardware:    Google Colab T4 (free tier)
+```
+
+## Citation
+
+```bibtex
+@misc{legaleagle2025,
+  author = {Your Name},
+  title = {LegalEagle-1B: A Fine-Tuned SLM for Contract Analysis},
+  year = {2025},
+  publisher = {HuggingFace},
+  url = {https://huggingface.co/your-username/legaleagle-1b}
+}
+```</pre>
+</div>
+
+<h2 id="upload-hf">Upload to HuggingFace Hub</h2>
+
+<div class="code-block">
+  <div class="code-block-header"><span class="code-lang">bash</span><button class="code-copy-btn">Copy</button></div>
+  <pre"># 1. Create HuggingFace account at huggingface.co
+# 2. Generate access token: Settings → Access Tokens → New token (write)
+
+# 3. Login via CLI
+pip install huggingface_hub
+huggingface-cli login
+# Paste your token when prompted
+
+# 4. Create a repository
+huggingface-cli repo create legaleagle-1b --type model
+
+# 5. Upload your model files
+# Option A: Upload from Python (recommended)
+from huggingface_hub import upload_folder
+
+upload_folder(
+    folder_path="./legaleagle-1b-merged",  # your merged model folder
+    repo_id="your-username/legaleagle-1b",
+    repo_type="model",
+    ignore_patterns=["*.pyc", "__pycache__", "*.tmp"]
+)
+
+# Option B: Upload individual files
+from huggingface_hub import upload_file
+
+upload_file(
+    path_or_fileobj="./README.md",
+    path_in_repo="README.md",
+    repo_id="your-username/legaleagle-1b"
+)
+
+# 6. Verify upload
+from huggingface_hub import list_repo_files
+for f in list_repo_files("your-username/legaleagle-1b"):
+    print(f)</pre>
+</div>
+
+<div class="code-block">
+  <div class="code-block-header"><span class="code-lang">bash</span><button class="code-copy-btn">Copy</button></div>
+  <pre"># Alternatively: use git-lfs (for large files)
+git lfs install
+
+git clone https://huggingface.co/your-username/legaleagle-1b
+cd legaleagle-1b
+
+# Copy your model files here
+cp -r ../legaleagle-1b-merged/* .
+
+git add .
+git commit -m "Add LegalEagle-1B fine-tuned model"
+git push
+
+# For GGUF files (can be very large — use the Hub's upload tool)
+huggingface-cli upload your-username/legaleagle-1b-GGUF \
+  ./legaleagle-1b-q4_k_m.gguf legaleagle-1b-q4_k_m.gguf</pre>
+</div>
+
+<h2 id="upload-slm-marketplace">Upload to SLM Marketplace</h2>
+
+<p>SLM Marketplace is purpose-built for SLMs. Listing here gives you exposure to engineers specifically looking for small, specialized models.</p>
+
+<ol style="line-height:2.4;margin:16px 0 16px 20px">
+  <li><strong>Create an account</strong> at <a href="../../auth.html">slm-market.sannan.app/auth</a></li>
+  <li><strong>Click "Upload Model"</strong> in the navigation bar</li>
+  <li>Fill in the <strong>required fields:</strong>
+    <ul style="margin-top:8px;line-height:2">
+      <li>Model name (must be unique)</li>
+      <li>Description (markdown supported — be detailed)</li>
+      <li>Category (text-generation, classification, embedding, etc.)</li>
+      <li>Tags (your domain, base model, technique)</li>
+      <li>HuggingFace URL (link to your Hub model)</li>
+      <li>License</li>
+      <li>Parameter count</li>
+    </ul>
+  </li>
+  <li><strong>Add benchmark results</strong> — models with eval scores get significantly more visibility</li>
+  <li><strong>Submit</strong> — your model appears immediately</li>
+</ol>
+
+<div class="callout callout-info">
+  <strong>Pro tip:</strong> Models with all fields filled, benchmark scores, and a detailed description get 5–10× more views than bare-minimum listings. Spend 20 minutes on the description — it pays off.
+</div>
+
+<h2 id="versioning">Model Versioning</h2>
+
+<div class="code-block">
+  <div class="code-block-header"><span class="code-lang">bash</span><button class="code-copy-btn">Copy</button></div>
+  <pre"># Use HuggingFace's revision system for versioning
+# Every push creates a commit — revisions are automatic
+
+# Tag a specific version
+from huggingface_hub import create_tag
+
+create_tag(
+    repo_id="your-username/legaleagle-1b",
+    tag="v1.0.0",
+    tag_message="Initial release — 87% clause accuracy on test set"
+)
+
+create_tag(
+    repo_id="your-username/legaleagle-1b",
+    tag="v1.1.0",
+    tag_message="v1.1 — Added 300 more training examples, improved risk classification"
+)
+
+# Load a specific version
+from transformers import AutoModelForCausalLM
+model = AutoModelForCausalLM.from_pretrained(
+    "your-username/legaleagle-1b",
+    revision="v1.0.0"   # pin to specific version
+)
+
+# Users can always get latest:
+model = AutoModelForCausalLM.from_pretrained("your-username/legaleagle-1b")
+# Or pin to a version for reproducibility:
+model = AutoModelForCausalLM.from_pretrained(
+    "your-username/legaleagle-1b", revision="v1.1.0"
+)</pre>
+</div>
+
+<h2 id="promoting">Building an Audience</h2>
+
+<p>Publishing is step one. Here's how to get your model discovered:</p>
+
+<div class="card-grid-2" style="margin:24px 0">
+  <div class="doc-card">
+    <div class="doc-card-icon">✍️</div>
+    <div class="doc-card-title">Write a Technical Blog Post</div>
+    <div class="doc-card-desc">Document your process on Medium, Substack, or dev.to. Include your eval results. Link to your HuggingFace and SLM Marketplace pages. Engineers who find useful write-ups bookmark and share them.</div>
+  </div>
+  <div class="doc-card">
+    <div class="doc-card-icon">🐦</div>
+    <div class="doc-card-title">Share on Social Media</div>
+    <div class="doc-card-desc">Post on Twitter/X and LinkedIn with your benchmark results. Tag @huggingface. The AI community on Twitter is extremely active and shares good work generously.</div>
+  </div>
+  <div class="doc-card">
+    <div class="doc-card-icon">💬</div>
+    <div class="doc-card-title">Post in Communities</div>
+    <div class="doc-card-desc">r/MachineLearning, r/LocalLLaMA, HuggingFace Discord, and domain-specific communities (r/legaltech, r/healthcareit). Share results, not just links — show what it can do.</div>
+  </div>
+  <div class="doc-card">
+    <div class="doc-card-icon">🎮</div>
+    <div class="doc-card-title">Create a Live Demo</div>
+    <div class="doc-card-desc">HuggingFace Spaces (free Gradio demo) lets users try your model in the browser without downloading anything. A live demo converts viewers to users far better than a static README.</div>
+  </div>
+</div>
+
+<h2 id="common-mistakes">Common Publishing Mistakes</h2>
+
+<div class="callout callout-warning">
+  <ul style="margin:0;padding-left:20px;line-height:2.2">
+    <li><strong>Publishing without evaluation</strong> — "Works on my machine" isn't documentation. Run the eval, write the numbers.</li>
+    <li><strong>Wrong license</strong> — Publishing a Llama fine-tune under MIT violates Meta's license. Always check your base model's license first.</li>
+    <li><strong>No GGUF version</strong> — Most users want to run locally with Ollama or LM Studio. No GGUF = fewer downloads.</li>
+    <li><strong>Vague model name</strong> — "my-model-v2" tells nobody anything. "legaleagle-1b-contract-analysis" is findable.</li>
+    <li><strong>Missing base_model tag</strong> — HuggingFace indexes this for discovery. Always set <code>base_model:</code> in your card front matter.</li>
+    <li><strong>No example outputs</strong> — The single highest-impact addition to any model card. Show what it does, not just what it is.</li>
+  </ul>
+</div>
+
+<h2 id="next-steps">Next Steps</h2>
+<div class="card-grid-2" style="margin:24px 0">
+  <a href="../../upload.html" class="doc-card card-orange">
+    <div class="doc-card-icon">📤</div>
+    <div class="doc-card-title">Upload to SLM Marketplace</div>
+    <div class="doc-card-desc">List your model now. It takes 5 minutes.</div>
+    <div class="doc-card-footer">Upload →</div>
+  </a>
+  <a href="../best-practices/" class="doc-card">
+    <div class="doc-card-icon">🛡️</div>
+    <div class="doc-card-title">Best Practices</div>
+    <div class="doc-card-desc">Production-quality SLM engineering patterns.</div>
+    <div class="doc-card-footer">Read →</div>
+  </a>
+</div>
+
+</main>
+<aside class="docs-toc" aria-label="On this page">
+  <div class="toc-title">On this page</div>
+  <a href="#why-publish" class="toc-link">Why Publishing Matters</a>
+  <a href="#before-publishing" class="toc-link">Pre-Publish Checklist</a>
+  <a href="#choosing-license" class="toc-link">Choosing a License</a>
+  <a href="#model-card" class="toc-link">Writing a Model Card</a>
+  <a href="#upload-hf" class="toc-link">Upload to HuggingFace</a>
+  <a href="#upload-slm-marketplace" class="toc-link">Upload to SLM Marketplace</a>
+  <a href="#versioning" class="toc-link">Model Versioning</a>
+  <a href="#promoting" class="toc-link">Building an Audience</a>
+  <a href="#common-mistakes" class="toc-link">Common Mistakes</a>
+  <a href="#next-steps" class="toc-link">Next Steps</a>
+</aside>
+</div>
+<script src="../../docs/docs.js"></script>
+</body>
+</html>

@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+<meta charset='UTF-8'>
+<meta name='viewport' content='width=device-width,initial-scale=1.0'>
+<title>Deployment Academy — RunPod, Modal, HuggingFace, AWS &mdash; SLM Docs</title>
+<meta name='description' content='Deploy SLMs to production. Guides for RunPod, Modal, HuggingFace Endpoints, and AWS with cost estimates.'>
+<link rel='icon' type='image/svg+xml' href='../../assets/favicon.svg'>
+<link rel='preconnect' href='https://fonts.googleapis.com'>
+<link href='https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap' rel='stylesheet'>
+<style>#reading-progress-wrap{position:fixed;top:60px;left:0;right:0;height:2px;z-index:199}#reading-progress{height:2px;background:#F97316;width:0;transition:width .1s}</style>
+<link rel='stylesheet' href='../../docs/docs.css'>
+</head>
+<body>
+<div id='reading-progress-wrap'><div id='reading-progress'></div></div>
+<header class='docs-header'><div class='docs-header-inner'><button class='mobile-menu-btn' id='mobile-menu-btn' aria-label='Menu'><svg width='18' height='18' fill='none' viewBox='0 0 24 24' stroke='currentColor' stroke-width='2'><line x1='3' y1='6' x2='21' y2='6'/><line x1='3' y1='12' x2='21' y2='12'/><line x1='3' y1='18' x2='21' y2='18'/></svg></button><a href='../../index.html' class='docs-logo'><span class='docs-logo-slm'>SLM</span><span class='docs-logo-name'>Marketplace</span><span class='docs-logo-sep'>/</span><span class='docs-logo-docs'>Docs</span></a><div class='docs-header-search'><svg class='search-icon-wrap' width='14' height='14' fill='none' viewBox='0 0 24 24' stroke='currentColor' stroke-width='2'><circle cx='11' cy='11' r='8'/><line x1='21' y1='21' x2='16.65' y2='16.65'/></svg><input type='search' id='docs-search' placeholder='Search docs...' autocomplete='off'><div class='search-results' id='search-results'></div></div><nav class='docs-header-nav'><a href='../../explore.html'>Explore Models</a><a href='../../upload.html'>Upload Model</a><a href='../../auth.html' class='btn-cta'>Sign Up Free</a></nav></div></header>
+<div class='docs-layout'>
+<nav class="docs-sidebar" id="docs-sidebar">
+<div class="nav-section"><div class="nav-section-title">Getting Started</div>
+<a href="../../docs/getting-started/" class="nav-link">🌐 Introduction to SLMs</a>
+<a href="../../docs/getting-started/slm-vs-llm.html" class="nav-link">⚖️ SLM vs LLM</a>
+</div>
+<div class="nav-section"><div class="nav-section-title">AI Foundations</div>
+<a href="../../docs/foundations/" class="nav-link">🔬 Overview</a>
+<a href="../../docs/foundations/lora.html" class="nav-link" style="padding-left:24px;font-size:12px">LoRA &amp; QLoRA</a>
+<a href="../../docs/foundations/quantization.html" class="nav-link" style="padding-left:24px;font-size:12px">Quantization</a>
+</div>
+<div class="nav-section"><div class="nav-section-title">Roadmap</div>
+<a href="../../docs/roadmap/" class="nav-link">🗺️ Learning Roadmap</a>
+</div>
+<div class="nav-section"><div class="nav-section-title">Setup</div>
+<a href="../../docs/setup/" class="nav-link">⚙️ Overview</a>
+<a href="../../docs/setup/colab.html" class="nav-link" style="padding-left:24px;font-size:12px">☁️ Google Colab</a>
+<a href="../../docs/setup/gpu-guide.html" class="nav-link" style="padding-left:24px;font-size:12px">🎮 GPU Guide</a>
+</div>
+<div class="nav-section"><div class="nav-section-title">Tools</div>
+<a href="../../docs/tools/" class="nav-link">🔧 Tools Directory</a>
+</div>
+<div class="nav-section"><div class="nav-section-title">Tutorial</div>
+<a href="../../docs/tutorials/" class="nav-link" style="color:var(--orange);font-weight:600">🏗️ Build First SLM</a>
+</div>
+<div class="nav-section"><div class="nav-section-title">Academies</div>
+<a href="../../docs/fine-tuning/" class="nav-link">⚡ Fine-Tuning</a>
+<a href="../../docs/fine-tuning/qlora.html" class="nav-link" style="padding-left:24px;font-size:12px">QLoRA</a>
+<a href="../../docs/fine-tuning/unsloth.html" class="nav-link" style="padding-left:24px;font-size:12px">Unsloth 🦥</a>
+<a href="../../docs/datasets/" class="nav-link">📦 Datasets</a>
+<a href="../../docs/evaluation/" class="nav-link">📊 Evaluation</a>
+<a href="../../docs/quantization/" class="nav-link">💾 Quantization</a>
+<a href="../../docs/inference/" class="nav-link">🚀 Inference</a>
+<a href="../../docs/inference/ollama.html" class="nav-link" style="padding-left:24px;font-size:12px">🦙 Ollama</a>
+<a href="../../docs/inference/vllm.html" class="nav-link" style="padding-left:24px;font-size:12px">vLLM</a>
+<a href="../../docs/deployment/" class="nav-link">☁️ Deployment</a>
+<a href="../../docs/rag/" class="nav-link">🔍 RAG</a>
+</div>
+<div class="nav-section"><div class="nav-section-title">Projects</div>
+<a href="../../docs/projects/" class="nav-link">🏗️ All Projects</a>
+<a href="../../docs/projects/medical.html" class="nav-link" style="padding-left:24px;font-size:12px">🏥 Medical SLM</a>
+<a href="../../docs/projects/legal.html" class="nav-link" style="padding-left:24px;font-size:12px">⚖️ Legal SLM</a>
+<a href="../../docs/projects/coding.html" class="nav-link" style="padding-left:24px;font-size:12px">💻 Coding SLM</a>
+<a href="../../docs/projects/finance.html" class="nav-link" style="padding-left:24px;font-size:12px">📈 Finance SLM</a>
+</div>
+<div class="nav-section"><div class="nav-section-title">Reference</div>
+<a href="../../docs/hardware/" class="nav-link">🎮 Hardware Guide</a>
+<a href="../../docs/costs/" class="nav-link">💰 Cost Guide</a>
+<a href="../../docs/publishing/" class="nav-link">📤 Publishing Guide</a>
+<a href="../../docs/best-practices/" class="nav-link">🛡️ Best Practices</a>
+<a href="../../docs/troubleshooting/" class="nav-link">🔴 Troubleshooting</a>
+</div>
+</nav>
+<main class='docs-content'>
+<div class='breadcrumb'><a href='../'>Docs</a> &rsaquo; <span>Deployment Academy</span></div><div class='page-hero'><div class='page-label'>☁️ Deployment Academy</div><h1 class='page-title'>Deployment Academy</h1><p class='page-desc'>Take your fine-tuned SLM from your laptop to production. Cost estimates, architecture diagrams, and scaling guides.</p><div class='page-meta'><span class='page-meta-item'>⏱ 15 min read</span><span class='difficulty diff-advanced'>Advanced</span></div></div><hr class='page-divider'><h2 id='options'>Deployment Options</h2><div class='table-wrap'><table><thead><tr><th>Platform</th><th>Setup</th><th>Cost</th><th>Scaling</th><th>Best For</th></tr></thead><tbody><tr><td><strong>Local (Ollama)</strong></td><td class='td-good'>5 min</td><td class='td-good'>Free</td><td class='td-bad'>1 user</td><td>Dev, demos</td></tr><tr><td><strong>RunPod</strong></td><td>30 min</td><td class='td-good'>$0.20/hr</td><td class='td-warn'>Manual</td><td>Low-volume API</td></tr><tr><td><strong>Modal</strong></td><td>20 min</td><td class='td-warn'>$1.10/hr</td><td class='td-good'>Auto</td><td>Variable traffic</td></tr><tr><td><strong>HF Endpoints</strong></td><td class='td-good'>10 min</td><td class='td-warn'>$0.60/hr</td><td class='td-warn'>Manual</td><td>Simple REST API</td></tr><tr><td><strong>AWS SageMaker</strong></td><td class='td-bad'>2 hrs</td><td class='td-bad'>$1.50/hr+</td><td class='td-good'>Auto</td><td>Enterprise</td></tr></tbody></table></div><h2 id='runpod'>RunPod Deployment</h2><p>Best price for dedicated GPU servers. RTX 3090 24GB at $0.20/hr. Good for low-to-medium volume APIs.</p><div class='steps'><div class='step'><div class='step-num'>1</div><div class='step-body'><div class='step-title'>Create a pod</div><div class='step-desc'>runpod.io &rarr; Deploy &rarr; GPU Cloud &rarr; Select RTX 3090 &rarr; Choose PyTorch template &rarr; Deploy On-Demand.</div></div></div><div class='step'><div class='step-num'>2</div><div class='step-body'><div class='step-title'>SSH in and install vLLM</div><div class='step-desc'><div class='code-block'><div class='code-block-header'><span class='code-block-lang'>bash</span><button class='code-copy-btn'>Copy</button></div><pre><code>pip install vllm huggingface_hub
+huggingface-cli login  # paste your HF token</code></pre></div></div></div></div><div class='step'><div class='step-num'>3</div><div class='step-body'><div class='step-title'>Start the API server</div><div class='step-desc'><div class='code-block'><div class='code-block-header'><span class='code-block-lang'>bash</span><button class='code-copy-btn'>Copy</button></div><pre><code>python -m vllm.entrypoints.openai.api_server \
+  --model your-username/YourFineTunedModel \
+  --host 0.0.0.0 --port 8000 \
+  --max-model-len 4096</code></pre></div></div></div></div><div class='step'><div class='step-num'>4</div><div class='step-body'><div class='step-title'>Expose the port</div><div class='step-desc'>RunPod &rarr; your pod &rarr; Connect &rarr; HTTP Service &rarr; Port 8000 &rarr; Expose. You get a public URL.</div></div></div></div><h2 id='modal'>Modal — Serverless (Recommended)</h2><p>Modal autoscales to zero when not in use. You only pay per second of GPU time. $30/mo free credit.</p><div class='code-block'><div class='code-block-header'><span class='code-block-lang'>python</span><button class='code-copy-btn'>Copy</button></div><pre><code>pip install modal
+modal setup  # authenticate
+
+# deploy_slm.py
+import modal
+
+app = modal.App('my-slm')
+image = modal.Image.debian_slim().pip_install('vllm', 'huggingface_hub')
+
+@app.cls(gpu='A10G', image=image)
+class Model:
+    @modal.enter()
+    def load(self):
+        from vllm import LLM
+        self.llm = LLM('your-username/YourModel', max_model_len=4096)
+
+    @modal.method()
+    def generate(self, prompt: str) -> str:
+        from vllm import SamplingParams
+        out = self.llm.generate(prompt, SamplingParams(max_tokens=512))
+        return out[0].outputs[0].text
+
+@app.local_entrypoint()
+def main():
+    m = Model()
+    print(m.generate.remote('Hello!'))
+
+# Deploy
+# modal deploy deploy_slm.py</code></pre></div><h2 id='cost'>Cost Comparison (1M tokens/month)</h2><div class='table-wrap'><table><thead><tr><th>Option</th><th>Monthly Cost</th><th>Latency</th></tr></thead><tbody><tr><td>GPT-4 API</td><td class='td-bad'>$30,000+</td><td>1&ndash;3 sec</td></tr><tr><td>GPT-4o API</td><td class='td-bad'>$2,500</td><td>500ms&ndash;2 sec</td></tr><tr><td>RunPod RTX 3090 (24/7)</td><td class='td-warn'>$144</td><td class='td-good'>&lt;100ms</td></tr><tr><td>Modal (pay per use)</td><td class='td-good'>$20&ndash;80</td><td class='td-good'>&lt;150ms</td></tr><tr><td>Self-hosted RTX 3090</td><td class='td-good'>~$15 (power)</td><td class='td-good'>&lt;50ms</td></tr></tbody></table></div>
+
+</main>
+<aside class='docs-toc'><div class='toc-title'>On this page</div>
+<a href="#options" class="toc-link">Deployment Options</a>
+<a href="#runpod" class="toc-link">RunPod</a>
+<a href="#modal" class="toc-link">Modal (Serverless)</a>
+<a href="#cost" class="toc-link">Cost Comparison</a>
+</aside>
+</div>
+<script src='../../docs/docs.js'></script>
+</body></html>

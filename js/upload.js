@@ -296,7 +296,9 @@ async function handleContinue() {
       window.location.href = `model.html?id=${newId}`;
     }, 800);
   } catch (err) {
-    showToast('Something went wrong. Please try again.', 'error');
+    const msg = err?.message || 'Something went wrong. Please try again.';
+    showToast(msg, 'error', 6000);
+    console.error('[upload] submit failed:', err);
     if (btn) {
       btn.disabled = false;
       btn.textContent = 'Continue';
@@ -341,6 +343,7 @@ function collectFormData(status, user) {
     // B1 fix: attach owner identity
     engineer_id: user?.id || null,
     engineer_username: user?.user_metadata?.username || user?.email?.split('@')[0] || null,
+    engineer_name: user?.user_metadata?.full_name || user?.user_metadata?.name || user?.user_metadata?.user_name || user?.email?.split('@')[0] || null,
   };
 }
 
@@ -349,21 +352,23 @@ function collectFormData(status, user) {
  * Returns the new model's ID.
  */
 async function submitModel(data) {
-  try {
-    const client = getSupabaseClient();
-    if (client) {
-      const { data: inserted, error } = await client
-        .from('models')
-        .insert([data])
-        .select('id')
-        .single();
-      if (error) throw error;
-      return inserted.id;
+  const client = getSupabaseClient();
+  if (client) {
+    const { data: inserted, error } = await client
+      .from('models')
+      .insert([data])
+      .select('id')
+      .single();
+    if (error) {
+      // Surface the real error to the caller so the user knows it failed
+      console.error('[upload] Supabase insert error:', error);
+      throw new Error(error.message || 'Failed to save model. Please try again.');
     }
-  } catch (err) {
+    return inserted.id;
   }
 
-  // Mock: generate a fake ID
+  // No Supabase client — demo mode only
+  console.warn('[upload] No Supabase client — running in demo mode');
   return Math.floor(Math.random() * 9000) + 100;
 }
 

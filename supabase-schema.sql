@@ -335,3 +335,101 @@ grant execute on function unfollow_engineer(uuid) to authenticated;
 -- ============================================================
 -- insert into models (title, short_description, category, engineer_username, ...)
 -- values (...);
+
+-- ============================================================
+-- SCHEMA FIXES — run these after the main schema
+-- ============================================================
+
+-- FIX: Add missing columns to users table
+-- These are referenced in recalc_engineer_score() and profile.js
+-- but were not declared in the CREATE TABLE statement.
+ALTER TABLE users ADD COLUMN IF NOT EXISTS total_downloads integer DEFAULT 0;
+ALTER TABLE users ADD COLUMN IF NOT EXISTS model_count integer DEFAULT 0;
+ALTER TABLE users ADD COLUMN IF NOT EXISTS avg_rating numeric(3,2) DEFAULT 0;
+ALTER TABLE users ADD COLUMN IF NOT EXISTS review_count integer DEFAULT 0;
+
+-- FIX: Update recalc_engineer_score to also update model_count and avg_rating
+CREATE OR REPLACE FUNCTION recalc_engineer_score(eng_id uuid)
+RETURNS void AS $$
+DECLARE
+  dl_count  bigint;
+  avg_rat   numeric;
+  mod_count int;
+BEGIN
+  SELECT
+    COALESCE(SUM(download_count), 0),
+    COALESCE(AVG(rating), 0),
+    COUNT(*)
+  INTO dl_count, avg_rat, mod_count
+  FROM models
+  WHERE engineer_id = eng_id AND status = 'published';
+
+  UPDATE users SET
+    score           = ROUND(
+                        (LOG(GREATEST(dl_count, 1)) * 100) +
+                        ((avg_rat / 5.0) * 300) +
+                        LEAST(mod_count * 20, 400)
+                      ),
+    total_downloads = dl_count,
+    model_count     = mod_count,
+    avg_rating      = ROUND(avg_rat::numeric, 2)
+  WHERE id = eng_id;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+-- FIX: Also update review_count when reviews change
+CREATE OR REPLACE FUNCTION recalc_model_rating() RETURNS trigger AS $$
+DECLARE
+  target_model_id bigint;
+  eng_id          uuid;
+BEGIN
+  target_model_id := COALESCE(NEW.model_id, OLD.model_id);
+
+  -- Update model's average rating
+  UPDATE models
+  SET rating = COALESCE((
+    SELECT ROUND(AVG(rating)::numeric, 1)
+    FROM reviews
+    WHERE model_id = target_model_id
+  ), 0)
+  WHERE id = target_model_id;
+
+  -- Update engineer's review_count
+  SELECT engineer_id INTO eng_id FROM models WHERE id = target_model_id;
+  IF eng_id IS NOT NULL THEN
+    UPDATE users SET
+      review_count = (
+        SELECT COUNT(*) FROM reviews r
+        JOIN models m ON r.model_id = m.id
+        WHERE m.engineer_id = eng_id
+      )
+    WHERE id = eng_id;
+    -- Recalculate full score
+    PERFORM recalc_engineer_score(eng_id);
+  END IF;
+
+  RETURN NULL;
+END;
+$$ LANGUAGE plpgsql;
+
+-- FIX: Grant anon read access to published models
+-- (needed for explore page without login)
+GRANT SELECT ON models TO anon;
+GRANT SELECT ON users  TO anon;
+GRANT SELECT ON reviews TO anon;
+
+-- FIX: Create match_documents function for pgvector RAG
+-- (needed if using Supabase as vector store per rag/index.html docs)
+-- Requires: CREATE EXTENSION IF NOT EXISTS vector;
+-- Only run this if you plan to use the RAG feature with Supabase.
+-- CREATE OR REPLACE FUNCTION match_documents(
+--   query_embedding vector(384),
+--   match_count int DEFAULT 3
+-- ) RETURNS TABLE(id bigint, content text, source text, similarity float)
+-- LANGUAGE sql STABLE AS $$
+--   SELECT id, content, source,
+--     1 - (embedding <=> query_embedding) AS similarity
+--   FROM documents
+--   ORDER BY embedding <=> query_embedding
+--   LIMIT match_count;
+-- $$;

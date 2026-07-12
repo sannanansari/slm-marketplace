@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tokenization — How Text Becomes Numbers — SLM Marketplace Docs</title>
+<meta name="description" content="How BPE, WordPiece and SentencePiece tokenizers convert text to token IDs. Why tokenization affects model cost, quality, and multilingual performance.">
+<link rel="icon" type="image/svg+xml" href="../../assets/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" media="print" onload="this.media='all'" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"></noscript>
+<style>#reading-progress-wrap{position:fixed;top:60px;left:0;right:0;height:2px;z-index:199}#reading-progress{height:2px;background:#F97316;width:0;transition:width .1s}</style>
+<link rel="stylesheet" href="../../docs/docs.css">
+</head>
+<body>
+<div id="reading-progress-wrap"><div id="reading-progress"></div></div>
+<header class="docs-header">
+  <div class="docs-header-inner">
+    <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="Open menu">
+      <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+    </button>
+    <a href="../../index.html" class="docs-logo">
+      <span class="docs-logo-slm">SLM</span><span class="docs-logo-name">Marketplace</span>
+      <span class="docs-logo-sep">/</span><span class="docs-logo-docs">Docs</span>
+    </a>
+    <div class="docs-header-search">
+      <svg class="search-icon-wrap" width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input type="search" id="docs-search" placeholder="Search docs… (Press /)" autocomplete="off" aria-label="Search docs">
+      <div class="search-results" id="search-results" aria-live="polite"></div>
+    </div>
+    <nav class="docs-header-nav" aria-label="Site navigation">
+      <a href="../../explore.html">Explore Models</a>
+      <a href="../../upload.html">Upload Model</a>
+      <a href="../../auth.html" class="btn-cta">Sign Up Free</a>
+    </nav>
+  </div>
+</header>
+<div class="docs-layout">
+<nav class="docs-sidebar" id="docs-sidebar" aria-label="Documentation navigation">
+  <div class="nav-section"><div class="nav-section-title">Getting Started</div>
+    <a href="../../docs/getting-started/" class="nav-link">🌐 Introduction to SLMs</a>
+    <a href="../../docs/getting-started/slm-vs-llm.html" class="nav-link">⚖️ SLM vs LLM</a>
+    <a href="../../docs/getting-started/use-cases.html" class="nav-link">💼 Use Cases</a>
+    <a href="../../docs/getting-started/popular-slms.html" class="nav-link">🏆 Popular SLMs</a>
+  </div>
+  <div class="nav-section"><div class="nav-section-title">Roadmap</div>
+    <a href="../../docs/roadmap/" class="nav-link">🗺️ 6-Month Roadmap</a>
+  </div>
+  <div class="nav-section"><div class="nav-section-title">Setup</div>
+    <a href="../../docs/setup/" class="nav-link">⚙️ Environment Setup</a>
+    <a href="../../docs/setup/colab.html" class="nav-link" style="padding-left:24px;font-size:12px">☁️ Google Colab</a>
+    <a href="../../docs/setup/gpu-guide.html" class="nav-link" style="padding-left:24px;font-size:12px">🎮 GPU Guide</a>
+    <a href="../../docs/setup/linux.html" class="nav-link" style="padding-left:24px;font-size:12px">🐧 Linux Setup</a>
+    <a href="../../docs/setup/macos.html" class="nav-link" style="padding-left:24px;font-size:12px">🍎 macOS Setup</a>
+    <a href="../../docs/setup/windows.html" class="nav-link" style="padding-left:24px;font-size:12px">🪟 Windows Setup</a>
+    <a href="../../docs/setup/runpod.html" class="nav-link" style="padding-left:24px;font-size:12px">☁️ RunPod</a>
+  </div>
+  <div class="nav-section"><div class="nav-section-title">Foundations</div>
+    <a href="../../docs/foundations/" class="nav-link">🔬 AI Foundations</a>
+    <a href="../../docs/foundations/transformers.html" class="nav-link" style="padding-left:24px;font-size:12px">🤖 Transformers</a>
+    <a href="../../docs/foundations/tokens.html" class="nav-link" style="padding-left:24px;font-size:12px">🔤 Tokenization</a>
+    <a href="../../docs/foundations/lora.html" class="nav-link" style="padding-left:24px;font-size:12px">⚡ LoRA</a>
+    <a href="../../docs/foundations/quantization.html" class="nav-link" style="padding-left:24px;font-size:12px">💾 Quantization Basics</a>
+  </div>
+  <div class="nav-section"><div class="nav-section-title">Tutorial</div>
+    <a href="../../docs/tutorials/" class="nav-link">🏗️ Build First SLM</a>
+  </div>
+  <div class="nav-section"><div class="nav-section-title">Academies</div>
+    <a href="../../docs/fine-tuning/" class="nav-link">⚡ Fine-Tuning</a>
+    <a href="../../docs/fine-tuning/qlora.html" class="nav-link" style="padding-left:24px;font-size:12px">QLoRA Deep Dive</a>
+    <a href="../../docs/fine-tuning/unsloth.html" class="nav-link" style="padding-left:24px;font-size:12px">🦥 Unsloth</a>
+    <a href="../../docs/datasets/" class="nav-link">📦 Datasets</a>
+    <a href="../../docs/evaluation/" class="nav-link">📊 Evaluation</a>
+    <a href="../../docs/quantization/" class="nav-link">💾 Quantization</a>
+    <a href="../../docs/inference/" class="nav-link">🚀 Inference</a>
+    <a href="../../docs/inference/ollama.html" class="nav-link" style="padding-left:24px;font-size:12px">🦙 Ollama</a>
+    <a href="../../docs/inference/vllm.html" class="nav-link" style="padding-left:24px;font-size:12px">vLLM</a>
+    <a href="../../docs/deployment/" class="nav-link">☁️ Deployment</a>
+    <a href="../../docs/rag/" class="nav-link">🔍 RAG</a>
+  </div>
+  <div class="nav-section"><div class="nav-section-title">Reference</div>
+    <a href="../../docs/hardware/" class="nav-link">🎮 Hardware Guide</a>
+    <a href="../../docs/costs/" class="nav-link">💰 Cost Guide</a>
+    <a href="../../docs/publishing/" class="nav-link">📤 Publishing Guide</a>
+    <a href="../../docs/best-practices/" class="nav-link">🛡️ Best Practices</a>
+    <a href="../../docs/troubleshooting/" class="nav-link">🔴 Troubleshooting</a>
+  </div>
+</nav>
+<main class="docs-content" id="main-content">
+<div class="breadcrumb"><a href="../../docs/">Docs</a> &rsaquo; <a href="../../docs/foundations/">Foundations</a> &rsaquo; <span>Tokenization</span></div>
+<div class="page-hero">
+  <div class="page-label">🔤 Foundations</div>
+  <h1 class="page-title">Tokenization</h1>
+  <p class="page-desc">How BPE, WordPiece and SentencePiece tokenizers convert text to token IDs. Why tokenization affects model cost, quality, and multilingual performance.</p>
+</div>
+<hr class="page-divider">
+<h2 id="overview">What Is Tokenization?</h2>
+<p>A language model cannot read text. It reads numbers. Tokenization is the process of converting text into a sequence of integers (token IDs) that the model can process. The vocabulary — the set of all possible tokens — is fixed at training time.</p>
+<h2 id="content">BPE — Byte-Pair Encoding</h2>
+<p>The most common algorithm. Starts with characters, then iteratively merges the most frequent adjacent pairs. "playing" might be split as ["play", "ing"] → [1234, 5678].</p>
+<div class="code-block"><div class="code-block-header"><span class="code-lang">python</span><button class="code-copy-btn">Copy</button></div><pre>from transformers import AutoTokenizer
+
+tokenizer = AutoTokenizer.from_pretrained("meta-llama/Llama-3.2-1B")
+
+text = "Fine-tuning a small language model"
+tokens = tokenizer.tokenize(text)
+ids    = tokenizer.encode(text)
+
+print("Tokens:", tokens)
+# ['Fine', '-', 'tuning', '▁a', '▁small', '▁language', '▁model']
+print("IDs:", ids)
+# [28724, 28733, 28707, 264, 2613, 4028, 2229]
+print("Token count:", len(ids))  # 7
+
+# Token count matters for cost and context window!
+# GPT-4 pricing is per token, not per word.</pre></div>
+<h2 id="examples">Practical Implications</h2>
+<div class="callout callout-warning"><strong>Why token count matters:</strong><ul style="margin:8px 0 0;padding-left:20px;line-height:2"><li>API costs are per token — longer tokenizations = higher cost</li><li>Context window is in tokens — 4096 tokens ≠ 4096 words</li><li>Non-English text often tokenizes less efficiently (uses more tokens per word)</li><li>Code tokenizes differently than prose — choose a code-optimised tokenizer for code tasks</li></ul></div>
+<h2 id="next-steps">Next Steps</h2>
+<div class="card-grid-2" style="margin:24px 0"><a href="transformers.html" class="doc-card"><div class="doc-card-icon">🤖</div><div class="doc-card-title">Transformer Architecture</div><div class="doc-card-footer">Read →</div></a><a href="lora.html" class="doc-card card-orange"><div class="doc-card-icon">⚡</div><div class="doc-card-title">LoRA Explained</div><div class="doc-card-footer">Read →</div></a></div>
+</main>
+<aside class="docs-toc" aria-label="On this page">
+  <div class="toc-title">On this page</div>
+  <a href="#overview" class="toc-link">Overview</a>
+  <a href="#content" class="toc-link">Content</a>
+  <a href="#examples" class="toc-link">Examples</a>
+  <a href="#next-steps" class="toc-link">Next Steps</a>
+</aside>
+</div>
+<script src="../../docs/docs.js"></script>
+</body>
+</html>

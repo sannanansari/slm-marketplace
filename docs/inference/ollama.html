@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ollama Guide — Run SLMs Locally — SLM Marketplace Docs</title>
+<meta name="description" content="Complete Ollama guide. Install, run models, use the API, build chatbots, create Modelfiles, and serve your fine-tuned GGUF model locally.">
+<link rel="canonical" href="https://slm-market.sannan.app/docs/inference/ollama.html">
+<link rel="icon" type="image/svg+xml" href="../../assets/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" media="print" onload="this.media='all'" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"></noscript>
+<style>#reading-progress-wrap{position:fixed;top:60px;left:0;right:0;height:2px;z-index:199}#reading-progress{height:2px;background:#F97316;width:0;transition:width .1s}</style>
+<link rel="stylesheet" href="../../docs/docs.css">
+</head>
+<body>
+<div id="reading-progress-wrap"><div id="reading-progress"></div></div>
+<header class="docs-header">
+  <div class="docs-header-inner">
+    <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="Open menu">
+      <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+    </button>
+    <a href="../../index.html" class="docs-logo">
+      <span class="docs-logo-slm">SLM</span><span class="docs-logo-name">Marketplace</span>
+      <span class="docs-logo-sep">/</span><span class="docs-logo-docs">Docs</span>
+    </a>
+    <div class="docs-header-search">
+      <svg class="search-icon-wrap" width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input type="search" id="docs-search" placeholder="Search docs… (Press /)" autocomplete="off" aria-label="Search docs">
+      <div class="search-results" id="search-results" aria-live="polite"></div>
+    </div>
+    <nav class="docs-header-nav" aria-label="Site navigation">
+      <a href="../../explore.html">Explore Models</a>
+      <a href="../../upload.html">Upload Model</a>
+      <a href="../../auth.html" class="btn-cta">Sign Up Free</a>
+    </nav>
+  </div>
+</header>
+<div class="docs-layout">
+<nav class="docs-sidebar" id="docs-sidebar" aria-label="Documentation navigation">
+  <div class="nav-section"><div class="nav-section-title">Getting Started</div>
+    <a href="../../docs/getting-started/" class="nav-link">🌐 Introduction to SLMs</a>
+  </div>
+  <div class="nav-section"><div class="nav-section-title">Roadmap</div>
+    <a href="../../docs/roadmap/" class="nav-link">🗺️ 6-Month Roadmap</a>
+  </div>
+  <div class="nav-section"><div class="nav-section-title">Setup</div>
+    <a href="../../docs/setup/" class="nav-link">⚙️ Environment Setup</a>
+  </div>
+  <div class="nav-section"><div class="nav-section-title">Academies</div>
+    <a href="../../docs/fine-tuning/" class="nav-link">⚡ Fine-Tuning</a>
+    <a href="../../docs/datasets/" class="nav-link">📦 Datasets</a>
+    <a href="../../docs/evaluation/" class="nav-link">📊 Evaluation</a>
+    <a href="../../docs/quantization/" class="nav-link">💾 Quantization</a>
+    <a href="../../docs/inference/" class="nav-link">🚀 Inference</a>
+    <a href="../../docs/inference/ollama.html" class="nav-link active" aria-current="page">🦙 Ollama</a>
+    <a href="../../docs/inference/vllm.html" class="nav-link" style="padding-left:24px;font-size:12px">vLLM</a>
+    <a href="../../docs/deployment/" class="nav-link">☁️ Deployment</a>
+    <a href="../../docs/rag/" class="nav-link">🔍 RAG</a>
+  </div>
+  <div class="nav-section"><div class="nav-section-title">Reference</div>
+    <a href="../../docs/hardware/" class="nav-link">🎮 Hardware Guide</a>
+    <a href="../../docs/costs/" class="nav-link">💰 Cost Guide</a>
+    <a href="../../docs/publishing/" class="nav-link">📤 Publishing Guide</a>
+    <a href="../../docs/best-practices/" class="nav-link">🛡️ Best Practices</a>
+    <a href="../../docs/troubleshooting/" class="nav-link">🔴 Troubleshooting</a>
+  </div>
+</nav>
+<main class="docs-content" id="main-content">
+
+<div class="breadcrumb"><a href="../../docs/">Docs</a> &rsaquo; <a href="../inference/">Inference</a> &rsaquo; <span>Ollama</span></div>
+
+<div class="page-hero">
+  <div class="page-label">🦙 Ollama</div>
+  <h1 class="page-title">Run Any SLM Locally with Ollama</h1>
+  <p class="page-desc">Ollama is the easiest way to run language models on your own machine. One command installs it, one command downloads and runs a model. This guide covers installation, the REST API, Modelfiles, calling from Python/JavaScript, and serving your own fine-tuned GGUF model.</p>
+  <div class="page-meta">
+    <span class="page-meta-item">⏱ 25 min read</span>
+    <span class="page-meta-item">💻 Mac / Linux / Windows</span>
+    <span class="page-meta-item">🎯 Beginner-friendly</span>
+  </div>
+</div>
+
+<hr class="page-divider">
+
+<h2 id="install">Install Ollama</h2>
+
+<div class="tab-group">
+  <div class="tab-nav">
+    <button class="tab-btn active" data-tab="tab-mac">macOS</button>
+    <button class="tab-btn" data-tab="tab-linux">Linux</button>
+    <button class="tab-btn" data-tab="tab-windows">Windows</button>
+    <button class="tab-btn" data-tab="tab-docker">Docker</button>
+  </div>
+  <div class="tab-panel active" id="tab-mac">
+    <div class="code-block">
+      <div class="code-block-header"><span class="code-lang">bash</span><button class="code-copy-btn">Copy</button></div>
+      <pre># Download the macOS app from ollama.com
+# Or install via Homebrew:
+brew install ollama
+
+# Start the Ollama server (runs in background)
+ollama serve &
+
+# Verify installation
+ollama --version</pre>
+    </div>
+    <div class="callout callout-info" style="margin-top:12px">
+      <strong>Apple Silicon:</strong> Ollama natively uses Metal GPU acceleration on M1/M2/M3/M4 Macs. No configuration needed — it's automatic.
+    </div>
+  </div>
+  <div class="tab-panel" id="tab-linux">
+    <div class="code-block">
+      <div class="code-block-header"><span class="code-lang">bash</span><button class="code-copy-btn">Copy</button></div>
+      <pre># One-line install (official script)
+curl -fsSL https://ollama.com/install.sh | sh
+
+# The installer:
+# - Detects your GPU (NVIDIA/AMD/CPU)
+# - Installs CUDA libraries if needed
+# - Creates systemd service (auto-start on boot)
+# - Adds 'ollama' to PATH
+
+# Check it's running
+systemctl status ollama
+
+# Or start manually
+ollama serve</pre>
+    </div>
+  </div>
+  <div class="tab-panel" id="tab-windows">
+    <div class="code-block">
+      <div class="code-block-header"><span class="code-lang">bash</span><button class="code-copy-btn">Copy</button></div>
+      <pre"># Download OllamaSetup.exe from https://ollama.com/download
+# Run the installer — it installs automatically and starts the server.
+
+# Then open PowerShell or Command Prompt:
+ollama run llama3.2:1b
+
+# Windows with WSL2 (recommended for GPU):
+wsl --install
+# Then follow Linux instructions inside WSL2</pre>
+    </div>
+  </div>
+  <div class="tab-panel" id="tab-docker">
+    <div class="code-block">
+      <div class="code-block-header"><span class="code-lang">bash</span><button class="code-copy-btn">Copy</button></div>
+      <pre"># CPU only
+docker run -d -v ollama:/root/.ollama -p 11434:11434 --name ollama ollama/ollama
+
+# With NVIDIA GPU
+docker run -d --gpus=all \
+  -v ollama:/root/.ollama \
+  -p 11434:11434 \
+  --name ollama \
+  ollama/ollama
+
+# Pull and run a model inside the container
+docker exec -it ollama ollama run llama3.2:1b
+
+# docker-compose.yml
+# ─────────────────────────
+# services:
+#   ollama:
+#     image: ollama/ollama
+#     ports:
+#       - "11434:11434"
+#     volumes:
+#       - ollama:/root/.ollama
+#     deploy:
+#       resources:
+#         reservations:
+#           devices:
+#             - driver: nvidia
+#               count: all
+#               capabilities: [gpu]
+# volumes:
+#   ollama:</pre>
+    </div>
+  </div>
+</div>
+
+<h2 id="run-models">Run Your First Model</h2>
+
+<div class="code-block">
+  <div class="code-block-header"><span class="code-lang">bash</span><button class="code-copy-btn">Copy</button></div>
+  <pre># Run interactively (downloads model on first run)
+ollama run llama3.2:1b
+
+# You'll see:
+# pulling manifest ████████ 100%
+# pulling model   ████████ 100%
+# >>> Hello! What can you do?
+
+# One-shot (non-interactive)
+ollama run llama3.2:1b "Explain transformers in 3 sentences"
+
+# Popular models to try:
+ollama run llama3.2:1b          # 1B — fastest, ~800MB
+ollama run llama3.2:3b          # 3B — balanced, ~2GB
+ollama run phi3.5               # Phi-3.5-mini — great reasoning
+ollama run gemma2:2b            # Gemma 2 2B — excellent quality
+ollama run qwen2.5:1.5b         # Qwen 2.5 — multilingual
+ollama run mistral               # Mistral 7B — best 7B open model
+ollama run codellama:7b          # Code-focused Llama
+ollama run nomic-embed-text      # Embedding model (for RAG)
+
+# List downloaded models
+ollama list
+
+# Remove a model
+ollama rm llama3.2:1b
+
+# Show model info
+ollama show llama3.2:1b</pre>
+</div>
+
+<h2 id="api">Ollama REST API</h2>
+
+<p>Ollama runs a local REST API on port <code>11434</code>. You can call it from any language.</p>
+
+<div class="tab-group">
+  <div class="tab-nav">
+    <button class="tab-btn active" data-tab="tab-curl">curl</button>
+    <button class="tab-btn" data-tab="tab-py">Python</button>
+    <button class="tab-btn" data-tab="tab-js">JavaScript</button>
+  </div>
+  <div class="tab-panel active" id="tab-curl">
+    <div class="code-block">
+      <div class="code-block-header"><span class="code-lang">bash</span><button class="code-copy-btn">Copy</button></div>
+      <pre># Generate (single turn)
+curl http://localhost:11434/api/generate \
+  -d '{
+    "model": "llama3.2:1b",
+    "prompt": "What is a transformer model?",
+    "stream": false
+  }'
+
+# Chat (multi-turn with history)
+curl http://localhost:11434/api/chat \
+  -d '{
+    "model": "llama3.2:1b",
+    "messages": [
+      {"role": "system", "content": "You are a helpful assistant."},
+      {"role": "user",   "content": "What is fine-tuning?"}
+    ],
+    "stream": false
+  }'
+
+# Streaming response (real-time token output)
+curl http://localhost:11434/api/chat \
+  -d '{
+    "model": "llama3.2:1b",
+    "messages": [{"role": "user", "content": "Count to 5"}],
+    "stream": true
+  }'
+
+# List available models
+curl http://localhost:11434/api/tags
+
+# Generate embeddings
+curl http://localhost:11434/api/embed \
+  -d '{
+    "model": "nomic-embed-text",
+    "input": "Text to embed for RAG"
+  }'</pre>
+    </div>
+  </div>
+  <div class="tab-panel" id="tab-py">
+    <div class="code-block">
+      <div class="code-block-header"><span class="code-lang">python</span><button class="code-copy-btn">Copy</button></div>
+      <pre"># pip install ollama
+import ollama
+
+# ── Simple chat ────────────────────────────────
+response = ollama.chat(
+    model="llama3.2:1b",
+    messages=[
+        {"role": "system", "content": "You are a concise technical assistant."},
+        {"role": "user",   "content": "What is RAG in AI?"}
+    ]
+)
+print(response["message"]["content"])
+
+# ── Streaming response ─────────────────────────
+print("Streaming: ", end="", flush=True)
+for chunk in ollama.chat(
+    model="llama3.2:1b",
+    messages=[{"role": "user", "content": "Write a haiku about AI"}],
+    stream=True
+):
+    print(chunk["message"]["content"], end="", flush=True)
+print()
+
+# ── Multi-turn conversation ────────────────────
+def chat_session(model="llama3.2:1b", system_prompt="You are helpful."):
+    """Maintain conversation history across turns."""
+    messages = [{"role": "system", "content": system_prompt}]
+
+    while True:
+        user_input = input("You: ").strip()
+        if user_input.lower() in ("exit", "quit", "q"):
+            break
+
+        messages.append({"role": "user", "content": user_input})
+
+        response = ollama.chat(model=model, messages=messages)
+        assistant_msg = response["message"]["content"]
+
+        messages.append({"role": "assistant", "content": assistant_msg})
+        print(f"AI: {assistant_msg}\n")
+
+# chat_session()
+
+# ── Generate embeddings ────────────────────────
+embedding_result = ollama.embed(
+    model="nomic-embed-text",
+    input="The quick brown fox"
+)
+vector = embedding_result["embeddings"][0]
+print(f"Embedding dimension: {len(vector)}")  # 768
+
+# ── OpenAI-compatible client ───────────────────
+# Ollama supports the OpenAI API format
+from openai import OpenAI
+
+client = OpenAI(
+    base_url="http://localhost:11434/v1",
+    api_key="ollama"   # required but ignored
+)
+
+completion = client.chat.completions.create(
+    model="llama3.2:1b",
+    messages=[{"role": "user", "content": "What is 2 + 2?"}]
+)
+print(completion.choices[0].message.content)</pre>
+    </div>
+  </div>
+  <div class="tab-panel" id="tab-js">
+    <div class="code-block">
+      <div class="code-block-header"><span class="code-lang">javascript</span><button class="code-copy-btn">Copy</button></div>
+      <pre>// npm install ollama
+import ollama from 'ollama';
+
+// Simple chat
+async function ask(question) {
+  const response = await ollama.chat({
+    model: 'llama3.2:1b',
+    messages: [{ role: 'user', content: question }]
+  });
+  return response.message.content;
+}
+
+// Streaming
+async function streamChat(question) {
+  const stream = await ollama.chat({
+    model: 'llama3.2:1b',
+    messages: [{ role: 'user', content: question }],
+    stream: true
+  });
+
+  for await (const chunk of stream) {
+    process.stdout.write(chunk.message.content);
+  }
+  console.log();
+}
+
+// Full chatbot with history
+class OllamaChatbot {
+  constructor(model = 'llama3.2:1b', systemPrompt = 'You are helpful.') {
+    this.model = model;
+    this.messages = [{ role: 'system', content: systemPrompt }];
+  }
+
+  async send(userMessage) {
+    this.messages.push({ role: 'user', content: userMessage });
+
+    const response = await ollama.chat({
+      model: this.model,
+      messages: this.messages
+    });
+
+    const reply = response.message.content;
+    this.messages.push({ role: 'assistant', content: reply });
+    return reply;
+  }
+}
+
+// Usage:
+// const bot = new OllamaChatbot('llama3.2:1b', 'You are a legal assistant.');
+// const answer = await bot.send('What is an NDA?');
+// console.log(answer);</pre>
+    </div>
+  </div>
+</div>
+
+<h2 id="modelfile">Modelfiles — Customize Any Model</h2>
+
+<p>A Modelfile is like a Dockerfile for AI models. It lets you customize the system prompt, temperature, context length, and more — then bake it into a named model you can share.</p>
+
+<div class="code-block">
+  <div class="code-block-header"><span class="code-lang">bash</span><button class="code-copy-btn">Copy</button></div>
+  <pre"># Modelfile — create a domain-specific assistant
+
+# Base model to customize
+FROM llama3.2:1b
+
+# System prompt — defines the assistant's persona and behavior
+SYSTEM """
+You are LegalEagle, an expert legal assistant specializing in contract analysis.
+
+Your role:
+- Identify key clauses and their implications
+- Flag unusual or risky terms
+- Explain legal language in plain English
+- Always note when users should consult a licensed attorney
+
+Formatting:
+- Use bullet points for clause analysis
+- Bold key terms using **bold**
+- Always include a "Risk Level: Low/Medium/High" rating
+
+You do NOT provide legal advice. You provide legal information.
+"""
+
+# Model parameters
+PARAMETER temperature 0.3         # Low temp for factual, consistent answers
+PARAMETER top_p 0.9
+PARAMETER num_ctx 4096            # Context window
+PARAMETER repeat_penalty 1.1      # Reduce repetition
+PARAMETER num_predict 500         # Max tokens per response
+
+# Optional: custom stop tokens
+# PARAMETER stop "<|end|>"</pre>
+</div>
+
+<div class="code-block">
+  <div class="code-block-header"><span class="code-lang">bash</span><button class="code-copy-btn">Copy</button></div>
+  <pre"># Create the custom model from the Modelfile
+ollama create legaleagle -f ./Modelfile
+
+# Run it
+ollama run legaleagle
+
+# >>> Analyze this clause: "Either party may terminate this agreement
+# >>> with 30 days written notice for any reason."
+
+# Output:
+# **Termination Clause Analysis**
+# • Type: At-will termination with notice
+# • Notice period: 30 days (written)
+# • Bilateral: Both parties have equal termination rights
+# **Risk Level: Low** — Standard commercial clause...
+
+# Push to Ollama registry (create account at ollama.com)
+ollama push your-username/legaleagle</pre>
+</div>
+
+<h2 id="custom-gguf">Load Your Own Fine-Tuned GGUF Model</h2>
+
+<p>After fine-tuning and exporting to GGUF, you can load it directly into Ollama:</p>
+
+<div class="code-block">
+  <div class="code-block-header"><span class="code-lang">bash</span><button class="code-copy-btn">Copy</button></div>
+  <pre"># Method 1: Load GGUF directly from file path
+cat > MyModelfile << 'EOF'
+FROM ./my-model-q4_k_m.gguf
+
+SYSTEM "You are a domain expert assistant trained on specialized data."
+
+PARAMETER temperature 0.4
+PARAMETER num_ctx 4096
+EOF
+
+ollama create my-domain-model -f MyModelfile
+ollama run my-domain-model
+
+# Method 2: Load directly from HuggingFace (Ollama 0.6+)
+ollama run hf.co/your-username/your-model-GGUF:Q4_K_M
+
+# This downloads the Q4_K_M GGUF from your HuggingFace repo
+# and creates a local Ollama model automatically</pre>
+</div>
+
+<h2 id="production">Production Configuration</h2>
+
+<div class="code-block">
+  <div class="code-block-header"><span class="code-lang">bash</span><button class="code-copy-btn">Copy</button></div>
+  <pre"># Environment variables for production Ollama
+
+# Allow external connections (default: localhost only)
+OLLAMA_HOST=0.0.0.0:11434
+
+# Number of models kept loaded in memory (default: 1)
+OLLAMA_MAX_LOADED_MODELS=3
+
+# Keep models loaded in memory for N minutes after last use
+OLLAMA_KEEP_ALIVE=30m
+
+# Use GPU (auto-detected, but can force CPU)
+OLLAMA_GPU_OVERHEAD=0
+
+# Log level
+OLLAMA_DEBUG=false
+
+# Set via systemd (Linux):
+sudo systemctl edit ollama
+# Add:
+# [Service]
+# Environment="OLLAMA_HOST=0.0.0.0:11434"
+# Environment="OLLAMA_MAX_LOADED_MODELS=3"
+
+# Restart
+sudo systemctl restart ollama</pre>
+</div>
+
+<div class="code-block">
+  <div class="code-block-header"><span class="code-lang">python</span><button class="code-copy-btn">Copy</button></div>
+  <pre"># production_ollama.py — production wrapper with error handling
+
+import ollama
+import time
+import logging
+from typing import Optional
+
+logger = logging.getLogger(__name__)
+
+class OllamaClient:
+    """Production wrapper around Ollama with retry logic."""
+
+    def __init__(self, model: str, host: str = "http://localhost:11434"):
+        self.model = model
+        self.client = ollama.Client(host=host)
+        self._verify_model()
+
+    def _verify_model(self):
+        """Check model is available before first request."""
+        models = [m["name"] for m in self.client.list()["models"]]
+        if not any(self.model in m for m in models):
+            logger.warning(f"Model '{self.model}' not found. Pulling...")
+            self.client.pull(self.model)
+
+    def chat(
+        self,
+        messages: list[dict],
+        temperature: float = 0.7,
+        max_tokens: int = 500,
+        retries: int = 3
+    ) -> Optional[str]:
+        """Send chat request with retry on failure."""
+        for attempt in range(retries):
+            try:
+                response = self.client.chat(
+                    model=self.model,
+                    messages=messages,
+                    options={
+                        "temperature": temperature,
+                        "num_predict": max_tokens,
+                        "repeat_penalty": 1.1
+                    }
+                )
+                return response["message"]["content"]
+
+            except ollama.ResponseError as e:
+                logger.error(f"Ollama error (attempt {attempt+1}): {e}")
+                if attempt < retries - 1:
+                    time.sleep(2 ** attempt)  # exponential backoff
+
+            except Exception as e:
+                logger.error(f"Unexpected error: {e}")
+                raise
+
+        return None
+
+    def generate_with_timing(self, prompt: str) -> dict:
+        """Generate and return response with performance metrics."""
+        start = time.perf_counter()
+
+        response = self.client.generate(
+            model=self.model,
+            prompt=prompt,
+            stream=False
+        )
+
+        elapsed = time.perf_counter() - start
+        tokens = response.get("eval_count", 0)
+        tps = tokens / elapsed if elapsed > 0 else 0
+
+        return {
+            "text": response["response"],
+            "tokens": tokens,
+            "elapsed_s": round(elapsed, 2),
+            "tokens_per_sec": round(tps, 1)
+        }
+
+# Usage:
+# client = OllamaClient("llama3.2:1b")
+# result = client.generate_with_timing("What is deep learning?")
+# print(f"Answer: {result['text']}")
+# print(f"Speed: {result['tokens_per_sec']} tok/s")</pre>
+</div>
+
+<h2 id="troubleshooting">Troubleshooting</h2>
+
+<div style="overflow-x:auto;margin:20px 0">
+<table class="comparison-table">
+  <thead><tr><th>Error</th><th>Cause</th><th>Fix</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><code>connection refused</code></td>
+      <td>Ollama server not running</td>
+      <td>Run <code>ollama serve</code> or <code>systemctl start ollama</code></td>
+    </tr>
+    <tr>
+      <td><code>model not found</code></td>
+      <td>Model not pulled yet</td>
+      <td>Run <code>ollama pull model-name</code> first</td>
+    </tr>
+    <tr>
+      <td>Very slow (CPU)</td>
+      <td>GPU not detected</td>
+      <td>NVIDIA: install <code>nvidia-cuda-toolkit</code>. AMD: ROCm support via env var.</td>
+    </tr>
+    <tr>
+      <td><code>out of memory</code></td>
+      <td>Model too large for RAM/VRAM</td>
+      <td>Use smaller model or lower quant (Q4 instead of Q8)</td>
+    </tr>
+    <tr>
+      <td>Port 11434 in use</td>
+      <td>Another process using port</td>
+      <td>Set <code>OLLAMA_HOST=0.0.0.0:11435</code></td>
+    </tr>
+    <tr>
+      <td>Model repeats itself</td>
+      <td>Repetition penalty too low</td>
+      <td>Add <code>PARAMETER repeat_penalty 1.15</code> to Modelfile</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<h2 id="faq">FAQ</h2>
+
+<div class="faq-list">
+  <div class="faq-item">
+    <button class="faq-q">Does Ollama support GPU on Windows?</button>
+    <div class="faq-a"><p>Yes — NVIDIA GPUs are supported via CUDA on Windows. AMD GPU support is improving. Make sure your NVIDIA drivers are up to date. Check with <code>nvidia-smi</code> in PowerShell. WSL2 also passes through GPU access.</p></div>
+  </div>
+  <div class="faq-item">
+    <button class="faq-q">Can I run Ollama on a server and access it remotely?</button>
+    <div class="faq-a"><p>Yes. Set <code>OLLAMA_HOST=0.0.0.0:11434</code> so it listens on all interfaces. Point your client at <code>http://your-server-ip:11434</code>. Add a reverse proxy (Nginx/Caddy) with authentication for public-facing servers.</p></div>
+  </div>
+  <div class="faq-item">
+    <button class="faq-q">What's the difference between /api/generate and /api/chat?</button>
+    <div class="faq-a"><p><code>/api/generate</code> is a simple completion endpoint — you provide a raw prompt string and get a completion. <code>/api/chat</code> takes a messages array with roles (system/user/assistant) and handles conversation formatting automatically. Use <code>/api/chat</code> for anything conversational.</p></div>
+  </div>
+  <div class="faq-item">
+    <button class="faq-q">How do I make Ollama start automatically on boot?</button>
+    <div class="faq-a"><p>On Linux, the installer creates a systemd service: <code>sudo systemctl enable ollama</code>. On macOS, the app auto-starts. On Windows, it installs as a background service that starts on login.</p></div>
+  </div>
+</div>
+
+<h2 id="next-steps">Next Steps</h2>
+<div class="card-grid-2" style="margin:24px 0">
+  <a href="vllm.html" class="doc-card">
+    <div class="doc-card-icon">⚡</div>
+    <div class="doc-card-title">vLLM — Production Serving</div>
+    <div class="doc-card-desc">When Ollama isn't enough: serve thousands of concurrent users with vLLM's PagedAttention.</div>
+    <div class="doc-card-footer">vLLM Guide →</div>
+  </a>
+  <a href="../rag/" class="doc-card">
+    <div class="doc-card-icon">🔍</div>
+    <div class="doc-card-title">Build a RAG Pipeline on Ollama</div>
+    <div class="doc-card-desc">Add a knowledge base to your Ollama model. Chroma + nomic-embed-text + your SLM.</div>
+    <div class="doc-card-footer">RAG Guide →</div>
+  </a>
+</div>
+
+</main>
+<aside class="docs-toc" aria-label="On this page">
+  <div class="toc-title">On this page</div>
+  <a href="#install" class="toc-link">Install Ollama</a>
+  <a href="#run-models" class="toc-link">Run Your First Model</a>
+  <a href="#api" class="toc-link">REST API</a>
+  <a href="#modelfile" class="toc-link">Modelfiles</a>
+  <a href="#custom-gguf" class="toc-link">Load Custom GGUF</a>
+  <a href="#production" class="toc-link">Production Config</a>
+  <a href="#troubleshooting" class="toc-link">Troubleshooting</a>
+  <a href="#faq" class="toc-link">FAQ</a>
+  <a href="#next-steps" class="toc-link">Next Steps</a>
+</aside>
+</div>
+<script src="../../docs/docs.js"></script>
+</body>
+</html>

@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+<meta charset='UTF-8'>
+<meta name='viewport' content='width=device-width,initial-scale=1.0'>
+<title>vLLM Production Guide — High-Throughput SLM Serving &mdash; SLM Docs</title>
+<meta name='description' content='Complete vLLM setup guide for production SLM serving. OpenAI-compatible API, PagedAttention, batching, streaming, benchmarks.'>
+<link rel='icon' type='image/svg+xml' href='../../../assets/favicon.svg'>
+<link rel='preconnect' href='https://fonts.googleapis.com'>
+<link href='https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap' rel='stylesheet'>
+<style>#reading-progress-wrap{position:fixed;top:60px;left:0;right:0;height:2px;z-index:199}#reading-progress{height:2px;background:#F97316;width:0;transition:width .1s}</style>
+<link rel='stylesheet' href='../../../docs/docs.css'>
+</head>
+<body>
+<div id='reading-progress-wrap'><div id='reading-progress'></div></div>
+<header class='docs-header'><div class='docs-header-inner'><button class='mobile-menu-btn' id='mobile-menu-btn' aria-label='Menu'><svg width='18' height='18' fill='none' viewBox='0 0 24 24' stroke='currentColor' stroke-width='2'><line x1='3' y1='6' x2='21' y2='6'/><line x1='3' y1='12' x2='21' y2='12'/><line x1='3' y1='18' x2='21' y2='18'/></svg></button><a href='../../../index.html' class='docs-logo'><span class='docs-logo-slm'>SLM</span><span class='docs-logo-name'>Marketplace</span><span class='docs-logo-sep'>/</span><span class='docs-logo-docs'>Docs</span></a><div class='docs-header-search'><svg class='search-icon-wrap' width='14' height='14' fill='none' viewBox='0 0 24 24' stroke='currentColor' stroke-width='2'><circle cx='11' cy='11' r='8'/><line x1='21' y1='21' x2='16.65' y2='16.65'/></svg><input type='search' id='docs-search' placeholder='Search docs...' autocomplete='off'><div class='search-results' id='search-results'></div></div><nav class='docs-header-nav'><a href='../../../explore.html'>Explore</a><a href='../../../upload.html'>Upload</a><a href='../../../auth.html' class='btn-cta'>Sign Up Free</a></nav></div></header>
+<div class='docs-layout'>
+<nav class="docs-sidebar" id="docs-sidebar">
+<div class="nav-section"><div class="nav-section-title">Getting Started</div>
+<a href="../../../docs/getting-started/" class="nav-link">🌐 Introduction to SLMs</a>
+<a href="../../../docs/getting-started/slm-vs-llm.html" class="nav-link">⚖️ SLM vs LLM</a>
+</div>
+<div class="nav-section"><div class="nav-section-title">AI Foundations</div>
+<a href="../../../docs/foundations/" class="nav-link">🔬 Overview</a>
+<a href="../../../docs/foundations/lora.html" class="nav-link" style="padding-left:22px;font-size:12px">LoRA &amp; QLoRA</a>
+</div>
+<div class="nav-section"><div class="nav-section-title">Roadmap</div>
+<a href="../../../docs/roadmap/" class="nav-link">🗺️ Learning Roadmap</a>
+</div>
+<div class="nav-section"><div class="nav-section-title">Setup</div>
+<a href="../../../docs/setup/" class="nav-link">⚙️ Overview</a>
+<a href="../../../docs/setup/colab.html" class="nav-link" style="padding-left:22px;font-size:12px">☁️ Google Colab</a>
+<a href="../../../docs/setup/gpu-guide.html" class="nav-link" style="padding-left:22px;font-size:12px">🎮 GPU Guide</a>
+</div>
+<div class="nav-section"><div class="nav-section-title">Tools</div>
+<a href="../../../docs/tools/" class="nav-link">🔧 Tools Directory</a>
+</div>
+<div class="nav-section"><div class="nav-section-title">Tutorial</div>
+<a href="../../../docs/tutorials/" class="nav-link" style="color:var(--orange);font-weight:600">🏗️ Build First SLM</a>
+</div>
+<div class="nav-section"><div class="nav-section-title">Academies</div>
+<a href="../../../docs/fine-tuning/" class="nav-link">⚡ Fine-Tuning</a>
+<a href="../../../docs/fine-tuning/qlora.html" class="nav-link" style="padding-left:22px;font-size:12px">QLoRA</a>
+<a href="../../../docs/fine-tuning/unsloth.html" class="nav-link" style="padding-left:22px;font-size:12px">Unsloth 🦥</a>
+<a href="../../../docs/datasets/" class="nav-link">📦 Datasets</a>
+<a href="../../../docs/evaluation/" class="nav-link">📊 Evaluation</a>
+<a href="../../../docs/quantization/" class="nav-link">💾 Quantization</a>
+<a href="../../../docs/inference/" class="nav-link">🚀 Inference</a>
+<a href="../../../docs/inference/ollama.html" class="nav-link" style="padding-left:22px;font-size:12px">🦙 Ollama</a>
+<a href="../../../docs/inference/vllm.html" class="nav-link" style="padding-left:22px;font-size:12px">vLLM</a>
+<a href="../../../docs/deployment/" class="nav-link">☁️ Deployment</a>
+<a href="../../../docs/rag/" class="nav-link">🔍 RAG</a>
+</div>
+<div class="nav-section"><div class="nav-section-title">Projects</div>
+<a href="../../../docs/projects/" class="nav-link">🏗️ All Projects</a>
+<a href="../../../docs/projects/medical.html" class="nav-link" style="padding-left:22px;font-size:12px">🏥 Medical SLM</a>
+<a href="../../../docs/projects/legal.html" class="nav-link" style="padding-left:22px;font-size:12px">⚖️ Legal SLM</a>
+<a href="../../../docs/projects/coding.html" class="nav-link" style="padding-left:22px;font-size:12px">💻 Coding SLM</a>
+<a href="../../../docs/projects/finance.html" class="nav-link" style="padding-left:22px;font-size:12px">📈 Finance SLM</a>
+</div>
+<div class="nav-section"><div class="nav-section-title">Reference</div>
+<a href="../../../docs/hardware/" class="nav-link">🎮 Hardware Guide</a>
+<a href="../../../docs/costs/" class="nav-link">💰 Cost Guide</a>
+<a href="../../../docs/publishing/" class="nav-link">📤 Publishing Guide</a>
+<a href="../../../docs/best-practices/" class="nav-link">🛡️ Best Practices</a>
+<a href="../../../docs/troubleshooting/" class="nav-link">🔴 Troubleshooting</a>
+</div>
+</nav>
+<main class='docs-content'>
+<div class='breadcrumb'><a href='../../'>Docs</a> &rsaquo; <a href='../'>Inference</a> &rsaquo; <span>vLLM</span></div><div class='page-hero'><div class='page-label'>⚡ Inference &mdash; vLLM</div><h1 class='page-title'>vLLM — Production Serving</h1><p class='page-desc'>10&ndash;25x higher throughput than naive inference. OpenAI-compatible API. The production standard for SLM serving.</p><div class='page-meta'><span class='page-meta-item'>⏱ 10 min read</span><span class='difficulty diff-advanced'>Advanced</span></div></div><hr class='page-divider'><h2 id='install'>Install</h2><div class='code-block'><div class='code-block-header'><span class='code-block-lang'>bash</span><button class='code-copy-btn'>Copy</button></div><pre><code># Requires NVIDIA GPU with CUDA 12.1+
+pip install vllm
+
+# Verify
+python -c 'import vllm; print(vllm.__version__)'</code></pre></div><h2 id='serve'>Start the API Server</h2><div class='code-block'><div class='code-block-header'><span class='code-block-lang'>bash</span><button class='code-copy-btn'>Copy</button></div><pre><code># Basic server (OpenAI-compatible)
+python -m vllm.entrypoints.openai.api_server \
+  --model meta-llama/Llama-3.2-1B-Instruct \
+  --host 0.0.0.0 \
+  --port 8000 \
+  --max-model-len 4096
+
+# With your fine-tuned model from HuggingFace
+python -m vllm.entrypoints.openai.api_server \
+  --model your-username/YourFineTunedModel \
+  --max-model-len 4096 \
+  --gpu-memory-utilization 0.90
+
+# Multi-GPU (for 7B+ models)
+python -m vllm.entrypoints.openai.api_server \
+  --model meta-llama/Llama-3.1-8B-Instruct \
+  --tensor-parallel-size 2 \
+  --max-model-len 8192</code></pre></div><h2 id='query'>Query the API</h2><div class='code-block'><div class='code-block-header'><span class='code-block-lang'>python</span><button class='code-copy-btn'>Copy</button></div><pre><code>from openai import OpenAI
+
+# vLLM uses the same client as OpenAI
+client = OpenAI(base_url='http://localhost:8000/v1', api_key='not-needed')
+
+# Chat completion
+response = client.chat.completions.create(
+    model='your-username/YourFineTunedModel',
+    messages=[
+        {'role': 'system', 'content': 'You are a medical coding expert.'},
+        {'role': 'user',   'content': 'Patient with acute chest pain...'},
+    ],
+    max_tokens=256,
+    temperature=0.1,
+)
+print(response.choices[0].message.content)
+
+# Batch inference (much faster than one-by-one)
+import asyncio
+from openai import AsyncOpenAI
+
+async def batch_predict(notes):
+    aclient = AsyncOpenAI(base_url='http://localhost:8000/v1', api_key='-')
+    tasks = [aclient.chat.completions.create(
+        model='your-model', messages=[{'role':'user','content':n}], max_tokens=128
+    ) for n in notes]
+    return await asyncio.gather(*tasks)
+
+results = asyncio.run(batch_predict(['note 1...', 'note 2...', 'note 3...']))</code></pre></div><h2 id='perf'>Performance Tuning</h2><div class='table-wrap'><table><thead><tr><th>Parameter</th><th>Default</th><th>Recommendation</th><th>Effect</th></tr></thead><tbody><tr><td><code>--gpu-memory-utilization</code></td><td>0.90</td><td>0.85&ndash;0.95</td><td>More VRAM = more KV cache = higher throughput</td></tr><tr><td><code>--max-num-batched-tokens</code></td><td>auto</td><td>4096&ndash;8192</td><td>Larger batches = higher GPU utilization</td></tr><tr><td><code>--quantization</code></td><td>none</td><td>awq or fp8</td><td>2x memory savings, ~5% quality loss</td></tr><tr><td><code>--enable-prefix-caching</code></td><td>off</td><td>on</td><td>Cache repeated system prompts</td></tr></tbody></table></div><div class='code-block'><div class='code-block-header'><span class='code-block-lang'>bash</span><button class='code-copy-btn'>Copy</button></div><pre><code># Production-optimised command
+python -m vllm.entrypoints.openai.api_server \
+  --model your-username/YourModel-AWQ \
+  --quantization awq \
+  --enable-prefix-caching \
+  --max-model-len 4096 \
+  --gpu-memory-utilization 0.90 \
+  --host 0.0.0.0 --port 8000</code></pre></div>
+</main>
+<aside class='docs-toc'><div class='toc-title'>On this page</div>
+<a href="#install" class="toc-link">Install</a>
+<a href="#serve" class="toc-link">Start API Server</a>
+<a href="#query" class="toc-link">Query the API</a>
+<a href="#perf" class="toc-link">Performance Tuning</a>
+</aside>
+</div>
+<script src='../../../docs/docs.js'></script>
+</body></html>

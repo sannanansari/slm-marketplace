@@ -1,46 +1,49 @@
 /**
  * _worker.js — Cloudflare Pages Advanced Mode Worker
  *
- * This handles ONE route: GET /config.js
- * It injects SUPABASE_URL and SUPABASE_ANON_KEY from CF Pages env vars
- * so the Supabase key is never in git.
+ * Handles ONE route: GET /config.js
+ * Injects SUPABASE_URL, SUPABASE_ANON_KEY, and SITE_URL from CF Pages
+ * env vars so no secrets ever appear in git.
  *
- * Everything else is passed through to static assets normally.
- *
- * Set env vars in: CF Pages → Settings → Environment Variables
+ * Set in CF Pages → Settings → Environment Variables:
  *   SUPABASE_URL      = https://xxxx.supabase.co
  *   SUPABASE_ANON_KEY = eyJhbGci...
+ *   SITE_URL          = https://slm-market.sannan.app
  */
 
 export default {
   async fetch(request, env, ctx) {
     const url = new URL(request.url);
 
-    // Intercept only /config.js
+    // ── Inject runtime config ──────────────────────────────────
     if (url.pathname === '/config.js') {
       const supabaseUrl = env.SUPABASE_URL      || '';
       const supabaseKey = env.SUPABASE_ANON_KEY || '';
+      const siteUrl     = env.SITE_URL          || url.origin;
 
-      const body = supabaseUrl && supabaseKey
-        ? `window.__SLM_CONFIG = { url: "${supabaseUrl}", key: "${supabaseKey}" };`
-        : `/* Supabase env vars not set — running in demo mode */\nwindow.__SLM_CONFIG = { url: "", key: "" };`;
+      const isConfigured = supabaseUrl && supabaseKey &&
+        !supabaseUrl.includes('YOUR_PROJECT');
+
+      const body = isConfigured
+        ? `window.__SLM_CONFIG = { url: "${supabaseUrl}", key: "${supabaseKey}", siteUrl: "${siteUrl}" };`
+        : `/* Supabase env vars not set — running in demo mode */\nwindow.__SLM_CONFIG = { url: "", key: "", siteUrl: "${siteUrl}" };`;
 
       return new Response(body, {
         status: 200,
         headers: {
           'Content-Type':  'application/javascript; charset=utf-8',
           'Cache-Control': 'no-store, no-cache, must-revalidate',
-          'X-Config-Mode': supabaseUrl ? 'production' : 'demo',
+          'X-Config-Mode': isConfigured ? 'production' : 'demo',
         },
       });
     }
 
-    // /docs without trailing slash → redirect to /docs/
+    // ── /docs without trailing slash → redirect ────────────────
     if (url.pathname === '/docs') {
       return Response.redirect(url.origin + '/docs/', 301);
     }
 
-    // Everything else → serve static asset normally
+    // ── Everything else → static asset ────────────────────────
     return env.ASSETS.fetch(request);
   },
 };

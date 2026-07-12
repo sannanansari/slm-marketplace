@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>macOS Setup for SLM Development — SLM Marketplace Docs</title>
+<meta name="description" content="Set up your Mac (M1/M2/M3/M4 or Intel) for SLM development. Python, PyTorch with Metal, Ollama, and HuggingFace tools.">
+<link rel="icon" type="image/svg+xml" href="../../assets/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" media="print" onload="this.media='all'" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"></noscript>
+<style>#reading-progress-wrap{position:fixed;top:60px;left:0;right:0;height:2px;z-index:199}#reading-progress{height:2px;background:#F97316;width:0;transition:width .1s}</style>
+<link rel="stylesheet" href="../../docs/docs.css">
+</head>
+<body>
+<div id="reading-progress-wrap"><div id="reading-progress"></div></div>
+<header class="docs-header">
+  <div class="docs-header-inner">
+    <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="Open menu">
+      <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+    </button>
+    <a href="../../index.html" class="docs-logo">
+      <span class="docs-logo-slm">SLM</span><span class="docs-logo-name">Marketplace</span>
+      <span class="docs-logo-sep">/</span><span class="docs-logo-docs">Docs</span>
+    </a>
+    <div class="docs-header-search">
+      <svg class="search-icon-wrap" width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input type="search" id="docs-search" placeholder="Search docs… (Press /)" autocomplete="off" aria-label="Search docs">
+      <div class="search-results" id="search-results" aria-live="polite"></div>
+    </div>
+    <nav class="docs-header-nav" aria-label="Site navigation">
+      <a href="../../explore.html">Explore Models</a>
+      <a href="../../upload.html">Upload Model</a>
+      <a href="../../auth.html" class="btn-cta">Sign Up Free</a>
+    </nav>
+  </div>
+</header>
+<div class="docs-layout">
+<nav class="docs-sidebar" id="docs-sidebar" aria-label="Documentation navigation">
+  <div class="nav-section"><div class="nav-section-title">Getting Started</div>
+    <a href="../../docs/getting-started/" class="nav-link">🌐 Introduction to SLMs</a>
+    <a href="../../docs/getting-started/slm-vs-llm.html" class="nav-link">⚖️ SLM vs LLM</a>
+    <a href="../../docs/getting-started/use-cases.html" class="nav-link">💼 Use Cases</a>
+    <a href="../../docs/getting-started/popular-slms.html" class="nav-link">🏆 Popular SLMs</a>
+  </div>
+  <div class="nav-section"><div class="nav-section-title">Roadmap</div>
+    <a href="../../docs/roadmap/" class="nav-link">🗺️ 6-Month Roadmap</a>
+  </div>
+  <div class="nav-section"><div class="nav-section-title">Setup</div>
+    <a href="../../docs/setup/" class="nav-link">⚙️ Environment Setup</a>
+    <a href="../../docs/setup/colab.html" class="nav-link" style="padding-left:24px;font-size:12px">☁️ Google Colab</a>
+    <a href="../../docs/setup/gpu-guide.html" class="nav-link" style="padding-left:24px;font-size:12px">🎮 GPU Guide</a>
+    <a href="../../docs/setup/linux.html" class="nav-link" style="padding-left:24px;font-size:12px">🐧 Linux Setup</a>
+    <a href="../../docs/setup/macos.html" class="nav-link" style="padding-left:24px;font-size:12px">🍎 macOS Setup</a>
+    <a href="../../docs/setup/windows.html" class="nav-link" style="padding-left:24px;font-size:12px">🪟 Windows Setup</a>
+    <a href="../../docs/setup/runpod.html" class="nav-link" style="padding-left:24px;font-size:12px">☁️ RunPod</a>
+  </div>
+  <div class="nav-section"><div class="nav-section-title">Foundations</div>
+    <a href="../../docs/foundations/" class="nav-link">🔬 AI Foundations</a>
+    <a href="../../docs/foundations/transformers.html" class="nav-link" style="padding-left:24px;font-size:12px">🤖 Transformers</a>
+    <a href="../../docs/foundations/tokens.html" class="nav-link" style="padding-left:24px;font-size:12px">🔤 Tokenization</a>
+    <a href="../../docs/foundations/lora.html" class="nav-link" style="padding-left:24px;font-size:12px">⚡ LoRA</a>
+    <a href="../../docs/foundations/quantization.html" class="nav-link" style="padding-left:24px;font-size:12px">💾 Quantization Basics</a>
+  </div>
+  <div class="nav-section"><div class="nav-section-title">Tutorial</div>
+    <a href="../../docs/tutorials/" class="nav-link">🏗️ Build First SLM</a>
+  </div>
+  <div class="nav-section"><div class="nav-section-title">Academies</div>
+    <a href="../../docs/fine-tuning/" class="nav-link">⚡ Fine-Tuning</a>
+    <a href="../../docs/fine-tuning/qlora.html" class="nav-link" style="padding-left:24px;font-size:12px">QLoRA Deep Dive</a>
+    <a href="../../docs/fine-tuning/unsloth.html" class="nav-link" style="padding-left:24px;font-size:12px">🦥 Unsloth</a>
+    <a href="../../docs/datasets/" class="nav-link">📦 Datasets</a>
+    <a href="../../docs/evaluation/" class="nav-link">📊 Evaluation</a>
+    <a href="../../docs/quantization/" class="nav-link">💾 Quantization</a>
+    <a href="../../docs/inference/" class="nav-link">🚀 Inference</a>
+    <a href="../../docs/inference/ollama.html" class="nav-link" style="padding-left:24px;font-size:12px">🦙 Ollama</a>
+    <a href="../../docs/inference/vllm.html" class="nav-link" style="padding-left:24px;font-size:12px">vLLM</a>
+    <a href="../../docs/deployment/" class="nav-link">☁️ Deployment</a>
+    <a href="../../docs/rag/" class="nav-link">🔍 RAG</a>
+  </div>
+  <div class="nav-section"><div class="nav-section-title">Reference</div>
+    <a href="../../docs/hardware/" class="nav-link">🎮 Hardware Guide</a>
+    <a href="../../docs/costs/" class="nav-link">💰 Cost Guide</a>
+    <a href="../../docs/publishing/" class="nav-link">📤 Publishing Guide</a>
+    <a href="../../docs/best-practices/" class="nav-link">🛡️ Best Practices</a>
+    <a href="../../docs/troubleshooting/" class="nav-link">🔴 Troubleshooting</a>
+  </div>
+</nav>
+<main class="docs-content" id="main-content">
+<div class="breadcrumb"><a href="../../docs/">Docs</a> &rsaquo; <a href="../../docs/setup/">Setup</a> &rsaquo; <span>macOS Setup for SLM Development</span></div>
+<div class="page-hero">
+  <div class="page-label">🍎 Setup</div>
+  <h1 class="page-title">macOS Setup for SLM Development</h1>
+  <p class="page-desc">Set up your Mac (M1/M2/M3/M4 or Intel) for SLM development. Python, PyTorch with Metal, Ollama, and HuggingFace tools.</p>
+</div>
+<hr class="page-divider">
+<h2 id="overview">Mac for AI Development</h2>
+<p>Apple Silicon Macs (M1/M2/M3/M4) have unified memory — the GPU and CPU share RAM. A 32GB M3 Mac can run a 7B model at 13GB directly in memory using Metal acceleration. Excellent for local inference; limited for training large models.</p>
+<h2 id="content">Complete Setup</h2>
+<div class="code-block"><div class="code-block-header"><span class="code-lang">bash</span><button class="code-copy-btn">Copy</button></div><pre"># 1. Install Homebrew
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+
+# 2. Python 3.11
+brew install python@3.11
+python3.11 --version
+
+# 3. Virtual environment
+python3.11 -m venv ~/slm-env
+source ~/slm-env/bin/activate
+echo "source ~/slm-env/bin/activate" >> ~/.zshrc
+
+# 4. PyTorch with Metal (Apple Silicon)
+pip install torch torchvision torchaudio  # Metal backend is auto-detected
+
+# Verify Metal GPU
+python -c "
+import torch
+print('MPS available:', torch.backends.mps.is_available())
+print('Device:', torch.device('mps'))
+"
+
+# 5. HuggingFace stack
+pip install transformers datasets accelerate peft trl
+pip install huggingface_hub sentence-transformers
+
+# 6. Ollama (native Apple Silicon support, uses Metal automatically)
+brew install ollama
+ollama serve &
+ollama run llama3.2:1b</pre></div>
+<h2 id="examples">Training on Mac</h2>
+<div class="callout callout-warning"><strong>Training limitations on Mac:</strong> bitsandbytes (required for QLoRA) has limited Mac support. Use <code>unsloth</code> on Mac for fine-tuning, or use Google Colab (free T4 GPU) for training and Mac for inference only. Mac is excellent for inference — Ollama runs at full Metal speed.</div>
+<h2 id="next-steps">Next Steps</h2>
+<div class="card-grid-2" style="margin:24px 0"><a href="colab.html" class="doc-card"><div class="doc-card-icon">☁️</div><div class="doc-card-title">Google Colab for Training</div><div class="doc-card-footer">Free GPU →</div></a><a href="../../docs/inference/ollama.html" class="doc-card card-orange"><div class="doc-card-icon">🦙</div><div class="doc-card-title">Run Models Locally</div><div class="doc-card-footer">Ollama guide →</div></a></div>
+</main>
+<aside class="docs-toc" aria-label="On this page">
+  <div class="toc-title">On this page</div>
+  <a href="#overview" class="toc-link">Overview</a>
+  <a href="#content" class="toc-link">Content</a>
+  <a href="#examples" class="toc-link">Examples</a>
+  <a href="#next-steps" class="toc-link">Next Steps</a>
+</aside>
+</div>
+<script src="../../docs/docs.js"></script>
+</body>
+</html>

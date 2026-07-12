@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+<meta charset='UTF-8'>
+<meta name='viewport' content='width=device-width,initial-scale=1.0'>
+<title>AI Foundations for SLM Developers — SLM Marketplace Docs</title>
+<meta name='description' content='Core AI concepts for building SLMs: transformers, tokens, embeddings, attention, LoRA, and quantization explained simply.'>
+<link rel='icon' type='image/svg+xml' href='../../assets/favicon.svg'>
+<link rel='preconnect' href='https://fonts.googleapis.com'>
+<link href='https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap' rel='stylesheet'>
+<style>#reading-progress-wrap{position:fixed;top:60px;left:0;right:0;height:2px;z-index:199}#reading-progress{height:2px;background:#F97316;width:0;transition:width .1s}</style>
+<link rel='stylesheet' href='../../docs/docs.css'>
+</head>
+<body>
+<div id='reading-progress-wrap'><div id='reading-progress'></div></div>
+<header class='docs-header'><div class='docs-header-inner'><button class='mobile-menu-btn' id='mobile-menu-btn' aria-label='Open menu'><svg width='18' height='18' fill='none' viewBox='0 0 24 24' stroke='currentColor' stroke-width='2'><line x1='3' y1='6' x2='21' y2='6'/><line x1='3' y1='12' x2='21' y2='12'/><line x1='3' y1='18' x2='21' y2='18'/></svg></button><a href='../../index.html' class='docs-logo'><span class='docs-logo-slm'>SLM</span><span class='docs-logo-name'>Marketplace</span><span class='docs-logo-sep'>/</span><span class='docs-logo-docs'>Docs</span></a><div class='docs-header-search'><svg class='search-icon-wrap' width='14' height='14' fill='none' viewBox='0 0 24 24' stroke='currentColor' stroke-width='2'><circle cx='11' cy='11' r='8'/><line x1='21' y1='21' x2='16.65' y2='16.65'/></svg><input type='search' id='docs-search' placeholder='Search docs… (Press /)' autocomplete='off'><div class='search-results' id='search-results'></div></div><nav class='docs-header-nav'><a href='../../explore.html'>Explore Models</a><a href='../../upload.html'>Upload Model</a><a href='../../auth.html' class='btn-cta'>Sign Up Free</a></nav></div></header>
+<div class='docs-layout'>
+<nav class="docs-sidebar" id="docs-sidebar">
+<div class="nav-section"><div class="nav-section-title">Getting Started</div>
+<a href="../../docs/getting-started/" class="nav-link">🌐 Introduction to SLMs</a>
+<a href="../../docs/getting-started/slm-vs-llm.html" class="nav-link">⚖️ SLM vs LLM</a>
+<a href="../../docs/getting-started/use-cases.html" class="nav-link">💼 Use Cases</a>
+<a href="../../docs/getting-started/popular-slms.html" class="nav-link">⭐ Popular SLMs</a>
+</div>
+<div class="nav-section"><div class="nav-section-title">AI Foundations</div>
+<a href="../../docs/foundations/" class="nav-link">🔬 Overview</a>
+<a href="../../docs/foundations/transformers.html" class="nav-link" style="padding-left:24px;font-size:12px">Transformers</a>
+<a href="../../docs/foundations/tokens.html" class="nav-link" style="padding-left:24px;font-size:12px">Tokens</a>
+<a href="../../docs/foundations/lora.html" class="nav-link" style="padding-left:24px;font-size:12px">LoRA &amp; QLoRA</a>
+<a href="../../docs/foundations/quantization.html" class="nav-link" style="padding-left:24px;font-size:12px">Quantization</a>
+</div>
+<div class="nav-section"><div class="nav-section-title">Roadmap</div>
+<a href="../../docs/roadmap/" class="nav-link">🗺️ Learning Roadmap</a>
+</div>
+<div class="nav-section"><div class="nav-section-title">Setup</div>
+<a href="../../docs/setup/" class="nav-link">⚙️ Overview</a>
+<a href="../../docs/setup/windows.html" class="nav-link" style="padding-left:24px;font-size:12px">🪟 Windows</a>
+<a href="../../docs/setup/macos.html" class="nav-link" style="padding-left:24px;font-size:12px">🍎 macOS</a>
+<a href="../../docs/setup/linux.html" class="nav-link" style="padding-left:24px;font-size:12px">🐧 Linux</a>
+<a href="../../docs/setup/colab.html" class="nav-link" style="padding-left:24px;font-size:12px">☁️ Google Colab</a>
+<a href="../../docs/setup/runpod.html" class="nav-link" style="padding-left:24px;font-size:12px">🚀 RunPod</a>
+<a href="../../docs/setup/gpu-guide.html" class="nav-link" style="padding-left:24px;font-size:12px">🎮 GPU Guide</a>
+</div>
+<div class="nav-section"><div class="nav-section-title">Tools</div>
+<a href="../../docs/tools/" class="nav-link">🔧 Tools Directory</a>
+</div>
+<div class="nav-section"><div class="nav-section-title">Tutorial</div>
+<a href="../../docs/tutorials/" class="nav-link" style="color:var(--orange);font-weight:600"><span class="nav-badge nav-badge-new" style="margin-right:4px">NEW</span>Build First SLM</a>
+</div>
+<div class="nav-section"><div class="nav-section-title">Academies</div>
+<a href="../../docs/fine-tuning/" class="nav-link">⚡ Fine-Tuning</a>
+<a href="../../docs/fine-tuning/qlora.html" class="nav-link" style="padding-left:24px;font-size:12px">QLoRA</a>
+<a href="../../docs/fine-tuning/unsloth.html" class="nav-link" style="padding-left:24px;font-size:12px">Unsloth 🦥</a>
+<a href="../../docs/datasets/" class="nav-link">📦 Datasets</a>
+<a href="../../docs/evaluation/" class="nav-link">📊 Evaluation</a>
+<a href="../../docs/quantization/" class="nav-link">💾 Quantization</a>
+<a href="../../docs/inference/" class="nav-link">🚀 Inference</a>
+<a href="../../docs/inference/ollama.html" class="nav-link" style="padding-left:24px;font-size:12px">🦙 Ollama</a>
+<a href="../../docs/inference/vllm.html" class="nav-link" style="padding-left:24px;font-size:12px">vLLM</a>
+<a href="../../docs/deployment/" class="nav-link">☁️ Deployment</a>
+<a href="../../docs/rag/" class="nav-link">🔍 RAG</a>
+</div>
+<div class="nav-section"><div class="nav-section-title">Projects</div>
+<a href="../../docs/projects/" class="nav-link">🏗️ All Projects</a>
+<a href="../../docs/projects/medical.html" class="nav-link" style="padding-left:24px;font-size:12px">🏥 Medical SLM</a>
+<a href="../../docs/projects/legal.html" class="nav-link" style="padding-left:24px;font-size:12px">⚖️ Legal SLM</a>
+<a href="../../docs/projects/coding.html" class="nav-link" style="padding-left:24px;font-size:12px">💻 Coding SLM</a>
+<a href="../../docs/projects/finance.html" class="nav-link" style="padding-left:24px;font-size:12px">📈 Finance SLM</a>
+</div>
+<div class="nav-section"><div class="nav-section-title">Reference</div>
+<a href="../../docs/hardware/" class="nav-link">🎮 Hardware Guide</a>
+<a href="../../docs/costs/" class="nav-link">💰 Cost Guide</a>
+<a href="../../docs/publishing/" class="nav-link">📤 Publishing Guide</a>
+<a href="../../docs/best-practices/" class="nav-link">🛡️ Best Practices</a>
+<a href="../../docs/troubleshooting/" class="nav-link">🔴 Troubleshooting</a>
+</div>
+</nav>
+<main class='docs-content'>
+<div class='breadcrumb'><a href='../'>Docs</a> &rsaquo; <span>AI Foundations</span></div><div class='page-hero'><div class='page-label'>🔬 AI Foundations</div><h1 class='page-title'>AI Foundations</h1><p class='page-desc'>The minimum theory you need to build SLMs. No PhD required.</p><div class='page-meta'><span class='page-meta-item'>⏱ 20 min read</span><span class='difficulty diff-beginner'>Beginner</span></div></div><hr class='page-divider'><h2 id='overview'>Concept Map</h2><div class='card-grid-3'><a href='transformers.html' class='doc-card'><div class='doc-card-icon'>🔬</div><div class='doc-card-title'>Transformers</div><div class='doc-card-desc'>The architecture behind every modern language model.</div></a><a href='tokens.html' class='doc-card'><div class='doc-card-icon'>🔤</div><div class='doc-card-title'>Tokens</div><div class='doc-card-desc'>How text becomes numbers a model can process.</div></a><a href='embeddings.html' class='doc-card'><div class='doc-card-icon'>📐</div><div class='doc-card-title'>Embeddings</div><div class='doc-card-desc'>Representing meaning as high-dimensional vectors.</div></a><a href='attention.html' class='doc-card'><div class='doc-card-icon'>🧠</div><div class='doc-card-title'>Attention</div><div class='doc-card-desc'>How models decide what to focus on when generating text.</div></a><a href='lora.html' class='doc-card'><div class='doc-card-icon'>⚡</div><div class='doc-card-title'>LoRA &amp; QLoRA</div><div class='doc-card-desc'>Fine-tune billion-parameter models on one consumer GPU.</div></a><a href='quantization.html' class='doc-card'><div class='doc-card-icon'>💾</div><div class='doc-card-title'>Quantization Basics</div><div class='doc-card-desc'>Shrink models 4x with minimal quality loss.</div></a></div><h2 id='transformers'>Transformers in 60 Seconds</h2><p>Every SLM is built on the <strong>Transformer architecture</strong>. A Transformer reads all tokens in your input simultaneously and uses <em>attention</em> to weigh how important each token is relative to every other token when producing the next word.</p><div class='callout callout-tip'><span class='callout-icon'>🎯</span><div class='callout-body'><div class='callout-title'>Mental model</div><p>Think of it as: for every word being generated, the model asks &ldquo;which other words in my input are most relevant right now?&rdquo; — and weights their influence accordingly.</p></div></div><h2 id='tokens'>Tokens and Context Windows</h2><p>Models don't read words — they read <strong>tokens</strong> (~0.75 words each in English). &ldquo;Hello world&rdquo; = 2 tokens. A 1,000-word document ≈ 1,300 tokens.</p><p>The <strong>context window</strong> is the maximum tokens a model processes at once. Modern SLMs range from 4K to 128K tokens.</p><div class='table-wrap'><table><thead><tr><th>Context Window</th><th>Approx Words</th><th>Use For</th></tr></thead><tbody><tr><td>4K tokens</td><td>~3,000</td><td>Short documents, classification</td></tr><tr><td>8K tokens</td><td>~6,000</td><td>Medical notes, short contracts</td></tr><tr><td>32K tokens</td><td>~24,000</td><td>Long legal documents</td></tr><tr><td>128K tokens</td><td>~96,000</td><td>Full codebases, research papers</td></tr></tbody></table></div><h2 id='lora'>LoRA &amp; QLoRA</h2><p><strong>LoRA</strong> adds small adapter matrices to specific transformer layers and only trains those — instead of all 7B weights. Result: fine-tune a 7B model with <strong>8GB VRAM</strong> instead of 80GB, 3–5x faster, within 1–2% of full fine-tuning quality.</p><p><strong>QLoRA</strong> first quantizes the model to 4-bit precision, then applies LoRA. A 7B model fits in <strong>6GB VRAM</strong>.</p><h2 id='quantization'>Quantization Basics</h2><div class='table-wrap'><table><thead><tr><th>Precision</th><th>Bits/weight</th><th>7B size</th><th>Quality loss</th></tr></thead><tbody><tr><td>FP32</td><td>32</td><td>28 GB</td><td class='td-good'>None</td></tr><tr><td>FP16/BF16</td><td>16</td><td>14 GB</td><td class='td-good'>Negligible</td></tr><tr><td>INT8</td><td>8</td><td>7 GB</td><td class='td-good'>~1%</td></tr><tr><td>INT4 (QLoRA)</td><td>4</td><td>3.5 GB</td><td class='td-warn'>~3–5%</td></tr></tbody></table></div>
+<div class="page-nav"><div></div><a href="transformers.html" class="page-nav-btn page-nav-next"><div class="page-nav-label">Next &rarr;</div><div class="page-nav-title">Transformers Explained</div></a></div>
+</main>
+<aside class='docs-toc'><div class='toc-title'>On this page</div>
+<a href="#overview" class="toc-link">Concept Map</a>
+<a href="#transformers" class="toc-link">Transformers</a>
+<a href="#tokens" class="toc-link">Tokens & Context</a>
+<a href="#lora" class="toc-link">LoRA & QLoRA</a>
+<a href="#quantization" class="toc-link">Quantization</a>
+</aside>
+</div>
+<script src='../../docs/docs.js'></script>
+</body></html>

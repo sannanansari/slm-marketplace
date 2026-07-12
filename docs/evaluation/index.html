@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+<meta charset='UTF-8'>
+<meta name='viewport' content='width=device-width,initial-scale=1.0'>
+<title>Evaluation Academy — Metrics, Benchmarks, Hallucination &mdash; SLM Docs</title>
+<meta name='description' content='Learn to evaluate SLMs with accuracy, F1, hallucination testing, and custom benchmarks.'>
+<link rel='icon' type='image/svg+xml' href='../.../assets/favicon.svg'>
+<link rel='preconnect' href='https://fonts.googleapis.com'>
+<link href='https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap' rel='stylesheet'>
+<style>#reading-progress-wrap{position:fixed;top:60px;left:0;right:0;height:2px;z-index:199}#reading-progress{height:2px;background:#F97316;width:0;transition:width .1s}</style>
+<link rel='stylesheet' href='../.../docs/docs.css'>
+</head>
+<body>
+<div id='reading-progress-wrap'><div id='reading-progress'></div></div>
+<header class='docs-header'><div class='docs-header-inner'><button class='mobile-menu-btn' id='mobile-menu-btn' aria-label='Menu'><svg width='18' height='18' fill='none' viewBox='0 0 24 24' stroke='currentColor' stroke-width='2'><line x1='3' y1='6' x2='21' y2='6'/><line x1='3' y1='12' x2='21' y2='12'/><line x1='3' y1='18' x2='21' y2='18'/></svg></button><a href='../.../index.html' class='docs-logo'><span class='docs-logo-slm'>SLM</span><span class='docs-logo-name'>Marketplace</span><span class='docs-logo-sep'>/</span><span class='docs-logo-docs'>Docs</span></a><div class='docs-header-search'><svg class='search-icon-wrap' width='14' height='14' fill='none' viewBox='0 0 24 24' stroke='currentColor' stroke-width='2'><circle cx='11' cy='11' r='8'/><line x1='21' y1='21' x2='16.65' y2='16.65'/></svg><input type='search' id='docs-search' placeholder='Search docs...' autocomplete='off'><div class='search-results' id='search-results'></div></div><nav class='docs-header-nav'><a href='../.../explore.html'>Explore Models</a><a href='../.../upload.html'>Upload Model</a><a href='../.../auth.html' class='btn-cta'>Sign Up Free</a></nav></div></header>
+<div class='docs-layout'>
+<nav class="docs-sidebar" id="docs-sidebar">
+<div class="nav-section"><div class="nav-section-title">Getting Started</div>
+<a href="../.../docs/getting-started/" class="nav-link">🌐 Introduction to SLMs</a>
+<a href="../.../docs/getting-started/slm-vs-llm.html" class="nav-link">⚖️ SLM vs LLM</a>
+<a href="../.../docs/getting-started/use-cases.html" class="nav-link">💼 Use Cases</a>
+</div>
+<div class="nav-section"><div class="nav-section-title">AI Foundations</div>
+<a href="../.../docs/foundations/" class="nav-link">🔬 Overview</a>
+<a href="../.../docs/foundations/transformers.html" class="nav-link" style="padding-left:24px;font-size:12px">Transformers</a>
+<a href="../.../docs/foundations/tokens.html" class="nav-link" style="padding-left:24px;font-size:12px">Tokens</a>
+<a href="../.../docs/foundations/lora.html" class="nav-link" style="padding-left:24px;font-size:12px">LoRA &amp; QLoRA</a>
+<a href="../.../docs/foundations/quantization.html" class="nav-link" style="padding-left:24px;font-size:12px">Quantization</a>
+</div>
+<div class="nav-section"><div class="nav-section-title">Roadmap</div>
+<a href="../.../docs/roadmap/" class="nav-link">🗺️ Learning Roadmap</a>
+</div>
+<div class="nav-section"><div class="nav-section-title">Setup</div>
+<a href="../.../docs/setup/" class="nav-link">⚙️ Overview</a>
+<a href="../.../docs/setup/colab.html" class="nav-link" style="padding-left:24px;font-size:12px">☁️ Google Colab</a>
+<a href="../.../docs/setup/gpu-guide.html" class="nav-link" style="padding-left:24px;font-size:12px">🎮 GPU Guide</a>
+</div>
+<div class="nav-section"><div class="nav-section-title">Tools</div>
+<a href="../.../docs/tools/" class="nav-link">🔧 Tools Directory</a>
+</div>
+<div class="nav-section"><div class="nav-section-title">Tutorial</div>
+<a href="../.../docs/tutorials/" class="nav-link" style="color:var(--orange);font-weight:600">🏗️ Build First SLM</a>
+</div>
+<div class="nav-section"><div class="nav-section-title">Academies</div>
+<a href="../.../docs/fine-tuning/" class="nav-link">⚡ Fine-Tuning</a>
+<a href="../.../docs/fine-tuning/qlora.html" class="nav-link" style="padding-left:24px;font-size:12px">QLoRA</a>
+<a href="../.../docs/fine-tuning/unsloth.html" class="nav-link" style="padding-left:24px;font-size:12px">Unsloth 🦥</a>
+<a href="../.../docs/datasets/" class="nav-link">📦 Datasets</a>
+<a href="../.../docs/evaluation/" class="nav-link">📊 Evaluation</a>
+<a href="../.../docs/quantization/" class="nav-link">💾 Quantization</a>
+<a href="../.../docs/inference/" class="nav-link">🚀 Inference</a>
+<a href="../.../docs/inference/ollama.html" class="nav-link" style="padding-left:24px;font-size:12px">🦙 Ollama</a>
+<a href="../.../docs/inference/vllm.html" class="nav-link" style="padding-left:24px;font-size:12px">vLLM</a>
+<a href="../.../docs/deployment/" class="nav-link">☁️ Deployment</a>
+<a href="../.../docs/rag/" class="nav-link">🔍 RAG</a>
+</div>
+<div class="nav-section"><div class="nav-section-title">Projects</div>
+<a href="../.../docs/projects/" class="nav-link">🏗️ All Projects</a>
+<a href="../.../docs/projects/medical.html" class="nav-link" style="padding-left:24px;font-size:12px">🏥 Medical SLM</a>
+<a href="../.../docs/projects/legal.html" class="nav-link" style="padding-left:24px;font-size:12px">⚖️ Legal SLM</a>
+<a href="../.../docs/projects/coding.html" class="nav-link" style="padding-left:24px;font-size:12px">💻 Coding SLM</a>
+<a href="../.../docs/projects/finance.html" class="nav-link" style="padding-left:24px;font-size:12px">📈 Finance SLM</a>
+</div>
+<div class="nav-section"><div class="nav-section-title">Reference</div>
+<a href="../.../docs/hardware/" class="nav-link">🎮 Hardware Guide</a>
+<a href="../.../docs/costs/" class="nav-link">💰 Cost Guide</a>
+<a href="../.../docs/publishing/" class="nav-link">📤 Publishing Guide</a>
+<a href="../.../docs/best-practices/" class="nav-link">🛡️ Best Practices</a>
+<a href="../.../docs/troubleshooting/" class="nav-link">🔴 Troubleshooting</a>
+</div>
+</nav>
+<main class='docs-content'>
+<div class='breadcrumb'><a href='../'>Docs</a> &rsaquo; <span>Evaluation Academy</span></div><div class='page-hero'><div class='page-label'>📊 Evaluation Academy</div><h1 class='page-title'>Evaluation Academy</h1><p class='page-desc'>If you can't measure it, you can't improve it. Learn to evaluate your SLM rigorously before deploying.</p><div class='page-meta'><span class='page-meta-item'>⏱ 12 min read</span><span class='difficulty diff-intermediate'>Intermediate</span></div></div><hr class='page-divider'><h2 id='metrics'>Core Metrics</h2><div class='table-wrap'><table><thead><tr><th>Metric</th><th>What It Measures</th><th>When to Use</th><th>Good Score</th></tr></thead><tbody><tr><td><strong>Accuracy</strong></td><td>% predictions exactly correct</td><td>Balanced classes</td><td class='td-good'>&gt;85%</td></tr><tr><td><strong>Precision</strong></td><td>Of positive predictions, % actually positive</td><td>False positives costly</td><td class='td-good'>&gt;80%</td></tr><tr><td><strong>Recall</strong></td><td>Of actual positives, % found</td><td>False negatives costly</td><td class='td-good'>&gt;80%</td></tr><tr><td><strong>F1 Score</strong></td><td>Harmonic mean of precision &amp; recall</td><td>Imbalanced classes</td><td class='td-good'>&gt;75%</td></tr><tr><td><strong>Exact Match</strong></td><td>Output matches expected exactly</td><td>Structured output</td><td class='td-warn'>&gt;60%</td></tr><tr><td><strong>Perplexity</strong></td><td>Model confidence on held-out data</td><td>Language modelling</td><td class='td-good'>Lower is better</td></tr></tbody></table></div><div class='code-block'><div class='code-block-header'><span class='code-block-lang'>python</span><button class='code-copy-btn'>Copy</button></div><pre><code>from sklearn.metrics import accuracy_score, f1_score, classification_report
+
+y_true = ['J18.9', 'I10', 'E11.9', 'J18.9']
+y_pred = ['J18.9', 'I10', 'E11.65', 'J18.1']
+
+print(f'Accuracy: {accuracy_score(y_true, y_pred):.1%}')
+print(f'F1 macro: {f1_score(y_true, y_pred, average="macro"):.1%}')
+print(classification_report(y_true, y_pred))</code></pre></div><h2 id='hallucination'>Hallucination Testing</h2><div class='callout callout-danger'><span class='callout-icon'>🚨</span><div class='callout-body'><div class='callout-title'>Hallucination is your #1 production risk</div><p>A medical coding model that confidently assigns the wrong ICD-10 code can cause billing fraud. Always test before deploying in high-stakes domains.</p></div></div><p><strong>Three types of hallucination to test:</strong></p><ul><li><strong>Fabrication</strong> &mdash; inventing codes, citations, or facts that don't exist</li><li><strong>Substitution</strong> &mdash; substituting a similar but wrong entity (I21.9 instead of I21.0)</li><li><strong>Contradiction</strong> &mdash; output contradicts information in the input context</li></ul><div class='code-block'><div class='code-block-header'><span class='code-block-lang'>python</span><button class='code-copy-btn'>Copy</button></div><pre><code>import json
+
+VALID_CODES = set(json.load(open('icd10_codes.json')))
+
+def check_hallucination(model_output):
+    codes = [c.strip() for c in model_output.split(',')]
+    invalid = [c for c in codes if c not in VALID_CODES]
+    return {
+        'hallucinated': invalid,
+        'rate': len(invalid) / len(codes) if codes else 0
+    }
+
+results = [check_hallucination(model.predict(ex)) for ex in test_set]
+avg = sum(r['rate'] for r in results) / len(results)
+print(f'Hallucination rate: {avg:.1%}')  # Target: &lt;2%</code></pre></div><h2 id='benchmark'>Building a Benchmark Suite</h2><div class='steps'><div class='step'><div class='step-num'>1</div><div class='step-body'><div class='step-title'>Separate 15&ndash;20% of data BEFORE training</div><div class='step-desc'>Never train on test data. Create a fixed test set on day 1 and never change it.</div></div></div><div class='step'><div class='step-num'>2</div><div class='step-body'><div class='step-title'>Include edge cases deliberately</div><div class='step-desc'>Add the hardest, most ambiguous examples you know about. These are your canaries.</div></div></div><div class='step'><div class='step-num'>3</div><div class='step-body'><div class='step-title'>Run after every checkpoint</div><div class='step-desc'>Log to Weights &amp; Biases or MLflow. Watch the learning curve &mdash; catch overfitting early.</div></div></div><div class='step'><div class='step-num'>4</div><div class='step-body'><div class='step-title'>Compare against baselines</div><div class='step-desc'>Always compare: (a) base model zero-shot, (b) GPT-4 zero-shot. Know what you're beating.</div></div></div></div>
+
+</main>
+<aside class='docs-toc'><div class='toc-title'>On this page</div>
+<a href="#metrics" class="toc-link">Core Metrics</a>
+<a href="#hallucination" class="toc-link">Hallucination Testing</a>
+<a href="#benchmark" class="toc-link">Benchmark Suite</a>
+</aside>
+</div>
+<script src='../.../docs/docs.js'></script>
+</body></html>

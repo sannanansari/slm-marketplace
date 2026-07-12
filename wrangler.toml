@@ -1,0 +1,21 @@
+# wrangler.toml — Cloudflare Pages local development config
+# Used by: wrangler pages dev . --port 8788
+# 
+# DO NOT set real secrets here — use .dev.vars instead.
+# This file IS committed to git.
+
+name = "slm-marketplace"
+compatibility_date = "2024-01-01"
+
+# Pages config
+pages_build_output_dir = "."
+
+# Bindings available in _worker.js as env.*
+# Real values go in .dev.vars (gitignored)
+# These are just placeholder names so wrangler knows what to expect
+[vars]
+# These are overridden by .dev.vars in local dev
+# and by CF Pages env vars in production
+SUPABASE_URL = ""
+SUPABASE_ANON_KEY = ""
+SITE_URL = "http://localhost:8788"

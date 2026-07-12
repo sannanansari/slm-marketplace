@@ -1,1069 +1,206 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang='en'>
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Documentation — SLM Marketplace</title>
-  <link rel="canonical" href="https://slm-market.sannan.app/docs/">
-  <meta name="description" content="Complete user guide for SLM Marketplace. Learn how to discover, download, upload, and review Small Language Models.">
-  <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    :root {
-      --orange: #F97316;
-      --orange-dark: #EA6C0A;
-      --orange-light: #FFF7ED;
-      --text: #111827;
-      --text-2: #374151;
-      --text-3: #6B7280;
-      --text-4: #9CA3AF;
-      --border: #E5E7EB;
-      --bg: #FFFFFF;
-      --bg-2: #F9FAFB;
-      --bg-3: #F3F4F6;
-      --sidebar-w: 260px;
-      --header-h: 60px;
-      --radius: 8px;
-      --shadow: 0 1px 3px rgba(0,0,0,.08), 0 1px 2px rgba(0,0,0,.04);
-    }
-
-    html { scroll-behavior: smooth; font-size: 15px; }
-    body { font-family: 'Inter', sans-serif; color: var(--text); background: var(--bg); line-height: 1.6; }
-    a { color: var(--orange); text-decoration: none; }
-    a:hover { text-decoration: underline; }
-
-    /* ── HEADER ─────────────────────────────────── */
-    .site-header {
-      position: fixed; top: 0; left: 0; right: 0; height: var(--header-h);
-      background: var(--bg); border-bottom: 1px solid var(--border);
-      display: flex; align-items: center; z-index: 100;
-    }
-    .header-inner {
-      max-width: 1280px; margin: 0 auto; padding: 0 24px;
-      width: 100%; display: flex; align-items: center; gap: 24px;
-    }
-    .logo { display: flex; align-items: center; gap: 6px; text-decoration: none; }
-    .logo-slm { font-size: 17px; font-weight: 800; color: var(--orange); }
-    .logo-name { font-size: 15px; font-weight: 600; color: var(--text); }
-    .logo-sep { color: var(--border); font-size: 20px; margin: 0 4px; }
-    .logo-docs { font-size: 14px; font-weight: 600; color: var(--text-3); }
-    .header-search {
-      flex: 1; max-width: 360px; position: relative;
-    }
-    .header-search input {
-      width: 100%; height: 34px; padding: 0 12px 0 36px;
-      border: 1px solid var(--border); border-radius: 999px;
-      font-size: 13px; outline: none; background: var(--bg-2);
-    }
-    .header-search input:focus { border-color: var(--orange); background: var(--bg); }
-    .search-icon {
-      position: absolute; left: 11px; top: 50%; transform: translateY(-50%);
-      color: var(--text-4); pointer-events: none;
-    }
-    .header-links { margin-left: auto; display: flex; align-items: center; gap: 6px; }
-    .header-links a {
-      font-size: 13px; font-weight: 500; color: var(--text-3);
-      padding: 6px 12px; border-radius: var(--radius);
-      text-decoration: none; transition: background .15s, color .15s;
-    }
-    .header-links a:hover { background: var(--bg-2); color: var(--text); }
-    .btn-launch {
-      background: var(--orange) !important; color: white !important;
-      border-radius: var(--radius) !important;
-    }
-    .btn-launch:hover { background: var(--orange-dark) !important; }
-
-    /* ── LAYOUT ─────────────────────────────────── */
-    .layout {
-      display: grid;
-      grid-template-columns: var(--sidebar-w) 1fr 220px;
-      max-width: 1280px; margin: 0 auto;
-      padding-top: var(--header-h);
-      min-height: 100vh;
-    }
-
-    /* ── LEFT SIDEBAR ────────────────────────────── */
-    .sidebar {
-      position: sticky; top: var(--header-h);
-      height: calc(100vh - var(--header-h));
-      overflow-y: auto; padding: 24px 16px;
-      border-right: 1px solid var(--border);
-    }
-    .sidebar::-webkit-scrollbar { width: 4px; }
-    .sidebar::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
-
-    .nav-section { margin-bottom: 28px; }
-    .nav-section-title {
-      font-size: 11px; font-weight: 700; letter-spacing: .7px;
-      text-transform: uppercase; color: var(--text-4);
-      margin-bottom: 6px; padding: 0 8px;
-    }
-    .nav-link {
-      display: flex; align-items: center; gap: 8px;
-      padding: 7px 8px; border-radius: 6px; font-size: 13px;
-      font-weight: 500; color: var(--text-2); text-decoration: none;
-      transition: background .12s, color .12s;
-    }
-    .nav-link:hover { background: var(--bg-2); color: var(--text); text-decoration: none; }
-    .nav-link.active { background: var(--orange-light); color: var(--orange); }
-    .nav-link svg { flex-shrink: 0; opacity: .65; }
-    .nav-link.active svg { opacity: 1; }
-
-    /* ── MAIN CONTENT ────────────────────────────── */
-    .content {
-      padding: 40px 48px 80px;
-      min-width: 0;
-    }
-
-    /* Hero banner */
-    .docs-hero {
-      background: linear-gradient(135deg, var(--orange-light) 0%, #FEF3C7 100%);
-      border: 1px solid var(--orange); border-radius: 12px;
-      padding: 32px 36px; margin-bottom: 48px;
-    }
-    .docs-hero h1 { font-size: 26px; font-weight: 800; color: var(--text); margin-bottom: 8px; }
-    .docs-hero p { font-size: 15px; color: var(--text-2); max-width: 520px; }
-    .hero-cards {
-      display: grid; grid-template-columns: repeat(3, 1fr);
-      gap: 12px; margin-top: 24px;
-    }
-    .hero-card {
-      background: white; border-radius: var(--radius);
-      border: 1px solid var(--border); padding: 16px;
-      text-decoration: none; transition: box-shadow .15s, transform .15s;
-    }
-    .hero-card:hover { box-shadow: var(--shadow); transform: translateY(-1px); text-decoration: none; }
-    .hero-card-icon { font-size: 22px; margin-bottom: 8px; }
-    .hero-card-title { font-size: 13px; font-weight: 700; color: var(--text); margin-bottom: 3px; }
-    .hero-card-desc { font-size: 12px; color: var(--text-3); }
-
-    /* Sections */
-    .doc-section { margin-bottom: 56px; scroll-margin-top: 80px; }
-    h2.section-title {
-      font-size: 22px; font-weight: 800; color: var(--text);
-      margin-bottom: 16px; padding-bottom: 12px;
-      border-bottom: 2px solid var(--border);
-      display: flex; align-items: center; gap: 10px;
-    }
-    h2.section-title .emoji { font-size: 20px; }
-    h3.subsection {
-      font-size: 16px; font-weight: 700; color: var(--text);
-      margin: 28px 0 12px;
-    }
-    p { font-size: 14px; color: var(--text-2); margin-bottom: 14px; line-height: 1.7; }
-
-    /* Steps */
-    .steps { display: flex; flex-direction: column; gap: 0; margin: 20px 0; }
-    .step {
-      display: grid; grid-template-columns: 36px 1fr;
-      gap: 16px; padding-bottom: 24px; position: relative;
-    }
-    .step:not(:last-child)::before {
-      content: ''; position: absolute; left: 17px; top: 36px;
-      width: 2px; bottom: 0; background: var(--border);
-    }
-    .step-num {
-      width: 36px; height: 36px; background: var(--orange);
-      color: white; border-radius: 50%; display: flex;
-      align-items: center; justify-content: center;
-      font-size: 14px; font-weight: 700; flex-shrink: 0; z-index: 1;
-    }
-    .step-body { padding-top: 6px; }
-    .step-title { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 6px; }
-    .step-desc { font-size: 13px; color: var(--text-3); line-height: 1.6; }
-
-    /* Tips / callouts */
-    .tip {
-      display: flex; gap: 12px; padding: 14px 16px;
-      border-radius: var(--radius); margin: 16px 0; font-size: 13px;
-    }
-    .tip-info    { background: #EFF6FF; border: 1px solid #BFDBFE; color: #1E40AF; }
-    .tip-warn    { background: #FFFBEB; border: 1px solid #FDE68A; color: #92400E; }
-    .tip-success { background: #F0FDF4; border: 1px solid #BBF7D0; color: #166534; }
-    .tip-danger  { background: #FEF2F2; border: 1px solid #FECACA; color: #991B1B; }
-    .tip-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
-    .tip-text { line-height: 1.6; }
-
-    /* Feature grid */
-    .feature-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; margin: 20px 0; }
-    .feature-card {
-      padding: 18px; background: var(--bg-2); border: 1px solid var(--border);
-      border-radius: var(--radius);
-    }
-    .feature-card h4 { font-size: 13px; font-weight: 700; color: var(--text); margin-bottom: 6px; display: flex; align-items: center; gap: 7px; }
-    .feature-card p { font-size: 12px; color: var(--text-3); margin: 0; }
-
-    /* Category badges */
-    .cat-grid { display: flex; flex-wrap: wrap; gap: 8px; margin: 16px 0; }
-    .cat-badge {
-      padding: 5px 12px; border-radius: 999px; font-size: 12px;
-      font-weight: 600; display: flex; align-items: center; gap: 5px;
-    }
-
-    /* FAQ */
-    .faq-item {
-      border: 1px solid var(--border); border-radius: var(--radius);
-      margin-bottom: 10px; overflow: hidden;
-    }
-    .faq-q {
-      padding: 14px 16px; font-size: 14px; font-weight: 600;
-      color: var(--text); cursor: pointer; display: flex;
-      justify-content: space-between; align-items: center;
-      background: var(--bg); user-select: none;
-    }
-    .faq-q:hover { background: var(--bg-2); }
-    .faq-a {
-      padding: 0 16px 14px; font-size: 13px; color: var(--text-3);
-      line-height: 1.7; display: none;
-    }
-    .faq-item.open .faq-a { display: block; }
-    .faq-chevron { transition: transform .2s; color: var(--text-4); }
-    .faq-item.open .faq-chevron { transform: rotate(180deg); }
-
-    /* Table */
-    table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 13px; }
-    thead th {
-      background: var(--bg-2); padding: 10px 14px; text-align: left;
-      font-size: 11px; font-weight: 700; text-transform: uppercase;
-      letter-spacing: .5px; color: var(--text-3); border-bottom: 1px solid var(--border);
-    }
-    tbody td { padding: 10px 14px; border-bottom: 1px solid var(--bg-3); color: var(--text-2); }
-    tbody tr:last-child td { border-bottom: none; }
-    tbody tr:hover td { background: var(--bg-2); }
-
-    /* Code */
-    code {
-      background: var(--bg-3); padding: 2px 6px; border-radius: 4px;
-      font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--orange-dark);
-    }
-
-    /* ── RIGHT TOC ───────────────────────────────── */
-    .toc {
-      position: sticky; top: calc(var(--header-h) + 24px);
-      height: fit-content; padding: 24px 20px;
-      font-size: 12px;
-    }
-    .toc-title {
-      font-size: 11px; font-weight: 700; text-transform: uppercase;
-      letter-spacing: .7px; color: var(--text-4); margin-bottom: 10px;
-    }
-    .toc a {
-      display: block; color: var(--text-3); padding: 4px 0 4px 12px;
-      border-left: 2px solid var(--border); text-decoration: none;
-      transition: color .12s, border-color .12s; font-size: 12px;
-    }
-    .toc a:hover { color: var(--orange); border-color: var(--orange); }
-    .toc a.active { color: var(--orange); border-color: var(--orange); font-weight: 600; }
-
-    /* ── RESPONSIVE ──────────────────────────────── */
-    @media (max-width: 1100px) {
-      .layout { grid-template-columns: var(--sidebar-w) 1fr; }
-      .toc { display: none; }
-      .content { padding: 32px 32px 64px; }
-    }
-    @media (max-width: 768px) {
-      .layout { grid-template-columns: 1fr; }
-      .sidebar { display: none; }
-      .content { padding: 24px 20px 60px; }
-      .hero-cards { grid-template-columns: 1fr; }
-      .feature-grid { grid-template-columns: 1fr; }
-    }
-  </style>
+<meta charset='UTF-8'>
+<meta name='viewport' content='width=device-width,initial-scale=1.0'>
+<title>SLM Marketplace Documentation &mdash; Learn to Build Small Language Models</title>
+<meta name='description' content='The complete free resource for building, fine-tuning, evaluating, deploying and publishing Small Language Models. From zero to published SLM.'>
+<link rel='canonical' href='https://slm-market.sannan.app/docs/'>
+<link rel='icon' type='image/svg+xml' href='../assets/favicon.svg'>
+<link rel='preconnect' href='https://fonts.googleapis.com'>
+<link href='https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap' rel='stylesheet'>
+<style>#reading-progress-wrap{position:fixed;top:60px;left:0;right:0;height:2px;z-index:199}#reading-progress{height:2px;background:#F97316;width:0;transition:width .1s}</style>
+<link rel='stylesheet' href='docs.css'>
 </head>
 <body>
+<div id='reading-progress-wrap'><div id='reading-progress'></div></div>
 
-<!-- HEADER -->
-<header class="site-header">
-  <div class="header-inner">
-    <a href="../index.html" class="logo">
-      <span class="logo-slm">SLM</span>
-      <span class="logo-name">Marketplace</span>
-      <span class="logo-sep">/</span>
-      <span class="logo-docs">Docs</span>
+<header class='docs-header'>
+  <div class='docs-header-inner'>
+    <button class='mobile-menu-btn' id='mobile-menu-btn' aria-label='Open menu'>
+      <svg width='18' height='18' fill='none' viewBox='0 0 24 24' stroke='currentColor' stroke-width='2'><line x1='3' y1='6' x2='21' y2='6'/><line x1='3' y1='12' x2='21' y2='12'/><line x1='3' y1='18' x2='21' y2='18'/></svg>
+    </button>
+    <a href='../index.html' class='docs-logo'>
+      <span class='docs-logo-slm'>SLM</span><span class='docs-logo-name'>Marketplace</span>
+      <span class='docs-logo-sep'>/</span><span class='docs-logo-docs'>Docs</span>
     </a>
-    <div class="header-search">
-      <svg class="search-icon" width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-        <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
-      </svg>
-      <input type="search" placeholder="Search docs…" id="doc-search" autocomplete="off">
+    <div class='docs-header-search'>
+      <svg class='search-icon-wrap' width='14' height='14' fill='none' viewBox='0 0 24 24' stroke='currentColor' stroke-width='2'><circle cx='11' cy='11' r='8'/><line x1='21' y1='21' x2='16.65' y2='16.65'/></svg>
+      <input type='search' id='docs-search' placeholder='Search docs... (Press /)' autocomplete='off'>
+      <div class='search-results' id='search-results'></div>
     </div>
-    <div class="header-links">
-      <a href="../explore.html">Explore Models</a>
-      <a href="../upload.html">Upload Model</a>
-      <a href="../auth.html" class="btn-launch">Sign Up Free</a>
-    </div>
+    <nav class='docs-header-nav'>
+      <a href='../explore.html'>Explore Models</a>
+      <a href='../leaderboard.html'>Leaderboard</a>
+      <a href='../upload.html'>Upload Model</a>
+      <a href='../auth.html' class='btn-cta'>Sign Up Free</a>
+    </nav>
   </div>
 </header>
 
-<!-- LAYOUT -->
-<div class="layout">
+<div class='docs-layout'>
 
-  <!-- LEFT NAV -->
-  <nav class="sidebar">
-    <div class="nav-section">
-      <div class="nav-section-title">Getting Started</div>
-      <a href="#overview"    class="nav-link active">
-        <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
-        What is SLM Marketplace?
-      </a>
-      <a href="#account" class="nav-link">
-        <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-        Create an Account
-      </a>
-      <a href="#explore" class="nav-link">
-        <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-        Finding Models
-      </a>
+<nav class='docs-sidebar' id='docs-sidebar'>
+  <div class='nav-section'><div class='nav-section-title'>Getting Started</div>
+    <a href='getting-started/' class='nav-link'>🌐 Introduction to SLMs</a>
+    <a href='getting-started/slm-vs-llm.html' class='nav-link'>⚖️ SLM vs LLM</a>
+    <a href='getting-started/use-cases.html' class='nav-link'>💼 Use Cases</a>
+    <a href='getting-started/popular-slms.html' class='nav-link'>⭐ Popular SLMs</a>
+  </div>
+  <div class='nav-section'><div class='nav-section-title'>AI Foundations</div>
+    <a href='foundations/' class='nav-link'>🔬 Overview</a>
+    <a href='foundations/transformers.html' class='nav-link' style='padding-left:22px;font-size:12px'>Transformers</a>
+    <a href='foundations/tokens.html' class='nav-link' style='padding-left:22px;font-size:12px'>Tokens</a>
+    <a href='foundations/lora.html' class='nav-link' style='padding-left:22px;font-size:12px'>LoRA &amp; QLoRA</a>
+    <a href='foundations/quantization.html' class='nav-link' style='padding-left:22px;font-size:12px'>Quantization</a>
+  </div>
+  <div class='nav-section'><div class='nav-section-title'>Roadmap</div>
+    <a href='roadmap/' class='nav-link'>🗺️ Learning Roadmap</a>
+  </div>
+  <div class='nav-section'><div class='nav-section-title'>Setup</div>
+    <a href='setup/' class='nav-link'>⚙️ Overview</a>
+    <a href='setup/windows.html' class='nav-link' style='padding-left:22px;font-size:12px'>🪟 Windows</a>
+    <a href='setup/macos.html' class='nav-link' style='padding-left:22px;font-size:12px'>🍎 macOS</a>
+    <a href='setup/linux.html' class='nav-link' style='padding-left:22px;font-size:12px'>🐧 Linux</a>
+    <a href='setup/colab.html' class='nav-link' style='padding-left:22px;font-size:12px'>☁️ Google Colab</a>
+    <a href='setup/runpod.html' class='nav-link' style='padding-left:22px;font-size:12px'>🚀 RunPod</a>
+    <a href='setup/gpu-guide.html' class='nav-link' style='padding-left:22px;font-size:12px'>🎮 GPU Guide</a>
+  </div>
+  <div class='nav-section'><div class='nav-section-title'>Tools</div>
+    <a href='tools/' class='nav-link'>🔧 Tools Directory</a>
+  </div>
+  <div class='nav-section'><div class='nav-section-title'>Tutorial</div>
+    <a href='tutorials/' class='nav-link' style='color:var(--orange);font-weight:600'>
+      <span class='nav-badge nav-badge-new' style='margin-right:4px'>NEW</span>Build First SLM
+    </a>
+  </div>
+  <div class='nav-section'><div class='nav-section-title'>Academies</div>
+    <a href='fine-tuning/' class='nav-link'>⚡ Fine-Tuning</a>
+    <a href='fine-tuning/qlora.html' class='nav-link' style='padding-left:22px;font-size:12px'>QLoRA</a>
+    <a href='fine-tuning/unsloth.html' class='nav-link' style='padding-left:22px;font-size:12px'>Unsloth 🦥</a>
+    <a href='datasets/' class='nav-link'>📦 Datasets</a>
+    <a href='evaluation/' class='nav-link'>📊 Evaluation</a>
+    <a href='quantization/' class='nav-link'>💾 Quantization</a>
+    <a href='inference/' class='nav-link'>🚀 Inference</a>
+    <a href='inference/ollama.html' class='nav-link' style='padding-left:22px;font-size:12px'>🦙 Ollama</a>
+    <a href='inference/vllm.html' class='nav-link' style='padding-left:22px;font-size:12px'>vLLM</a>
+    <a href='deployment/' class='nav-link'>☁️ Deployment</a>
+    <a href='rag/' class='nav-link'>🔍 RAG</a>
+  </div>
+  <div class='nav-section'><div class='nav-section-title'>Projects</div>
+    <a href='projects/' class='nav-link'>🏗️ All Projects</a>
+    <a href='projects/medical.html' class='nav-link' style='padding-left:22px;font-size:12px'>🏥 Medical SLM</a>
+    <a href='projects/legal.html' class='nav-link' style='padding-left:22px;font-size:12px'>⚖️ Legal SLM</a>
+    <a href='projects/coding.html' class='nav-link' style='padding-left:22px;font-size:12px'>💻 Coding SLM</a>
+    <a href='projects/finance.html' class='nav-link' style='padding-left:22px;font-size:12px'>📈 Finance SLM</a>
+  </div>
+  <div class='nav-section'><div class='nav-section-title'>Reference</div>
+    <a href='hardware/' class='nav-link'>🎮 Hardware Guide</a>
+    <a href='costs/' class='nav-link'>💰 Cost Guide</a>
+    <a href='publishing/' class='nav-link'>📤 Publishing Guide</a>
+    <a href='best-practices/' class='nav-link'>🛡️ Best Practices</a>
+    <a href='troubleshooting/' class='nav-link'>🔴 Troubleshooting</a>
+  </div>
+</nav>
+
+<main class='docs-content'>
+
+  <div style='background:linear-gradient(135deg,#FFF7ED,#FFFBEB);border:1px solid #FED7AA;border-radius:16px;padding:36px 40px;margin-bottom:44px'>
+    <div style='font-size:11px;font-weight:700;letter-spacing:.7px;text-transform:uppercase;color:#F97316;margin-bottom:10px'>Documentation &mdash; v2.0</div>
+    <h1 style='font-size:32px;font-weight:800;color:#111827;letter-spacing:-.5px;line-height:1.2;margin-bottom:12px'>Build Small Language Models.<br>Start Here.</h1>
+    <p style='font-size:15px;color:#374151;max-width:560px;line-height:1.7;margin-bottom:24px'>The complete free resource for building, fine-tuning, evaluating, deploying, and publishing Small Language Models. From zero to published.</p>
+    <div style='display:flex;gap:12px;flex-wrap:wrap'>
+      <a href='roadmap/' style='display:inline-flex;align-items:center;gap:8px;background:#F97316;color:white;padding:10px 22px;border-radius:8px;font-size:14px;font-weight:600;text-decoration:none'>Start Learning &rarr;</a>
+      <a href='tutorials/' style='display:inline-flex;align-items:center;gap:8px;background:white;color:#374151;padding:10px 22px;border-radius:8px;font-size:14px;font-weight:600;border:1px solid #E5E7EB;text-decoration:none'>🚀 Build Your First SLM</a>
     </div>
-
-    <div class="nav-section">
-      <div class="nav-section-title">Using Models</div>
-      <a href="#model-page" class="nav-link">
-        <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
-        Model Detail Page
-      </a>
-      <a href="#download" class="nav-link">
-        <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
-        Downloading a Model
-      </a>
-      <a href="#benchmarks" class="nav-link">
-        <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
-        Understanding Benchmarks
-      </a>
-      <a href="#reviews" class="nav-link">
-        <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-        Writing Reviews
-      </a>
+    <div style='display:flex;align-items:center;gap:20px;margin-top:20px;flex-wrap:wrap'>
+      <span style='font-size:12px;color:#6B7280'>✅ Free forever</span>
+      <span style='font-size:12px;color:#6B7280'>🎯 Beginner to Expert</span>
+      <span style='font-size:12px;color:#6B7280'>💻 Code examples included</span>
     </div>
+  </div>
 
-    <div class="nav-section">
-      <div class="nav-section-title">Sharing Models</div>
-      <a href="#upload" class="nav-link">
-        <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-        Uploading a Model
-      </a>
-      <a href="#guidelines" class="nav-link">
-        <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-        Upload Guidelines
-      </a>
-      <a href="#tags" class="nav-link">
-        <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83 0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
-        Tags &amp; Categories
-      </a>
+  <div class='stat-grid' style='margin-bottom:36px'>
+    <div class='stat-card'><div class='stat-value'>20+</div><div class='stat-label'>Doc Sections</div></div>
+    <div class='stat-card'><div class='stat-value'>29</div><div class='stat-label'>Pages</div></div>
+    <div class='stat-card'><div class='stat-value'>8</div><div class='stat-label'>Real Projects</div></div>
+    <div class='stat-card'><div class='stat-value'>100+</div><div class='stat-label'>Code Examples</div></div>
+  </div>
+
+  <h2 id='paths'>Learning Paths</h2>
+  <div class='card-grid-2'>
+    <a href='roadmap/#beginner' class='doc-card card-green'><div class='doc-card-icon'>🌱</div><div class='doc-card-title'>Beginner Path</div><div class='doc-card-desc'>No AI experience needed. Understand SLMs and run one locally.</div><div class='doc-card-footer'>~15 hours &rarr;</div></a>
+    <a href='roadmap/#intermediate' class='doc-card card-blue'><div class='doc-card-icon'>🌿</div><div class='doc-card-title'>Intermediate Path</div><div class='doc-card-desc'>Know Python. Fine-tune a model on your own domain data.</div><div class='doc-card-footer'>~25 hours &rarr;</div></a>
+    <a href='roadmap/#advanced' class='doc-card card-orange'><div class='doc-card-icon'>🌳</div><div class='doc-card-title'>Advanced Path</div><div class='doc-card-desc'>Quantize, deploy, build RAG pipelines, serve in production.</div><div class='doc-card-footer'>~40 hours &rarr;</div></a>
+    <a href='roadmap/#expert' class='doc-card card-purple'><div class='doc-card-icon'>🚀</div><div class='doc-card-title'>Expert Path</div><div class='doc-card-desc'>Build domain SLMs, publish on marketplace, reach leaderboard.</div><div class='doc-card-footer'>~60 hours &rarr;</div></a>
+  </div>
+
+  <h2 id='sections'>All Sections</h2>
+  <div class='card-grid-3'>
+    <a href='getting-started/' class='doc-card'><div class='doc-card-icon'>🌐</div><div class='doc-card-title'>Introduction to SLMs</div><div class='doc-card-desc'>What SLMs are, why they matter, when to use them.</div></a>
+    <a href='foundations/' class='doc-card'><div class='doc-card-icon'>🔬</div><div class='doc-card-title'>AI Foundations</div><div class='doc-card-desc'>Transformers, tokens, LoRA — the minimum theory.</div></a>
+    <a href='roadmap/' class='doc-card'><div class='doc-card-icon'>🗺️</div><div class='doc-card-title'>Learning Roadmap</div><div class='doc-card-desc'>Structured paths from beginner to expert.</div></a>
+    <a href='setup/' class='doc-card'><div class='doc-card-icon'>⚙️</div><div class='doc-card-title'>Environment Setup</div><div class='doc-card-desc'>Windows, Mac, Linux, Colab, RunPod setup.</div></a>
+    <a href='tools/' class='doc-card'><div class='doc-card-icon'>🔧</div><div class='doc-card-title'>Tools Directory</div><div class='doc-card-desc'>Every tool for training, inference, evaluation.</div></a>
+    <a href='tutorials/' class='doc-card card-orange'><div class='doc-card-icon'>🏗️</div><div class='doc-card-title'>Build Your First SLM</div><div class='doc-card-desc'>Complete end-to-end: train &rarr; deploy &rarr; publish.</div></a>
+    <a href='fine-tuning/' class='doc-card'><div class='doc-card-icon'>⚡</div><div class='doc-card-title'>Fine-Tuning Academy</div><div class='doc-card-desc'>LoRA, QLoRA, Unsloth — with full code examples.</div></a>
+    <a href='datasets/' class='doc-card'><div class='doc-card-icon'>📦</div><div class='doc-card-title'>Dataset Academy</div><div class='doc-card-desc'>Collection, cleaning, synthetic generation.</div></a>
+    <a href='evaluation/' class='doc-card'><div class='doc-card-icon'>📊</div><div class='doc-card-title'>Evaluation Academy</div><div class='doc-card-desc'>Accuracy, F1, hallucination testing.</div></a>
+    <a href='quantization/' class='doc-card'><div class='doc-card-icon'>💾</div><div class='doc-card-title'>Quantization Academy</div><div class='doc-card-desc'>GGUF, GPTQ, AWQ with tradeoff tables.</div></a>
+    <a href='inference/' class='doc-card'><div class='doc-card-icon'>🚀</div><div class='doc-card-title'>Inference Academy</div><div class='doc-card-desc'>Ollama, vLLM, llama.cpp with benchmarks.</div></a>
+    <a href='deployment/' class='doc-card'><div class='doc-card-icon'>☁️</div><div class='doc-card-title'>Deployment Academy</div><div class='doc-card-desc'>RunPod, Modal, HuggingFace, AWS.</div></a>
+    <a href='rag/' class='doc-card'><div class='doc-card-icon'>🔍</div><div class='doc-card-title'>RAG Academy</div><div class='doc-card-desc'>Retrieval-augmented generation with SLMs.</div></a>
+    <a href='projects/' class='doc-card'><div class='doc-card-icon'>🏗️</div><div class='doc-card-title'>Real-World Projects</div><div class='doc-card-desc'>Medical, legal, coding, finance SLMs.</div></a>
+    <a href='hardware/' class='doc-card'><div class='doc-card-icon'>🎮</div><div class='doc-card-title'>Hardware Guide</div><div class='doc-card-desc'>GPU comparison and recommendations.</div></a>
+    <a href='costs/' class='doc-card'><div class='doc-card-icon'>💰</div><div class='doc-card-title'>Cost Guide</div><div class='doc-card-desc'>Real training and inference cost breakdowns.</div></a>
+    <a href='publishing/' class='doc-card card-orange'><div class='doc-card-icon'>📤</div><div class='doc-card-title'>Publishing Guide</div><div class='doc-card-desc'>How to upload and rank on SLM Marketplace.</div></a>
+    <a href='best-practices/' class='doc-card'><div class='doc-card-icon'>🛡️</div><div class='doc-card-title'>Best Practices</div><div class='doc-card-desc'>Security, privacy, safety, licensing.</div></a>
+    <a href='troubleshooting/' class='doc-card'><div class='doc-card-icon'>🔴</div><div class='doc-card-title'>Troubleshooting</div><div class='doc-card-desc'>50+ error solutions for common SLM issues.</div></a>
+  </div>
+
+  <h2 id='popular'>Most Read</h2>
+  <div style='border:1px solid var(--border);border-radius:12px;overflow:hidden'>
+    <div style='background:var(--bg-2);padding:10px 16px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--text-3);border-bottom:1px solid var(--border)'>Hot this week 🔥</div>
+    <a href='fine-tuning/qlora.html' style='display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px solid var(--border-2);text-decoration:none;color:inherit' onmouseover='this.style.background="var(--bg-2)"' onmouseout='this.style.background=""'>
+      <span style='display:flex;align-items:center;gap:10px'><span>⚡</span><span style='font-size:13px;font-weight:600;color:var(--text)'>QLoRA Fine-Tuning &mdash; Train 7B on 1 GPU</span></span>
+      <span style='font-size:11px;color:var(--text-4)'>Fine-Tuning</span>
+    </a>
+    <a href='inference/ollama.html' style='display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px solid var(--border-2);text-decoration:none;color:inherit' onmouseover='this.style.background="var(--bg-2)"' onmouseout='this.style.background=""'>
+      <span style='display:flex;align-items:center;gap:10px'><span>🦙</span><span style='font-size:13px;font-weight:600;color:var(--text)'>Run Any SLM Locally with Ollama</span></span>
+      <span style='font-size:11px;color:var(--text-4)'>Inference</span>
+    </a>
+    <a href='projects/medical.html' style='display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px solid var(--border-2);text-decoration:none;color:inherit' onmouseover='this.style.background="var(--bg-2)"' onmouseout='this.style.background=""'>
+      <span style='display:flex;align-items:center;gap:10px'><span>🏥</span><span style='font-size:13px;font-weight:600;color:var(--text)'>Build a Medical Coding SLM from Scratch</span></span>
+      <span style='font-size:11px;color:var(--text-4)'>Projects</span>
+    </a>
+    <a href='quantization/' style='display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px solid var(--border-2);text-decoration:none;color:inherit' onmouseover='this.style.background="var(--bg-2)"' onmouseout='this.style.background=""'>
+      <span style='display:flex;align-items:center;gap:10px'><span>📦</span><span style='font-size:13px;font-weight:600;color:var(--text)'>GGUF vs GPTQ vs AWQ &mdash; Which to Use?</span></span>
+      <span style='font-size:11px;color:var(--text-4)'>Quantization</span>
+    </a>
+    <a href='tutorials/' style='display:flex;align-items:center;justify-content:space-between;padding:12px 16px;text-decoration:none;color:inherit' onmouseover='this.style.background="var(--bg-2)"' onmouseout='this.style.background=""'>
+      <span style='display:flex;align-items:center;gap:10px'><span>🏗️</span><span style='font-size:13px;font-weight:600;color:var(--text)'>Build Your First SLM &mdash; Complete Tutorial</span></span>
+      <span style='font-size:11px;color:var(--text-4)'>Tutorial</span>
+    </a>
+  </div>
+
+  <div style='background:#1E2433;border-radius:16px;padding:36px 40px;margin-top:48px;text-align:center'>
+    <h2 style='color:white;font-size:22px;margin:0 0 10px'>Ready to publish your SLM?</h2>
+    <p style='color:rgba(255,255,255,.6);margin-bottom:24px;font-size:14px'>Join engineers sharing their models on SLM Marketplace.</p>
+    <div style='display:flex;gap:12px;justify-content:center;flex-wrap:wrap'>
+      <a href='../auth.html' style='background:#F97316;color:white;padding:10px 24px;border-radius:8px;font-size:14px;font-weight:600;text-decoration:none'>Create Free Account</a>
+      <a href='publishing/' style='background:rgba(255,255,255,.1);color:white;padding:10px 24px;border-radius:8px;font-size:14px;font-weight:600;text-decoration:none;border:1px solid rgba(255,255,255,.15)'>Publishing Guide</a>
     </div>
+  </div>
 
-    <div class="nav-section">
-      <div class="nav-section-title">Your Profile</div>
-      <a href="#profile" class="nav-link">
-        <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-        Engineer Profile
-      </a>
-      <a href="#leaderboard" class="nav-link">
-        <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polyline points="18 20 18 10"/><polyline points="12 20 12 4"/><polyline points="6 20 6 14"/></svg>
-        Leaderboard &amp; Scoring
-      </a>
-      <a href="#bookmarks" class="nav-link">
-        <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/></svg>
-        Saving Models
-      </a>
-    </div>
+</main>
 
-    <div class="nav-section">
-      <div class="nav-section-title">Help</div>
-      <a href="#faq" class="nav-link">
-        <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-        FAQ
-      </a>
-      <a href="#community" class="nav-link">
-        <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
-        Community &amp; Support
-      </a>
-    </div>
-  </nav>
+<aside class='docs-toc'>
+  <div class='toc-title'>On this page</div>
+  <a href='#paths' class='toc-link'>Learning Paths</a>
+  <a href='#sections' class='toc-link'>All Sections</a>
+  <a href='#popular' class='toc-link'>Most Read</a>
+</aside>
 
-  <!-- MAIN -->
-  <main class="content">
-
-    <!-- ─── HERO ─────────────────────────────────── -->
-    <div class="docs-hero">
-      <h1>SLM Marketplace Docs</h1>
-      <p>Everything you need to discover, use, and share Small Language Models. Find your answer in seconds.</p>
-      <div class="hero-cards">
-        <a href="#explore" class="hero-card">
-          <div class="hero-card-icon">🔍</div>
-          <div class="hero-card-title">Find a Model</div>
-          <div class="hero-card-desc">Search, filter, and discover the right SLM for your use case</div>
-        </a>
-        <a href="#upload" class="hero-card">
-          <div class="hero-card-icon">🚀</div>
-          <div class="hero-card-title">Share Your Model</div>
-          <div class="hero-card-desc">Upload your SLM and get discovered by thousands of engineers</div>
-        </a>
-        <a href="#benchmarks" class="hero-card">
-          <div class="hero-card-icon">📊</div>
-          <div class="hero-card-title">Read Benchmarks</div>
-          <div class="hero-card-desc">Understand accuracy, F1, response time, and what they mean</div>
-        </a>
-      </div>
-    </div>
-
-    <!-- ─── OVERVIEW ──────────────────────────────── -->
-    <section class="doc-section" id="overview">
-      <h2 class="section-title"><span class="emoji">🌐</span> What is SLM Marketplace?</h2>
-
-      <p>SLM Marketplace is a community-built discovery platform for <strong>Small Language Models</strong> — AI models under 7 billion parameters designed to run efficiently on standard hardware without expensive cloud APIs.</p>
-
-      <p>Think of it as the GitHub for SLMs: engineers publish their models, share benchmarks, and get feedback from the community. Businesses and developers discover production-ready models for their specific domain without building from scratch.</p>
-
-      <div class="feature-grid">
-        <div class="feature-card">
-          <h4>🔍 Discover</h4>
-          <p>Search 200+ models across 8 categories. Filter by rating, date, and performance metrics.</p>
-        </div>
-        <div class="feature-card">
-          <h4>📊 Compare</h4>
-          <p>Side-by-side benchmarks: accuracy, F1 score, response time, model size, context window.</p>
-        </div>
-        <div class="feature-card">
-          <h4>🚀 Share</h4>
-          <p>Upload your model with a GitHub link, tags, and benchmarks. Get downloads and reviews.</p>
-        </div>
-        <div class="feature-card">
-          <h4>🏆 Get Recognised</h4>
-          <p>Appear on the leaderboard. Build your reputation as an AI engineer in your domain.</p>
-        </div>
-      </div>
-
-      <h3 class="subsection">What is a Small Language Model?</h3>
-      <p>An SLM is an AI language model fine-tuned for a specific task, typically under 7B parameters. They run on consumer hardware, cost a fraction of GPT-4 API calls, and outperform large general models on their target task because of domain-specific training.</p>
-
-      <table>
-        <thead><tr><th>Type</th><th>Size</th><th>Runs on</th><th>Best for</th></tr></thead>
-        <tbody>
-          <tr><td>Nano SLM</td><td>Under 500M</td><td>Any CPU</td><td>Classification, tagging</td></tr>
-          <tr><td>Small SLM</td><td>500M – 1B</td><td>4GB RAM</td><td>Simple generation, coding assist</td></tr>
-          <tr><td>Medium SLM</td><td>1B – 3B</td><td>8GB GPU</td><td>Medical coding, legal analysis</td></tr>
-          <tr><td>Large SLM</td><td>3B – 7B</td><td>16GB GPU</td><td>Complex reasoning, multi-task</td></tr>
-        </tbody>
-      </table>
-    </section>
-
-    <!-- ─── ACCOUNT ───────────────────────────────── -->
-    <section class="doc-section" id="account">
-      <h2 class="section-title"><span class="emoji">👤</span> Create an Account</h2>
-
-      <p>You can browse and download models without an account. You need an account to upload models, write reviews, save bookmarks, and appear on the leaderboard.</p>
-
-      <h3 class="subsection">Sign up with email</h3>
-      <div class="steps">
-        <div class="step">
-          <div class="step-num">1</div>
-          <div class="step-body">
-            <div class="step-title">Go to the auth page</div>
-            <div class="step-desc">Click <strong>Sign Up</strong> in the top right corner, or go to <code>/auth</code>.</div>
-          </div>
-        </div>
-        <div class="step">
-          <div class="step-num">2</div>
-          <div class="step-body">
-            <div class="step-title">Fill in your details</div>
-            <div class="step-desc">Enter your full name, email address, and a password (minimum 8 characters). The password strength indicator shows how secure your password is.</div>
-          </div>
-        </div>
-        <div class="step">
-          <div class="step-num">3</div>
-          <div class="step-body">
-            <div class="step-title">Confirm your email</div>
-            <div class="step-desc">Check your inbox for a confirmation email from SLM Marketplace. Click the link inside. The link is valid for 24 hours.</div>
-          </div>
-        </div>
-        <div class="step">
-          <div class="step-num">4</div>
-          <div class="step-body">
-            <div class="step-title">You're in</div>
-            <div class="step-desc">You'll be redirected to the homepage. Your initial letter appears in the top right header confirming you're logged in.</div>
-          </div>
-        </div>
-      </div>
-
-      <h3 class="subsection">Sign up with GitHub</h3>
-      <p>Click <strong>Continue with GitHub</strong> on the auth page. You'll be redirected to GitHub to authorise the app. Your GitHub username, name, and profile picture are imported automatically. No email confirmation needed.</p>
-
-      <div class="tip tip-info">
-        <span class="tip-icon">ℹ️</span>
-        <span class="tip-text">GitHub sign-in is the fastest option for engineers — it connects your existing GitHub profile directly to your SLM Marketplace account.</span>
-      </div>
-
-      <h3 class="subsection">Forgot your password?</h3>
-      <p>On the login page, enter your email address in the email field, then click <strong>Forgot password?</strong>. A reset link will be emailed to you. The link expires after 1 hour.</p>
-    </section>
-
-    <!-- ─── EXPLORE ───────────────────────────────── -->
-    <section class="doc-section" id="explore">
-      <h2 class="section-title"><span class="emoji">🔍</span> Finding Models</h2>
-
-      <h3 class="subsection">Search</h3>
-      <p>Use the search bar at the top of the Explore page. Search matches against model name, description, and tags. You can search for things like:</p>
-      <ul style="margin: 12px 0 16px 24px; font-size: 14px; color: var(--text-2); line-height: 2;">
-        <li><code>ICD-10</code> — find medical coding models</li>
-        <li><code>contract analysis</code> — find legal models</li>
-        <li><code>Python code generation</code> — find coding assistants</li>
-        <li><code>multilingual</code> — find models supporting multiple languages</li>
-      </ul>
-
-      <h3 class="subsection">Filters</h3>
-      <p>The left sidebar has three filter groups:</p>
-
-      <table>
-        <thead><tr><th>Filter</th><th>Options</th><th>Use when</th></tr></thead>
-        <tbody>
-          <tr><td><strong>Category</strong></td><td>8 domains</td><td>You know the industry vertical</td></tr>
-          <tr><td><strong>Rating</strong></td><td>1★ to 5★</td><td>You want community-vetted models only</td></tr>
-          <tr><td><strong>Date Uploaded</strong></td><td>24h / 7d / 30d / 6m</td><td>You want the latest models</td></tr>
-        </tbody>
-      </table>
-
-      <h3 class="subsection">Categories</h3>
-      <div class="cat-grid">
-        <span class="cat-badge" style="background:#DCFCE7;color:#166534">🏛️ Legal</span>
-        <span class="cat-badge" style="background:#DBEAFE;color:#1E40AF">🏥 Healthcare</span>
-        <span class="cat-badge" style="background:#FEF3C7;color:#92400E">💻 Coding</span>
-        <span class="cat-badge" style="background:#EDE9FE;color:#5B21B6">💰 Finance</span>
-        <span class="cat-badge" style="background:#F3F4F6;color:#374151">🌐 General</span>
-        <span class="cat-badge" style="background:#FCE7F3;color:#9D174D">🎓 Education</span>
-        <span class="cat-badge" style="background:#CCFBF1;color:#134E4A">🌍 Multilingual</span>
-        <span class="cat-badge" style="background:#FEE2E2;color:#991B1B">🔒 Security</span>
-      </div>
-
-      <h3 class="subsection">Sorting</h3>
-      <p>Use the <strong>Sort by</strong> dropdown on the Explore page to order results by:</p>
-      <ul style="margin: 12px 0 0 24px; font-size: 14px; color: var(--text-2); line-height: 2;">
-        <li><strong>Most Recent</strong> — newest uploads first (default)</li>
-        <li><strong>Most Downloads</strong> — most popular models first</li>
-        <li><strong>Highest Rated</strong> — community top-rated models</li>
-        <li><strong>Most Viewed</strong> — most viewed model pages</li>
-      </ul>
-    </section>
-
-    <!-- ─── MODEL PAGE ────────────────────────────── -->
-    <section class="doc-section" id="model-page">
-      <h2 class="section-title"><span class="emoji">📄</span> Model Detail Page</h2>
-
-      <p>Every model has a detail page accessible by clicking its card. The page has four tabs:</p>
-
-      <div class="feature-grid">
-        <div class="feature-card">
-          <h4>📋 Overview</h4>
-          <p>Full description, tags, quick benchmark summary, links to GitHub and license information.</p>
-        </div>
-        <div class="feature-card">
-          <h4>📊 Benchmarks</h4>
-          <p>Detailed performance metrics: accuracy, F1 score, response time, with explanations.</p>
-        </div>
-        <div class="feature-card">
-          <h4>⚙️ Details</h4>
-          <p>Technical specs: model size, context window, quantization, base model, training data.</p>
-        </div>
-        <div class="feature-card">
-          <h4>⭐ Reviews</h4>
-          <p>Community reviews with star ratings and comments. Leave your own review after using it.</p>
-        </div>
-      </div>
-
-      <h3 class="subsection">Stats explained</h3>
-      <table>
-        <thead><tr><th>Stat</th><th>What it means</th></tr></thead>
-        <tbody>
-          <tr><td><strong>Rating</strong></td><td>Average of all community reviews (1–5 stars)</td></tr>
-          <tr><td><strong>Downloads</strong></td><td>Total unique sessions that clicked Get Model</td></tr>
-          <tr><td><strong>Views</strong></td><td>Total unique sessions that opened this model page</td></tr>
-          <tr><td><strong>Updated</strong></td><td>When the model was last modified by its creator</td></tr>
-        </tbody>
-      </table>
-    </section>
-
-    <!-- ─── DOWNLOAD ──────────────────────────────── -->
-    <section class="doc-section" id="download">
-      <h2 class="section-title"><span class="emoji">⬇️</span> Downloading a Model</h2>
-
-      <div class="steps">
-        <div class="step">
-          <div class="step-num">1</div>
-          <div class="step-body">
-            <div class="step-title">Click "Get Model"</div>
-            <div class="step-desc">On the model detail page, click the orange <strong>Get Model</strong> button. This opens the model's GitHub repository in a new tab.</div>
-          </div>
-        </div>
-        <div class="step">
-          <div class="step-num">2</div>
-          <div class="step-body">
-            <div class="step-title">Go to the GitHub repository</div>
-            <div class="step-desc">Read the README for installation and usage instructions. Each model has different requirements.</div>
-          </div>
-        </div>
-        <div class="step">
-          <div class="step-num">3</div>
-          <div class="step-body">
-            <div class="step-title">Download from HuggingFace or GitHub</div>
-            <div class="step-desc">Most models link to a HuggingFace model page where you can download weights directly. Use <code>huggingface-hub</code> or <code>git clone</code>.</div>
-          </div>
-        </div>
-      </div>
-
-      <div class="tip tip-warn">
-        <span class="tip-icon">⚠️</span>
-        <span class="tip-text"><strong>Check the license before using a model in production.</strong> Apache 2.0 and MIT allow commercial use. CC BY-NC does not. The license is shown on the Overview tab.</span>
-      </div>
-
-      <h3 class="subsection">Running a model locally</h3>
-      <p>Most models on SLM Marketplace can be run with the <code>transformers</code> library:</p>
-      <div style="background:var(--bg-3);border-radius:var(--radius);padding:16px 20px;margin:14px 0;font-family:monospace;font-size:13px;color:var(--text-2);line-height:1.8;">
-        pip install transformers torch<br>
-        <br>
-        from transformers import pipeline<br>
-        pipe = pipeline("text-generation", model="username/ModelName")<br>
-        result = pipe("Your input text here", max_new_tokens=256)
-      </div>
-      <p>Check the model's GitHub README for model-specific instructions and any additional dependencies.</p>
-    </section>
-
-    <!-- ─── BENCHMARKS ────────────────────────────── -->
-    <section class="doc-section" id="benchmarks">
-      <h2 class="section-title"><span class="emoji">📊</span> Understanding Benchmarks</h2>
-
-      <table>
-        <thead><tr><th>Metric</th><th>What it measures</th><th>Good range</th></tr></thead>
-        <tbody>
-          <tr><td><strong>Accuracy</strong></td><td>% of predictions exactly correct on the test set</td><td>85%+ for domain tasks</td></tr>
-          <tr><td><strong>F1 Score</strong></td><td>Balance of precision and recall — more robust than accuracy alone</td><td>80%+ good, 90%+ excellent</td></tr>
-          <tr><td><strong>Response Time</strong></td><td>Average milliseconds to generate output (CPU, 512 tokens)</td><td>&lt;200ms ideal, &lt;500ms acceptable</td></tr>
-          <tr><td><strong>Model Size</strong></td><td>Number of parameters (1B, 3B, 7B)</td><td>Smaller = faster/cheaper</td></tr>
-          <tr><td><strong>Context Window</strong></td><td>Maximum input tokens the model can process at once</td><td>4K minimum, 8K+ preferred</td></tr>
-          <tr><td><strong>Quantized</strong></td><td>Whether weights are compressed (4-bit/8-bit) to save memory</td><td>Yes = smaller, faster (slight quality trade-off)</td></tr>
-        </tbody>
-      </table>
-
-      <div class="tip tip-info">
-        <span class="tip-icon">ℹ️</span>
-        <span class="tip-text">Benchmarks are self-reported by model authors. Always test a model on your own data before deploying to production. A high accuracy score on the training benchmark may not transfer to your specific use case.</span>
-      </div>
-
-      <h3 class="subsection">How to compare two models</h3>
-      <p>Open each model's <strong>Benchmarks</strong> tab side by side. Prioritise F1 Score over Accuracy if your task has imbalanced classes. Prioritise Response Time if you need real-time inference. Prioritise Context Window if your inputs are long documents.</p>
-    </section>
-
-    <!-- ─── REVIEWS ───────────────────────────────── -->
-    <section class="doc-section" id="reviews">
-      <h2 class="section-title"><span class="emoji">⭐</span> Writing Reviews</h2>
-
-      <p>Reviews help the community understand how a model performs in real-world use — not just on benchmark tests. Good reviews are specific, honest, and mention your use case.</p>
-
-      <div class="steps">
-        <div class="step">
-          <div class="step-num">1</div>
-          <div class="step-body">
-            <div class="step-title">Use the model first</div>
-            <div class="step-desc">Test the model on your actual data or use case. Reviews based on real usage are far more valuable than reviews based on the benchmark numbers alone.</div>
-          </div>
-        </div>
-        <div class="step">
-          <div class="step-num">2</div>
-          <div class="step-body">
-            <div class="step-title">Go to the Reviews tab</div>
-            <div class="step-desc">On the model page, click the <strong>Reviews</strong> tab. You must be signed in. Each user can leave one review per model.</div>
-          </div>
-        </div>
-        <div class="step">
-          <div class="step-num">3</div>
-          <div class="step-body">
-            <div class="step-title">Select a star rating</div>
-            <div class="step-desc">Click the stars to rate (1–5). 5 stars = excellent, meets or exceeds benchmarks in real use. 3 stars = decent, some limitations. 1–2 stars = significant issues.</div>
-          </div>
-        </div>
-        <div class="step">
-          <div class="step-num">4</div>
-          <div class="step-body">
-            <div class="step-title">Write your comment</div>
-            <div class="step-desc">Describe your use case, what worked, what didn't. Mention specific inputs or scenarios. Keep it constructive.</div>
-          </div>
-        </div>
-      </div>
-
-      <div class="tip tip-success">
-        <span class="tip-icon">✅</span>
-        <span class="tip-text"><strong>Great review example:</strong> "Used this for contract clause extraction in SaaS agreements. F1 on our internal test set was 61% (slightly below the listed 72%). Excellent on Limitation of Liability clauses, weaker on non-standard IP ownership terms. Overall recommended for standard commercial contracts."</span>
-      </div>
-    </section>
-
-    <!-- ─── UPLOAD ────────────────────────────────── -->
-    <section class="doc-section" id="upload">
-      <h2 class="section-title"><span class="emoji">🚀</span> Uploading a Model</h2>
-
-      <p>Sharing your model takes about 5 minutes. You need a GitHub repository with the model files or HuggingFace link before you start.</p>
-
-      <div class="steps">
-        <div class="step">
-          <div class="step-num">1</div>
-          <div class="step-body">
-            <div class="step-title">Sign in and go to Upload</div>
-            <div class="step-desc">Click <strong>Upload Model</strong> in the navigation. You must be signed in — the page redirects to login if you're not.</div>
-          </div>
-        </div>
-        <div class="step">
-          <div class="step-num">2</div>
-          <div class="step-body">
-            <div class="step-title">Fill in the model name</div>
-            <div class="step-desc">Use a clear, descriptive name. Convention: <code>TaskName-SLM-Size</code> e.g. <code>Legal-SLM-3B</code> or <code>MedCoder-SLM-1B</code>. No spaces — use hyphens.</div>
-          </div>
-        </div>
-        <div class="step">
-          <div class="step-num">3</div>
-          <div class="step-body">
-            <div class="step-title">Select a category</div>
-            <div class="step-desc">Choose the primary domain. If your model spans multiple categories, pick the most dominant one and add the others as tags.</div>
-          </div>
-        </div>
-        <div class="step">
-          <div class="step-num">4</div>
-          <div class="step-body">
-            <div class="step-title">Write a short description</div>
-            <div class="step-desc">Max 150 characters. This appears in search results and model cards. Lead with what the model does, not how it was built. Example: <em>"Assigns ICD-10-CM and CPT codes from clinical notes with 69% exact match accuracy."</em></div>
-          </div>
-        </div>
-        <div class="step">
-          <div class="step-num">5</div>
-          <div class="step-body">
-            <div class="step-title">Add your GitHub URL</div>
-            <div class="step-desc">Must be a valid public GitHub repository (e.g. <code>https://github.com/username/repo</code>). This is where users go to download the model.</div>
-          </div>
-        </div>
-        <div class="step">
-          <div class="step-num">6</div>
-          <div class="step-body">
-            <div class="step-title">Add tags</div>
-            <div class="step-desc">Type a tag and press Enter. Add 3–8 tags. Use the suggested tags that appear after selecting a category. Good tags: base model name, task type, techniques, language.</div>
-          </div>
-        </div>
-        <div class="step">
-          <div class="step-num">7</div>
-          <div class="step-body">
-            <div class="step-title">Click Continue</div>
-            <div class="step-desc">Your model is published immediately. You'll be redirected to its detail page. You can edit or delete the model from that page if you're the owner.</div>
-          </div>
-        </div>
-      </div>
-
-      <div class="tip tip-info">
-        <span class="tip-icon">💡</span>
-        <span class="tip-text"><strong>Save Draft</strong> — click this instead of Continue to save without publishing. Drafts are visible only to you. Publish when your model and description are ready.</span>
-      </div>
-    </section>
-
-    <!-- ─── GUIDELINES ────────────────────────────── -->
-    <section class="doc-section" id="guidelines">
-      <h2 class="section-title"><span class="emoji">✅</span> Upload Guidelines</h2>
-
-      <h3 class="subsection">What's allowed</h3>
-      <div class="feature-grid">
-        <div class="feature-card">
-          <h4>✅ Open-source models</h4>
-          <p>Apache 2.0, MIT, CC BY, GPL, and similar permissive licenses.</p>
-        </div>
-        <div class="feature-card">
-          <h4>✅ Fine-tuned models</h4>
-          <p>Models fine-tuned from open base models (Llama, Mistral, Phi, Qwen, etc.).</p>
-        </div>
-        <div class="feature-card">
-          <h4>✅ Honest benchmarks</h4>
-          <p>Benchmarks run on real test sets. Include methodology in your GitHub README.</p>
-        </div>
-        <div class="feature-card">
-          <h4>✅ Clear documentation</h4>
-          <p>GitHub README with installation steps, usage example, and known limitations.</p>
-        </div>
-      </div>
-
-      <h3 class="subsection">What's not allowed</h3>
-      <div class="tip tip-danger">
-        <span class="tip-icon">🚫</span>
-        <div class="tip-text">
-          <strong>Prohibited content:</strong><br>
-          Models trained on illegally obtained data · Models designed to deceive, harm, or generate illegal content · Benchmark fraud (inflated or fabricated numbers) · Duplicate submissions · Models with no working GitHub link · Closed-source models presented as open-source
-        </div>
-      </div>
-
-      <h3 class="subsection">GitHub repository requirements</h3>
-      <p>Your repo must include at minimum:</p>
-      <ul style="margin: 8px 0 0 24px; font-size: 14px; color: var(--text-2); line-height: 2.2;">
-        <li>A <code>README.md</code> with what the model does</li>
-        <li>Installation and usage instructions</li>
-        <li>The license file</li>
-        <li>How to download the model weights (HuggingFace link, direct download, or similar)</li>
-      </ul>
-    </section>
-
-    <!-- ─── TAGS ──────────────────────────────────── -->
-    <section class="doc-section" id="tags">
-      <h2 class="section-title"><span class="emoji">🏷️</span> Tags &amp; Categories</h2>
-
-      <p>Good tags dramatically improve your model's discoverability in search. Use 4–8 tags per model.</p>
-
-      <table>
-        <thead><tr><th>Tag type</th><th>Examples</th></tr></thead>
-        <tbody>
-          <tr><td><strong>Task</strong></td><td><code>Medical Coding</code>, <code>Contract Analysis</code>, <code>Code Generation</code></td></tr>
-          <tr><td><strong>Base model</strong></td><td><code>Llama</code>, <code>Mistral</code>, <code>Phi</code>, <code>Qwen</code></td></tr>
-          <tr><td><strong>Technique</strong></td><td><code>QLoRA</code>, <code>LoRA</code>, <code>RLHF</code>, <code>RAG</code></td></tr>
-          <tr><td><strong>Data format</strong></td><td><code>ICD-10</code>, <code>CPT</code>, <code>CUAD</code>, <code>JSON output</code></td></tr>
-          <tr><td><strong>Language</strong></td><td><code>Arabic</code>, <code>Hindi</code>, <code>Multilingual</code></td></tr>
-          <tr><td><strong>Domain term</strong></td><td><code>HIPAA</code>, <code>Clinical NLP</code>, <code>LegalTech</code></td></tr>
-        </tbody>
-      </table>
-    </section>
-
-    <!-- ─── PROFILE ───────────────────────────────── -->
-    <section class="doc-section" id="profile">
-      <h2 class="section-title"><span class="emoji">👤</span> Engineer Profile</h2>
-
-      <p>Your profile is your public page on SLM Marketplace. It shows all your published models, reviews you've received, and your activity. Other users can follow you to get notified when you publish new models.</p>
-
-      <h3 class="subsection">Profile URL</h3>
-      <p>Your profile is at: <code>slm-market.sannan.app/profile?user=your_username</code></p>
-
-      <h3 class="subsection">Profile stats</h3>
-      <table>
-        <thead><tr><th>Stat</th><th>What it counts</th></tr></thead>
-        <tbody>
-          <tr><td><strong>Models</strong></td><td>Total published models</td></tr>
-          <tr><td><strong>Downloads</strong></td><td>Total downloads across all your models</td></tr>
-          <tr><td><strong>Average Rating</strong></td><td>Mean rating across all reviews received</td></tr>
-          <tr><td><strong>Reviews</strong></td><td>Total reviews received on your models</td></tr>
-          <tr><td><strong>Followers</strong></td><td>Users following your profile</td></tr>
-        </tbody>
-      </table>
-
-      <h3 class="subsection">Three tabs on your profile</h3>
-      <div class="feature-grid">
-        <div class="feature-card">
-          <h4>📦 Models</h4>
-          <p>All your published models sorted by date. Click any model to go to its detail page.</p>
-        </div>
-        <div class="feature-card">
-          <h4>⭐ Reviews</h4>
-          <p>Reviews left on your models by the community.</p>
-        </div>
-        <div class="feature-card">
-          <h4>📅 Activity</h4>
-          <p>Timeline of your uploads, updates, and milestones.</p>
-        </div>
-        <div class="feature-card">
-          <h4>🔖 Saved</h4>
-          <p>Models you've bookmarked — visible only to you.</p>
-        </div>
-      </div>
-    </section>
-
-    <!-- ─── LEADERBOARD ───────────────────────────── -->
-    <section class="doc-section" id="leaderboard">
-      <h2 class="section-title"><span class="emoji">🏆</span> Leaderboard &amp; Scoring</h2>
-
-      <p>The leaderboard ranks engineers and models across three views. Filter by This Month, This Week, or All Time.</p>
-
-      <h3 class="subsection">How the engineer score is calculated</h3>
-      <p>Your score is computed automatically by the platform whenever your models get downloads or reviews:</p>
-
-      <div style="background:var(--bg-3);border-radius:var(--radius);padding:16px 20px;margin:14px 0;font-size:13px;color:var(--text-2);line-height:1.8;">
-        Score = log₁₀(total downloads) × 100<br>
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ (average rating / 5) × 300<br>
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ min(model count × 20, 400)
-      </div>
-
-      <p>Downloads carry the most weight. A model with 10,000 downloads scores much higher than one with 100, even if they have the same rating. Publishing more models increases your score up to a cap of 400 points.</p>
-
-      <h3 class="subsection">Three leaderboard tabs</h3>
-      <table>
-        <thead><tr><th>Tab</th><th>Ranked by</th></tr></thead>
-        <tbody>
-          <tr><td><strong>Top Engineers</strong></td><td>Overall score (downloads + rating + model count)</td></tr>
-          <tr><td><strong>Top Models</strong></td><td>Total download count</td></tr>
-          <tr><td><strong>Trending</strong></td><td>Recent downloads × rating (last 7 days)</td></tr>
-        </tbody>
-      </table>
-    </section>
-
-    <!-- ─── BOOKMARKS ─────────────────────────────── -->
-    <section class="doc-section" id="bookmarks">
-      <h2 class="section-title"><span class="emoji">🔖</span> Saving Models</h2>
-
-      <p>Save any model to your bookmarks by clicking the <strong>bookmark icon</strong> on the top right of a model card (on Explore) or the bookmark icon on the model detail page. You must be signed in.</p>
-
-      <p>Your saved models appear in the <strong>Saved</strong> section on your profile page. Only you can see your saved models — they are private.</p>
-
-      <div class="tip tip-info">
-        <span class="tip-icon">ℹ️</span>
-        <span class="tip-text">Saving a model does not download it. It just adds it to your personal list for quick access later.</span>
-      </div>
-    </section>
-
-    <!-- ─── FAQ ───────────────────────────────────── -->
-    <section class="doc-section" id="faq">
-      <h2 class="section-title"><span class="emoji">❓</span> FAQ</h2>
-
-      <div class="faq-item">
-        <div class="faq-q" onclick="toggleFaq(this)">
-          Is SLM Marketplace free to use?
-          <svg class="faq-chevron" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
-        </div>
-        <div class="faq-a">Yes, completely free. Browsing, downloading, and uploading models are all free. There are no plans to charge for core discovery features.</div>
-      </div>
-
-      <div class="faq-item">
-        <div class="faq-q" onclick="toggleFaq(this)">
-          Can I upload a model without a GitHub repository?
-          <svg class="faq-chevron" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
-        </div>
-        <div class="faq-a">The GitHub URL field is optional in the form, but we strongly recommend it. Without a repository link, users have no way to download or inspect your model, which dramatically reduces your downloads and credibility.</div>
-      </div>
-
-      <div class="faq-item">
-        <div class="faq-q" onclick="toggleFaq(this)">
-          Can I upload a model I fine-tuned from Llama / Mistral / Phi?
-          <svg class="faq-chevron" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
-        </div>
-        <div class="faq-a">Yes, as long as your fine-tune complies with the base model's license. Llama models require the Meta Llama Community License. Mistral and Phi use Apache 2.0. Always declare the base model and your fine-tuning license clearly in your README.</div>
-      </div>
-
-      <div class="faq-item">
-        <div class="faq-q" onclick="toggleFaq(this)">
-          How do I get the verified checkmark?
-          <svg class="faq-chevron" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
-        </div>
-        <div class="faq-a">Verified status is granted to engineers who have published multiple high-quality models with honest benchmarks, and whose models have received positive community reviews. It is manually reviewed. Contact support if you believe you qualify.</div>
-      </div>
-
-      <div class="faq-item">
-        <div class="faq-q" onclick="toggleFaq(this)">
-          Can I edit or delete my model after publishing?
-          <svg class="faq-chevron" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
-        </div>
-        <div class="faq-a">Yes. Go to your model's detail page. If you are the owner, you will see Edit and Delete buttons next to the Get Model button. Edit opens the upload form pre-filled with your model's data. Delete requires confirmation and is permanent.</div>
-      </div>
-
-      <div class="faq-item">
-        <div class="faq-q" onclick="toggleFaq(this)">
-          My confirmation email never arrived. What do I do?
-          <svg class="faq-chevron" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
-        </div>
-        <div class="faq-a">Check your spam/junk folder first. The email comes from noreply@sannan.app. If it's not there after 5 minutes, try signing up again — you can request a new confirmation email. If the problem persists, contact support.</div>
-      </div>
-
-      <div class="faq-item">
-        <div class="faq-q" onclick="toggleFaq(this)">
-          Are the benchmarks verified by SLM Marketplace?
-          <svg class="faq-chevron" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
-        </div>
-        <div class="faq-a">Benchmarks are self-reported by model authors and are not independently verified. Community reviews are the best signal of real-world performance. If you notice inflated or fraudulent benchmarks, use the Report button on the model page.</div>
-      </div>
-
-      <div class="faq-item">
-        <div class="faq-q" onclick="toggleFaq(this)">
-          Can I use models from here in my commercial product?
-          <svg class="faq-chevron" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
-        </div>
-        <div class="faq-a">It depends on the model's license — always check the License field on the Overview tab. Apache 2.0 and MIT permit commercial use. CC BY-NC does not. GPL has copyleft requirements. SLM Marketplace itself does not grant any rights — the license from the model author governs usage.</div>
-      </div>
-    </section>
-
-    <!-- ─── COMMUNITY ─────────────────────────────── -->
-    <section class="doc-section" id="community">
-      <h2 class="section-title"><span class="emoji">🤝</span> Community &amp; Support</h2>
-
-      <div class="feature-grid">
-        <div class="feature-card">
-          <h4>📧 Email Support</h4>
-          <p>For account issues, upload problems, or to report a model: <a href="mailto:support@sannan.app">support@sannan.app</a></p>
-        </div>
-        <div class="feature-card">
-          <h4>🐙 GitHub</h4>
-          <p>Report bugs or request features at <a href="https://github.com/sannanansari/slm-marketplace" target="_blank">github.com/sannanansari/slm-marketplace</a></p>
-        </div>
-        <div class="feature-card">
-          <h4>🚩 Report a Model</h4>
-          <p>If a model violates guidelines, click the <strong>Report</strong> button on its detail page. We review all reports within 48 hours.</p>
-        </div>
-        <div class="feature-card">
-          <h4>📣 Stay Updated</h4>
-          <p>Follow the leaderboard for new model discoveries. Follow engineers whose work you find valuable.</p>
-        </div>
-      </div>
-
-      <div class="tip tip-success">
-        <span class="tip-icon">🌟</span>
-        <span class="tip-text">The best way to support SLM Marketplace is to upload your models, leave honest reviews, and share models you find useful with your network. The community grows through engineers helping engineers.</span>
-      </div>
-    </section>
-
-  </main>
-
-  <!-- RIGHT TOC -->
-  <aside class="toc" id="toc">
-    <div class="toc-title">On this page</div>
-    <a href="#overview">What is SLM Marketplace?</a>
-    <a href="#account">Create an Account</a>
-    <a href="#explore">Finding Models</a>
-    <a href="#model-page">Model Detail Page</a>
-    <a href="#download">Downloading</a>
-    <a href="#benchmarks">Benchmarks</a>
-    <a href="#reviews">Reviews</a>
-    <a href="#upload">Uploading</a>
-    <a href="#guidelines">Guidelines</a>
-    <a href="#tags">Tags &amp; Categories</a>
-    <a href="#profile">Engineer Profile</a>
-    <a href="#leaderboard">Leaderboard</a>
-    <a href="#bookmarks">Saving Models</a>
-    <a href="#faq">FAQ</a>
-    <a href="#community">Support</a>
-  </aside>
 </div>
-
-<script>
-  // FAQ accordion
-  function toggleFaq(el) {
-    el.parentElement.classList.toggle('open');
-  }
-
-  // Active nav + TOC on scroll
-  const sections = document.querySelectorAll('.doc-section');
-  const navLinks = document.querySelectorAll('.nav-link[href^="#"]');
-  const tocLinks = document.querySelectorAll('.toc a');
-
-  function onScroll() {
-    let current = '';
-    sections.forEach(s => {
-      if (window.scrollY >= s.offsetTop - 120) current = s.id;
-    });
-    navLinks.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + current));
-    tocLinks.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + current));
-  }
-  window.addEventListener('scroll', onScroll, { passive: true });
-  onScroll();
-
-  // Doc search (simple highlight)
-  const searchInput = document.getElementById('doc-search');
-  searchInput.addEventListener('input', function() {
-    const q = this.value.toLowerCase().trim();
-    if (!q) {
-      document.querySelectorAll('.doc-section').forEach(s => s.style.display = '');
-      return;
-    }
-    document.querySelectorAll('.doc-section').forEach(s => {
-      const match = s.textContent.toLowerCase().includes(q);
-      s.style.display = match ? '' : 'none';
-    });
-  });
-</script>
-</body>
-</html>
+<script src='docs.js'></script>
+</body></html>

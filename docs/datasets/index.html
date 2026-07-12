@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+<meta charset='UTF-8'>
+<meta name='viewport' content='width=device-width,initial-scale=1.0'>
+<title>Dataset Academy — Build SLM Training Data &mdash; SLM Docs</title>
+<meta name='description' content='Learn to collect, clean, label, and generate datasets for SLM fine-tuning.'>
+<link rel='icon' type='image/svg+xml' href='../.../assets/favicon.svg'>
+<link rel='preconnect' href='https://fonts.googleapis.com'>
+<link href='https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap' rel='stylesheet'>
+<style>#reading-progress-wrap{position:fixed;top:60px;left:0;right:0;height:2px;z-index:199}#reading-progress{height:2px;background:#F97316;width:0;transition:width .1s}</style>
+<link rel='stylesheet' href='../../docs/docs.css'>
+</head>
+<body>
+<div id='reading-progress-wrap'><div id='reading-progress'></div></div>
+<header class='docs-header'><div class='docs-header-inner'><button class='mobile-menu-btn' id='mobile-menu-btn' aria-label='Menu'><svg width='18' height='18' fill='none' viewBox='0 0 24 24' stroke='currentColor' stroke-width='2'><line x1='3' y1='6' x2='21' y2='6'/><line x1='3' y1='12' x2='21' y2='12'/><line x1='3' y1='18' x2='21' y2='18'/></svg></button><a href='../.../index.html' class='docs-logo'><span class='docs-logo-slm'>SLM</span><span class='docs-logo-name'>Marketplace</span><span class='docs-logo-sep'>/</span><span class='docs-logo-docs'>Docs</span></a><div class='docs-header-search'><svg class='search-icon-wrap' width='14' height='14' fill='none' viewBox='0 0 24 24' stroke='currentColor' stroke-width='2'><circle cx='11' cy='11' r='8'/><line x1='21' y1='21' x2='16.65' y2='16.65'/></svg><input type='search' id='docs-search' placeholder='Search docs...' autocomplete='off'><div class='search-results' id='search-results'></div></div><nav class='docs-header-nav'><a href='../.../explore.html'>Explore Models</a><a href='../.../upload.html'>Upload Model</a><a href='../.../auth.html' class='btn-cta'>Sign Up Free</a></nav></div></header>
+<div class='docs-layout'>
+<nav class="docs-sidebar" id="docs-sidebar">
+<div class="nav-section"><div class="nav-section-title">Getting Started</div>
+<a href="../../docs/getting-started/" class="nav-link">🌐 Introduction to SLMs</a>
+<a href="../../docs/getting-started/slm-vs-llm.html" class="nav-link">⚖️ SLM vs LLM</a>
+<a href="../../docs/getting-started/use-cases.html" class="nav-link">💼 Use Cases</a>
+</div>
+<div class="nav-section"><div class="nav-section-title">AI Foundations</div>
+<a href="../../docs/foundations/" class="nav-link">🔬 Overview</a>
+<a href="../../docs/foundations/transformers.html" class="nav-link" style="padding-left:24px;font-size:12px">Transformers</a>
+<a href="../../docs/foundations/tokens.html" class="nav-link" style="padding-left:24px;font-size:12px">Tokens</a>
+<a href="../../docs/foundations/lora.html" class="nav-link" style="padding-left:24px;font-size:12px">LoRA &amp; QLoRA</a>
+<a href="../../docs/foundations/quantization.html" class="nav-link" style="padding-left:24px;font-size:12px">Quantization</a>
+</div>
+<div class="nav-section"><div class="nav-section-title">Roadmap</div>
+<a href="../../docs/roadmap/" class="nav-link">🗺️ Learning Roadmap</a>
+</div>
+<div class="nav-section"><div class="nav-section-title">Setup</div>
+<a href="../../docs/setup/" class="nav-link">⚙️ Overview</a>
+<a href="../../docs/setup/colab.html" class="nav-link" style="padding-left:24px;font-size:12px">☁️ Google Colab</a>
+<a href="../../docs/setup/gpu-guide.html" class="nav-link" style="padding-left:24px;font-size:12px">🎮 GPU Guide</a>
+</div>
+<div class="nav-section"><div class="nav-section-title">Tools</div>
+<a href="../../docs/tools/" class="nav-link">🔧 Tools Directory</a>
+</div>
+<div class="nav-section"><div class="nav-section-title">Tutorial</div>
+<a href="../../docs/tutorials/" class="nav-link" style="color:var(--orange);font-weight:600">🏗️ Build First SLM</a>
+</div>
+<div class="nav-section"><div class="nav-section-title">Academies</div>
+<a href="../../docs/fine-tuning/" class="nav-link">⚡ Fine-Tuning</a>
+<a href="../../docs/fine-tuning/qlora.html" class="nav-link" style="padding-left:24px;font-size:12px">QLoRA</a>
+<a href="../../docs/fine-tuning/unsloth.html" class="nav-link" style="padding-left:24px;font-size:12px">Unsloth 🦥</a>
+<a href="../../docs/datasets/" class="nav-link">📦 Datasets</a>
+<a href="../../docs/evaluation/" class="nav-link">📊 Evaluation</a>
+<a href="../../docs/quantization/" class="nav-link">💾 Quantization</a>
+<a href="../../docs/inference/" class="nav-link">🚀 Inference</a>
+<a href="../../docs/inference/ollama.html" class="nav-link" style="padding-left:24px;font-size:12px">🦙 Ollama</a>
+<a href="../../docs/inference/vllm.html" class="nav-link" style="padding-left:24px;font-size:12px">vLLM</a>
+<a href="../../docs/deployment/" class="nav-link">☁️ Deployment</a>
+<a href="../../docs/rag/" class="nav-link">🔍 RAG</a>
+</div>
+<div class="nav-section"><div class="nav-section-title">Projects</div>
+<a href="../../docs/projects/" class="nav-link">🏗️ All Projects</a>
+<a href="../../docs/projects/medical.html" class="nav-link" style="padding-left:24px;font-size:12px">🏥 Medical SLM</a>
+<a href="../../docs/projects/legal.html" class="nav-link" style="padding-left:24px;font-size:12px">⚖️ Legal SLM</a>
+<a href="../../docs/projects/coding.html" class="nav-link" style="padding-left:24px;font-size:12px">💻 Coding SLM</a>
+<a href="../../docs/projects/finance.html" class="nav-link" style="padding-left:24px;font-size:12px">📈 Finance SLM</a>
+</div>
+<div class="nav-section"><div class="nav-section-title">Reference</div>
+<a href="../../docs/hardware/" class="nav-link">🎮 Hardware Guide</a>
+<a href="../../docs/costs/" class="nav-link">💰 Cost Guide</a>
+<a href="../../docs/publishing/" class="nav-link">📤 Publishing Guide</a>
+<a href="../../docs/best-practices/" class="nav-link">🛡️ Best Practices</a>
+<a href="../../docs/troubleshooting/" class="nav-link">🔴 Troubleshooting</a>
+</div>
+</nav>
+<main class='docs-content'>
+<div class='breadcrumb'><a href='../'>Docs</a> &rsaquo; <span>Dataset Academy</span></div><div class='page-hero'><div class='page-label'>📦 Dataset Academy</div><h1 class='page-title'>Dataset Academy</h1><p class='page-desc'>Your model is only as good as your data. Learn to build high-quality training datasets from scratch.</p><div class='page-meta'><span class='page-meta-item'>⏱ 15 min read</span><span class='difficulty diff-intermediate'>Intermediate</span></div></div><hr class='page-divider'><h2 id='format'>Dataset Format</h2><p>Most SLM fine-tuning uses the <strong>instruction-following format</strong> &mdash; pairs of (instruction, input, output):</p><div class='code-block'><div class='code-block-header'><span class='code-block-lang'>json</span><button class='code-copy-btn'>Copy</button></div><pre><code>[
+  {
+    "instruction": "Classify this note and assign ICD-10 codes.",
+    "input": "Patient with acute chest pain, ST elevation V1-V4.",
+    "output": "I21.9 - Acute myocardial infarction, unspecified"
+  },
+  {
+    "instruction": "Extract the limitation of liability clause.",
+    "input": "...contract text...",
+    "output": "Section 8.2: Liability shall not exceed fees paid in 12 months."
+  }
+]</code></pre></div><h2 id='size'>How Many Examples Do You Need?</h2><div class='table-wrap'><table><thead><tr><th>Task</th><th>Minimum</th><th>Recommended</th></tr></thead><tbody><tr><td>Simple classification (2&ndash;5 classes)</td><td>200</td><td class='td-good'>1,000&ndash;2,000</td></tr><tr><td>Structured extraction</td><td>500</td><td class='td-good'>2,000&ndash;5,000</td></tr><tr><td>Text generation</td><td>1,000</td><td class='td-good'>5,000&ndash;10,000</td></tr><tr><td>Complex reasoning</td><td>2,000</td><td class='td-warn'>10,000+</td></tr></tbody></table></div><h2 id='sources'>Data Collection Strategies</h2><div class='card-grid-2'><div class='doc-card'><div class='doc-card-icon'>🌐</div><div class='doc-card-title'>Public Datasets</div><div class='doc-card-desc'>HuggingFace Hub has 100,000+ datasets. CUAD (legal), MIMIC-IV (medical), CodeSearchNet (code). Filter by license.</div></div><div class='doc-card'><div class='doc-card-icon'>🏢</div><div class='doc-card-title'>Internal Data</div><div class='doc-card-desc'>Your company's documents, tickets, emails. Highest-quality signal for domain tasks. Ensure PII is removed.</div></div><div class='doc-card'><div class='doc-card-icon'>🤖</div><div class='doc-card-title'>Synthetic Generation</div><div class='doc-card-desc'>Use GPT-4 or Claude to generate training examples from templates. Fast, scalable, controllable quality.</div></div><div class='doc-card'><div class='doc-card-icon'>🔍</div><div class='doc-card-title'>Web Scraping</div><div class='doc-card-desc'>Scrapy, BeautifulSoup, Common Crawl. Always check robots.txt and terms of service before scraping.</div></div></div><h2 id='clean'>Data Cleaning Checklist</h2><p>Bad data is worse than less data. Run these checks before training:</p><ul><li>Remove examples where output is empty or under 10 characters</li><li>Deduplicate &mdash; identical or near-identical examples hurt training</li><li>Check for PII &mdash; names, emails, phone numbers in training data</li><li>Normalize whitespace and encoding</li><li>Truncate outliers &mdash; outputs over 512 tokens slow training significantly</li><li>Spot-check 50 random examples manually &mdash; quality issues are often obvious</li></ul><div class='code-block'><div class='code-block-header'><span class='code-block-lang'>python</span><button class='code-copy-btn'>Copy</button></div><pre><code>from datasets import load_dataset
+import re
+
+dataset = load_dataset("json", data_files="my_data.jsonl")
+
+def clean(ex):
+    if not ex["output"] or len(ex["output"].strip()) < 10:
+        return None
+    ex["output"] = re.sub(r"\s+", " ", ex["output"]).strip()
+    if len(ex["output"].split()) > 512:
+        ex["output"] = " ".join(ex["output"].split()[:512])
+    return ex
+
+cleaned = dataset.filter(lambda x: clean(x) is not None)
+print(f"Kept {len(cleaned['train'])} / {len(dataset['train'])} examples")</code></pre></div><h2 id='synthetic'>Synthetic Data Generation</h2><p>When real data is scarce, use a larger model to generate examples:</p><div class='code-block'><div class='code-block-header'><span class='code-block-lang'>python</span><button class='code-copy-btn'>Copy</button></div><pre><code>import anthropic, json
+
+client = anthropic.Anthropic()
+
+def generate_examples(n=100):
+    examples = []
+    for _ in range(n):
+        msg = client.messages.create(
+            model="claude-sonnet-4-6", max_tokens=500,
+            messages=[{"role": "user", "content":
+                "Generate a clinical note and its ICD-10 codes.\n"
+                'Return JSON: {"note": "...", "codes": ["X00.0"]}'
+            }]
+        )
+        try:
+            data = json.loads(msg.content[0].text)
+            examples.append({
+                "instruction": "Assign ICD-10 codes.",
+                "input": data["note"],
+                "output": ", ".join(data["codes"])
+            })
+        except: pass
+    return examples</code></pre></div>
+
+</main>
+<aside class='docs-toc'><div class='toc-title'>On this page</div>
+<a href="#format" class="toc-link">Dataset Format</a>
+<a href="#size" class="toc-link">How Many Examples?</a>
+<a href="#sources" class="toc-link">Data Sources</a>
+<a href="#clean" class="toc-link">Data Cleaning</a>
+<a href="#synthetic" class="toc-link">Synthetic Data</a>
+</aside>
+</div>
+<script src='../../docs/docs.js'></script>
+</body></html>

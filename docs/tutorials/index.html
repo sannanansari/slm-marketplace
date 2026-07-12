@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+<meta charset='UTF-8'>
+<meta name='viewport' content='width=device-width,initial-scale=1.0'>
+<title>Build Your First SLM — Complete End-to-End Tutorial &mdash; SLM Docs</title>
+<meta name='description' content='Complete tutorial: pick a base model, prepare data, fine-tune with QLoRA, evaluate, quantize, deploy, and publish your SLM.'>
+<link rel='icon' type='image/svg+xml' href='../../assets/favicon.svg'>
+<link rel='preconnect' href='https://fonts.googleapis.com'>
+<link href='https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap' rel='stylesheet'>
+<style>#reading-progress-wrap{position:fixed;top:60px;left:0;right:0;height:2px;z-index:199}#reading-progress{height:2px;background:#F97316;width:0;transition:width .1s}</style>
+<link rel='stylesheet' href='../../docs/docs.css'>
+</head>
+<body>
+<div id='reading-progress-wrap'><div id='reading-progress'></div></div>
+<header class='docs-header'><div class='docs-header-inner'><button class='mobile-menu-btn' id='mobile-menu-btn' aria-label='Menu'><svg width='18' height='18' fill='none' viewBox='0 0 24 24' stroke='currentColor' stroke-width='2'><line x1='3' y1='6' x2='21' y2='6'/><line x1='3' y1='12' x2='21' y2='12'/><line x1='3' y1='18' x2='21' y2='18'/></svg></button><a href='../../index.html' class='docs-logo'><span class='docs-logo-slm'>SLM</span><span class='docs-logo-name'>Marketplace</span><span class='docs-logo-sep'>/</span><span class='docs-logo-docs'>Docs</span></a><div class='docs-header-search'><svg class='search-icon-wrap' width='14' height='14' fill='none' viewBox='0 0 24 24' stroke='currentColor' stroke-width='2'><circle cx='11' cy='11' r='8'/><line x1='21' y1='21' x2='16.65' y2='16.65'/></svg><input type='search' id='docs-search' placeholder='Search docs...' autocomplete='off'><div class='search-results' id='search-results'></div></div><nav class='docs-header-nav'><a href='../../explore.html'>Explore</a><a href='../../upload.html'>Upload</a><a href='../../auth.html' class='btn-cta'>Sign Up Free</a></nav></div></header>
+<div class='docs-layout'>
+<nav class="docs-sidebar" id="docs-sidebar">
+<div class="nav-section"><div class="nav-section-title">Getting Started</div>
+<a href="../../docs/getting-started/" class="nav-link">🌐 Introduction to SLMs</a>
+<a href="../../docs/getting-started/slm-vs-llm.html" class="nav-link">⚖️ SLM vs LLM</a>
+</div>
+<div class="nav-section"><div class="nav-section-title">AI Foundations</div>
+<a href="../../docs/foundations/" class="nav-link">🔬 Overview</a>
+<a href="../../docs/foundations/lora.html" class="nav-link" style="padding-left:22px;font-size:12px">LoRA &amp; QLoRA</a>
+</div>
+<div class="nav-section"><div class="nav-section-title">Roadmap</div>
+<a href="../../docs/roadmap/" class="nav-link">🗺️ Learning Roadmap</a>
+</div>
+<div class="nav-section"><div class="nav-section-title">Setup</div>
+<a href="../../docs/setup/" class="nav-link">⚙️ Overview</a>
+<a href="../../docs/setup/colab.html" class="nav-link" style="padding-left:22px;font-size:12px">☁️ Google Colab</a>
+<a href="../../docs/setup/gpu-guide.html" class="nav-link" style="padding-left:22px;font-size:12px">🎮 GPU Guide</a>
+</div>
+<div class="nav-section"><div class="nav-section-title">Tools</div>
+<a href="../../docs/tools/" class="nav-link">🔧 Tools Directory</a>
+</div>
+<div class="nav-section"><div class="nav-section-title">Tutorial</div>
+<a href="../../docs/tutorials/" class="nav-link" style="color:var(--orange);font-weight:600">🏗️ Build First SLM</a>
+</div>
+<div class="nav-section"><div class="nav-section-title">Academies</div>
+<a href="../../docs/fine-tuning/" class="nav-link">⚡ Fine-Tuning</a>
+<a href="../../docs/fine-tuning/qlora.html" class="nav-link" style="padding-left:22px;font-size:12px">QLoRA</a>
+<a href="../../docs/fine-tuning/unsloth.html" class="nav-link" style="padding-left:22px;font-size:12px">Unsloth 🦥</a>
+<a href="../../docs/datasets/" class="nav-link">📦 Datasets</a>
+<a href="../../docs/evaluation/" class="nav-link">📊 Evaluation</a>
+<a href="../../docs/quantization/" class="nav-link">💾 Quantization</a>
+<a href="../../docs/inference/" class="nav-link">🚀 Inference</a>
+<a href="../../docs/inference/ollama.html" class="nav-link" style="padding-left:22px;font-size:12px">🦙 Ollama</a>
+<a href="../../docs/inference/vllm.html" class="nav-link" style="padding-left:22px;font-size:12px">vLLM</a>
+<a href="../../docs/deployment/" class="nav-link">☁️ Deployment</a>
+<a href="../../docs/rag/" class="nav-link">🔍 RAG</a>
+</div>
+<div class="nav-section"><div class="nav-section-title">Projects</div>
+<a href="../../docs/projects/" class="nav-link">🏗️ All Projects</a>
+<a href="../../docs/projects/medical.html" class="nav-link" style="padding-left:22px;font-size:12px">🏥 Medical SLM</a>
+<a href="../../docs/projects/legal.html" class="nav-link" style="padding-left:22px;font-size:12px">⚖️ Legal SLM</a>
+<a href="../../docs/projects/coding.html" class="nav-link" style="padding-left:22px;font-size:12px">💻 Coding SLM</a>
+<a href="../../docs/projects/finance.html" class="nav-link" style="padding-left:22px;font-size:12px">📈 Finance SLM</a>
+</div>
+<div class="nav-section"><div class="nav-section-title">Reference</div>
+<a href="../../docs/hardware/" class="nav-link">🎮 Hardware Guide</a>
+<a href="../../docs/costs/" class="nav-link">💰 Cost Guide</a>
+<a href="../../docs/publishing/" class="nav-link">📤 Publishing Guide</a>
+<a href="../../docs/best-practices/" class="nav-link">🛡️ Best Practices</a>
+<a href="../../docs/troubleshooting/" class="nav-link">🔴 Troubleshooting</a>
+</div>
+</nav>
+<main class='docs-content'>
+<div class='breadcrumb'><a href='../'>Docs</a> &rsaquo; <span>Build Your First SLM</span></div><div style='background:linear-gradient(135deg,#FFF7ED,#FFFBEB);border:1px solid #FED7AA;border-radius:16px;padding:32px 36px;margin-bottom:36px'><div class='page-label'>🏗️ Complete Tutorial</div><h1 class='page-title' style='font-size:28px'>Build Your First SLM</h1><p class='page-desc'>From zero to a published model on SLM Marketplace. Estimated time: 4&ndash;6 hours on free Colab.</p><div class='page-meta'><span class='page-meta-item'>⏱ 4&ndash;6 hours</span><span class='difficulty diff-intermediate'>Intermediate</span><span class='page-meta-item'>💰 Free (Colab T4)</span></div></div><h2 id='overview'>What You Will Build</h2><p>A domain-specific 1B parameter model fine-tuned on medical coding. By the end you will have:</p><ul><li>A trained QLoRA model with benchmarks (accuracy, F1)</li><li>A quantized GGUF version running in Ollama</li><li>A REST API serving predictions</li><li>A published listing on SLM Marketplace</li></ul><div class='callout callout-info'><span class='callout-icon'>ℹ️</span><div class='callout-body'><div class='callout-title'>You can swap the domain</div><p>This tutorial uses medical coding as the example, but the exact same steps apply to any domain: legal, finance, coding, customer support. Just swap the dataset and system prompt.</p></div></div><h2 id='step1'>Step 1 &mdash; Set Up Colab</h2><p>Open <a href='https://colab.research.google.com' target='_blank'>Google Colab</a> &rarr; Runtime &rarr; Change runtime type &rarr; T4 GPU.</p><div class='code-block'><div class='code-block-header'><span class='code-block-lang'>bash</span><button class='code-copy-btn'>Copy</button></div><pre><code># Verify GPU
+!nvidia-smi
+
+# Install Unsloth (2x faster training, 70% less VRAM)
+%%capture
+!pip install unsloth
+!pip install --no-deps trl peft accelerate bitsandbytes datasets</code></pre></div><h2 id='step2'>Step 2 &mdash; Load Base Model</h2><div class='code-block'><div class='code-block-header'><span class='code-block-lang'>python</span><button class='code-copy-btn'>Copy</button></div><pre><code>from unsloth import FastLanguageModel
+import torch
+
+model, tokenizer = FastLanguageModel.from_pretrained(
+    model_name='unsloth/Llama-3.2-1B-Instruct',  # 1B = trains on free T4
+    max_seq_length=1024,
+    load_in_4bit=True,      # QLoRA
+    dtype=torch.bfloat16,
+)
+
+# Add LoRA adapters (only these layers are trained)
+model = FastLanguageModel.get_peft_model(
+    model,
+    r=16,                   # LoRA rank
+    lora_alpha=32,
+    lora_dropout=0.05,
+    target_modules=['q_proj','k_proj','v_proj','o_proj','gate_proj','up_proj','down_proj'],
+)
+model.print_trainable_parameters()
+# trainable params: 8,388,608 || all params: 1,244,739,584 (0.67%)</code></pre></div><h2 id='step3'>Step 3 &mdash; Prepare Dataset</h2><div class='code-block'><div class='code-block-header'><span class='code-block-lang'>python</span><button class='code-copy-btn'>Copy</button></div><pre><code>from datasets import Dataset
+import json
+
+# Instruction-following format
+examples = [
+    {
+        'instruction': 'Assign ICD-10-CM codes to this clinical note.',
+        'input': 'Patient presents with acute chest pain, ST elevation V1-V4, troponin elevated.',
+        'output': 'I21.9 - Acute myocardial infarction, unspecified'
+    },
+    # ... your full dataset here
+]
+
+SYSTEM_PROMPT = 'You are a medical coding assistant. Given a clinical note, assign the correct ICD-10-CM codes.'
+
+def format_example(ex):
+    return {'text': (
+        f'&lt;|system|&gt;{SYSTEM_PROMPT}&lt;|end|&gt;'
+        f'&lt;|user|&gt;{ex["instruction"]}\n{ex["input"]}&lt;|end|&gt;'
+        f'&lt;|assistant|&gt;{ex["output"]}&lt;|end|&gt;'
+    )}
+
+dataset = Dataset.from_list(examples).map(format_example)
+train_ds, eval_ds = dataset.train_test_split(test_size=0.15).values()
+print(f'Train: {len(train_ds)} | Eval: {len(eval_ds)}')</code></pre></div><h2 id='step4'>Step 4 &mdash; Train</h2><div class='code-block'><div class='code-block-header'><span class='code-block-lang'>python</span><button class='code-copy-btn'>Copy</button></div><pre><code>from trl import SFTTrainer
+from transformers import TrainingArguments
+
+trainer = SFTTrainer(
+    model=model,
+    tokenizer=tokenizer,
+    train_dataset=train_ds,
+    eval_dataset=eval_ds,
+    dataset_text_field='text',
+    max_seq_length=1024,
+    args=TrainingArguments(
+        output_dir='./medcoder-slm',
+        num_train_epochs=3,
+        per_device_train_batch_size=4,
+        gradient_accumulation_steps=4,     # effective batch = 16
+        learning_rate=2e-4,
+        warmup_ratio=0.05,
+        lr_scheduler_type='cosine',
+        optim='paged_adamw_8bit',          # memory-efficient optimizer
+        bf16=True,
+        logging_steps=10,
+        eval_strategy='steps',
+        eval_steps=50,
+        save_strategy='steps',
+        save_steps=50,
+        load_best_model_at_end=True,
+        report_to='none',
+    ),
+)
+
+trainer.train()
+# Training time: ~4 hours on T4, ~1.5 hours on A100</code></pre></div><h2 id='step5'>Step 5 &mdash; Evaluate</h2><div class='code-block'><div class='code-block-header'><span class='code-block-lang'>python</span><button class='code-copy-btn'>Copy</button></div><pre><code>from sklearn.metrics import accuracy_score, f1_score
+
+def predict(note):
+    inputs = tokenizer(note, return_tensors='pt').to(model.device)
+    with torch.no_grad():
+        outputs = model.generate(**inputs, max_new_tokens=128, temperature=0.1)
+    return tokenizer.decode(outputs[0][inputs['input_ids'].shape[1]:], skip_special_tokens=True)
+
+# Run on eval set
+y_true, y_pred = [], []
+for ex in eval_ds.select(range(200)):
+    pred = predict(ex['input'])
+    y_true.append(ex['output'].split()[0])  # first ICD code
+    y_pred.append(pred.split()[0])
+
+print(f'Exact Match: {accuracy_score(y_true, y_pred):.1%}')
+print(f'F1 (macro):  {f1_score(y_true, y_pred, average="macro", zero_division=0):.1%}')</code></pre></div><h2 id='step6'>Step 6 &mdash; Quantize to GGUF</h2><div class='code-block'><div class='code-block-header'><span class='code-block-lang'>python</span><button class='code-copy-btn'>Copy</button></div><pre><code># Save as GGUF Q4_K_M (4x smaller, ~3% quality loss)
+model.save_pretrained_gguf(
+    'medcoder-gguf',
+    tokenizer,
+    quantization_method='q4_k_m',  # recommended: small + good quality
+)
+# Creates: medcoder-gguf/unsloth.Q4_K_M.gguf (~500MB for 1B model)</code></pre></div><h2 id='step7'>Step 7 &mdash; Push to HuggingFace</h2><div class='code-block'><div class='code-block-header'><span class='code-block-lang'>python</span><button class='code-copy-btn'>Copy</button></div><pre><code>from huggingface_hub import HfApi, login
+
+login()  # paste your HF write token
+
+# Push merged model
+model.push_to_hub('your-username/MedCoder-SLM-1B', tokenizer=tokenizer)
+
+# Push GGUF version
+api = HfApi()
+api.upload_folder(
+    folder_path='medcoder-gguf',
+    repo_id='your-username/MedCoder-SLM-1B-GGUF',
+    repo_type='model'
+)
+print('Model live at: https://huggingface.co/your-username/MedCoder-SLM-1B')</code></pre></div><h2 id='step8'>Step 8 &mdash; Run Locally with Ollama</h2><div class='code-block'><div class='code-block-header'><span class='code-block-lang'>bash</span><button class='code-copy-btn'>Copy</button></div><pre><code># Download your model
+ollama pull your-username/medcoder-slm-1b
+
+# Or create from local GGUF
+cat &gt; Modelfile &lt;&lt; 'EOF'
+FROM ./medcoder-gguf/unsloth.Q4_K_M.gguf
+SYSTEM 'You are a medical coding assistant. Assign ICD-10-CM codes to clinical notes.'
+EOF
+
+ollama create medcoder -f Modelfile
+ollama run medcoder 'Patient with acute chest pain, ST elevation in V1-V4...'</code></pre></div><h2 id='step9'>Step 9 &mdash; Publish on SLM Marketplace</h2><div class='steps'><div class='step'><div class='step-num'>1</div><div class='step-body'><div class='step-title'>Go to Upload Model</div><div class='step-desc'>Sign in at <a href='../../auth.html'>slm-market.sannan.app/auth</a> then click Upload Model in the nav.</div></div></div><div class='step'><div class='step-num'>2</div><div class='step-body'><div class='step-title'>Fill in the details</div><div class='step-desc'>Name: <code>MedCoder-SLM-1B</code> &nbsp;|&nbsp; Category: Healthcare &nbsp;|&nbsp; GitHub: your repo URL</div></div></div><div class='step'><div class='step-num'>3</div><div class='step-body'><div class='step-title'>Enter your benchmark numbers</div><div class='step-desc'>Accuracy: your exact match %. F1: your F1 score. Response time: ~280ms on T4.</div></div></div><div class='step'><div class='step-num'>4</div><div class='step-body'><div class='step-title'>Publish &rarr; Share!</div><div class='step-desc'>Your model is live. Share on r/LocalLLaMA and LinkedIn. First downloads incoming.</div></div></div></div><div style='background:var(--bg-code);border-radius:16px;padding:32px;text-align:center;margin-top:40px'><h2 style='color:white;font-size:22px;margin:0 0 10px'>Congratulations 🎉</h2><p style='color:rgba(255,255,255,.6);margin-bottom:24px'>You built, trained, evaluated, deployed, and published your first SLM.</p><a href='../../auth.html' style='background:#F97316;color:white;padding:10px 24px;border-radius:8px;font-size:14px;font-weight:600;text-decoration:none;margin-right:8px'>Publish My Model</a><a href='../projects/medical.html' style='background:rgba(255,255,255,.1);color:white;padding:10px 24px;border-radius:8px;font-size:14px;font-weight:600;text-decoration:none;border:1px solid rgba(255,255,255,.15)'>Full Medical Project Guide</a></div>
+</main>
+<aside class='docs-toc'><div class='toc-title'>On this page</div>
+<a href="#overview" class="toc-link">What You'll Build</a>
+<a href="#step1" class="toc-link">Step 1: Setup</a>
+<a href="#step2" class="toc-link">Step 2: Load Model</a>
+<a href="#step3" class="toc-link">Step 3: Dataset</a>
+<a href="#step4" class="toc-link">Step 4: Train</a>
+<a href="#step5" class="toc-link">Step 5: Evaluate</a>
+<a href="#step6" class="toc-link">Step 6: Quantize</a>
+<a href="#step7" class="toc-link">Step 7: Push to HF</a>
+<a href="#step8" class="toc-link">Step 8: Ollama</a>
+<a href="#step9" class="toc-link">Step 9: Publish</a>
+</aside>
+</div>
+<script src='../../docs/docs.js'></script>
+</body></html>

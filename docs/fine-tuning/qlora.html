@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+<meta charset='UTF-8'>
+<meta name='viewport' content='width=device-width,initial-scale=1.0'>
+<title>QLoRA Fine-Tuning Guide — Train 7B Models on 1 GPU &mdash; SLM Docs</title>
+<meta name='description' content='Complete QLoRA fine-tuning guide. Train Llama 3.2 on your domain data with 6GB VRAM. Full code, hyperparameter guide, and benchmarks.'>
+<link rel='icon' type='image/svg+xml' href='../../../assets/favicon.svg'>
+<link rel='preconnect' href='https://fonts.googleapis.com'>
+<link href='https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap' rel='stylesheet'>
+<style>#reading-progress-wrap{position:fixed;top:60px;left:0;right:0;height:2px;z-index:199}#reading-progress{height:2px;background:#F97316;width:0;transition:width .1s}</style>
+<link rel='stylesheet' href='../../../docs/docs.css'>
+</head>
+<body>
+<div id='reading-progress-wrap'><div id='reading-progress'></div></div>
+<header class='docs-header'><div class='docs-header-inner'><button class='mobile-menu-btn' id='mobile-menu-btn' aria-label='Menu'><svg width='18' height='18' fill='none' viewBox='0 0 24 24' stroke='currentColor' stroke-width='2'><line x1='3' y1='6' x2='21' y2='6'/><line x1='3' y1='12' x2='21' y2='12'/><line x1='3' y1='18' x2='21' y2='18'/></svg></button><a href='../../../index.html' class='docs-logo'><span class='docs-logo-slm'>SLM</span><span class='docs-logo-name'>Marketplace</span><span class='docs-logo-sep'>/</span><span class='docs-logo-docs'>Docs</span></a><div class='docs-header-search'><svg class='search-icon-wrap' width='14' height='14' fill='none' viewBox='0 0 24 24' stroke='currentColor' stroke-width='2'><circle cx='11' cy='11' r='8'/><line x1='21' y1='21' x2='16.65' y2='16.65'/></svg><input type='search' id='docs-search' placeholder='Search docs...' autocomplete='off'><div class='search-results' id='search-results'></div></div><nav class='docs-header-nav'><a href='../../../explore.html'>Explore</a><a href='../../../upload.html'>Upload</a><a href='../../../auth.html' class='btn-cta'>Sign Up Free</a></nav></div></header>
+<div class='docs-layout'>
+<nav class="docs-sidebar" id="docs-sidebar">
+<div class="nav-section"><div class="nav-section-title">Getting Started</div>
+<a href="../../../docs/getting-started/" class="nav-link">🌐 Introduction to SLMs</a>
+</div>
+<div class="nav-section"><div class="nav-section-title">Foundations</div>
+<a href="../../../docs/foundations/" class="nav-link">🔬 Overview</a>
+<a href="../../../docs/foundations/lora.html" class="nav-link" style="padding-left:22px;font-size:12px">LoRA &amp; QLoRA</a>
+</div>
+<div class="nav-section"><div class="nav-section-title">Roadmap</div>
+<a href="../../../docs/roadmap/" class="nav-link">🗺️ Roadmap</a>
+</div>
+<div class="nav-section"><div class="nav-section-title">Setup</div>
+<a href="../../../docs/setup/" class="nav-link">⚙️ Overview</a>
+<a href="../../../docs/setup/colab.html" class="nav-link" style="padding-left:22px;font-size:12px">☁️ Colab</a>
+<a href="../../../docs/setup/gpu-guide.html" class="nav-link" style="padding-left:22px;font-size:12px">🎮 GPU Guide</a>
+</div>
+<div class="nav-section"><div class="nav-section-title">Tools</div>
+<a href="../../../docs/tools/" class="nav-link">🔧 Tools</a>
+</div>
+<div class="nav-section"><div class="nav-section-title">Tutorial</div>
+<a href="../../../docs/tutorials/" class="nav-link" style="color:var(--orange);font-weight:600">🏗️ Build First SLM</a>
+</div>
+<div class="nav-section"><div class="nav-section-title">Academies</div>
+<a href="../../../docs/fine-tuning/" class="nav-link">⚡ Fine-Tuning</a>
+<a href="../../../docs/fine-tuning/qlora.html" class="nav-link" style="padding-left:22px;font-size:12px">QLoRA</a>
+<a href="../../../docs/datasets/" class="nav-link">📦 Datasets</a>
+<a href="../../../docs/evaluation/" class="nav-link">📊 Evaluation</a>
+<a href="../../../docs/quantization/" class="nav-link">💾 Quantization</a>
+<a href="../../../docs/inference/" class="nav-link">🚀 Inference</a>
+<a href="../../../docs/inference/ollama.html" class="nav-link" style="padding-left:22px;font-size:12px">🦙 Ollama</a>
+<a href="../../../docs/inference/vllm.html" class="nav-link" style="padding-left:22px;font-size:12px">vLLM</a>
+<a href="../../../docs/deployment/" class="nav-link">☁️ Deployment</a>
+<a href="../../../docs/rag/" class="nav-link">🔍 RAG</a>
+</div>
+<div class="nav-section"><div class="nav-section-title">Projects</div>
+<a href="../../../docs/projects/" class="nav-link">🏗️ All Projects</a>
+<a href="../../../docs/projects/medical.html" class="nav-link" style="padding-left:22px;font-size:12px">🏥 Medical SLM</a>
+<a href="../../../docs/projects/legal.html" class="nav-link" style="padding-left:22px;font-size:12px">⚖️ Legal SLM</a>
+<a href="../../../docs/projects/coding.html" class="nav-link" style="padding-left:22px;font-size:12px">💻 Coding SLM</a>
+<a href="../../../docs/projects/finance.html" class="nav-link" style="padding-left:22px;font-size:12px">📈 Finance SLM</a>
+</div>
+<div class="nav-section"><div class="nav-section-title">Reference</div>
+<a href="../../../docs/hardware/" class="nav-link">🎮 Hardware</a>
+<a href="../../../docs/costs/" class="nav-link">💰 Costs</a>
+<a href="../../../docs/publishing/" class="nav-link">📤 Publishing</a>
+<a href="../../../docs/best-practices/" class="nav-link">🛡️ Best Practices</a>
+<a href="../../../docs/troubleshooting/" class="nav-link">🔴 Troubleshooting</a>
+</div>
+</nav>
+<main class='docs-content'>
+<div class='breadcrumb'><a href='../../'>Docs</a> &rsaquo; <a href='../'>Fine-Tuning</a> &rsaquo; <span>QLoRA</span></div><div class='page-hero'><div class='page-label'>🔋 Fine-Tuning &mdash; QLoRA</div><h1 class='page-title'>QLoRA Fine-Tuning Guide</h1><p class='page-desc'>Fine-tune a 7B model on 6GB VRAM. The most important technique in practical SLM development.</p><div class='page-meta'><span class='page-meta-item'>⏱ 20 min read</span><span class='difficulty diff-intermediate'>Intermediate</span></div></div><hr class='page-divider'><h2 id='what'>How QLoRA Works</h2><p>QLoRA = Quantize the base model to 4-bit NF4 precision (reduces memory 4x) + apply LoRA adapters on top (only train the small adapter matrices). The key insight: the frozen 4-bit weights are only dequantized when needed for computation, keeping memory low while preserving training quality.</p><div class='callout callout-success'><span class='callout-icon'>✅</span><div class='callout-body'><div class='callout-title'>Why QLoRA changed everything</div><p>Before QLoRA (2023): fine-tuning a 7B model required 80GB VRAM (an A100). After QLoRA: the same fine-tune runs on a <strong>consumer RTX 3090 (24GB)</strong> or even a T4 (16GB) for smaller models. This democratised SLM development.</p></div></div><h2 id='params'>Key Hyperparameters</h2><div class='table-wrap'><table><thead><tr><th>Parameter</th><th>Recommended</th><th>Effect</th></tr></thead><tbody><tr><td><code>r</code> (LoRA rank)</td><td>16 (simple tasks), 32 (complex)</td><td>Higher = more capacity, more VRAM</td></tr><tr><td><code>lora_alpha</code></td><td>2x rank (32 or 64)</td><td>Scaling factor for LoRA updates</td></tr><tr><td><code>lora_dropout</code></td><td>0.05</td><td>Regularization. 0.0 with Unsloth.</td></tr><tr><td><code>learning_rate</code></td><td>2e-4</td><td>Higher for small datasets, lower for large</td></tr><tr><td><code>num_train_epochs</code></td><td>3</td><td>More epochs risks overfitting</td></tr><tr><td><code>batch_size</code></td><td>4 per device</td><td>Reduce if OOM</td></tr><tr><td><code>grad_accum_steps</code></td><td>4</td><td>Effective batch = batch_size x accum</td></tr><tr><td><code>max_seq_length</code></td><td>1024&ndash;2048</td><td>Longer = more VRAM</td></tr></tbody></table></div><h2 id='full-code'>Complete Training Code</h2><div class='code-block'><div class='code-block-header'><span class='code-block-lang'>python</span><button class='code-copy-btn'>Copy</button></div><pre><code># Install: pip install unsloth trl peft transformers datasets bitsandbytes
+from unsloth import FastLanguageModel
+from trl import SFTTrainer
+from transformers import TrainingArguments
+from datasets import Dataset
+import torch
+
+# 1. Load model in 4-bit
+model, tokenizer = FastLanguageModel.from_pretrained(
+    model_name='unsloth/Llama-3.2-1B-Instruct',  # or 3B, Phi-4-mini, Qwen2.5-3B
+    max_seq_length=1024,
+    load_in_4bit=True,
+    dtype=torch.bfloat16,
+)
+
+# 2. Add LoRA adapters
+model = FastLanguageModel.get_peft_model(
+    model, r=16, lora_alpha=32, lora_dropout=0.05,
+    target_modules=['q_proj','k_proj','v_proj','o_proj','gate_proj','up_proj','down_proj'],
+)
+model.print_trainable_parameters()
+
+# 3. Prepare dataset (instruction-following format)
+def format(ex):
+    return {'text': f'### Instruction:\n{ex["instruction"]}\n### Input:\n{ex["input"]}\n### Response:\n{ex["output"]}'}
+
+data = [{'instruction':'...','input':'...','output':'...'}, ...]  # your data
+dataset = Dataset.from_list(data).map(format)
+train_ds, eval_ds = dataset.train_test_split(0.15).values()
+
+# 4. Train
+trainer = SFTTrainer(
+    model=model, tokenizer=tokenizer,
+    train_dataset=train_ds, eval_dataset=eval_ds,
+    dataset_text_field='text', max_seq_length=1024,
+    args=TrainingArguments(
+        output_dir='./output',
+        num_train_epochs=3,
+        per_device_train_batch_size=4,
+        gradient_accumulation_steps=4,
+        learning_rate=2e-4,
+        warmup_ratio=0.05,
+        lr_scheduler_type='cosine',
+        optim='paged_adamw_8bit',
+        bf16=True, logging_steps=10,
+        eval_strategy='steps', eval_steps=50,
+        save_strategy='steps', save_steps=50,
+        load_best_model_at_end=True,
+    ),
+)
+trainer.train()
+
+# 5. Save
+model.save_pretrained('my-slm')
+tokenizer.save_pretrained('my-slm')
+
+# 6. Export to GGUF for Ollama
+model.save_pretrained_gguf('my-slm-gguf', tokenizer, quantization_method='q4_k_m')</code></pre></div>
+</main>
+<aside class='docs-toc'><div class='toc-title'>On this page</div>
+<a href="#what" class="toc-link">How QLoRA Works</a>
+<a href="#params" class="toc-link">Key Hyperparameters</a>
+<a href="#full-code" class="toc-link">Complete Code</a>
+</aside>
+</div>
+<script src='../../../docs/docs.js'></script>
+</body></html>

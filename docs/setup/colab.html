@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+<meta charset='UTF-8'>
+<meta name='viewport' content='width=device-width,initial-scale=1.0'>
+<title>Google Colab Setup for SLM Training — Free GPU Guide &mdash; SLM Marketplace Docs</title>
+<meta name='description' content='Complete guide to setting up Google Colab for SLM fine-tuning. Free T4 GPU, Unsloth installation, and tips to maximize free GPU hours.'>
+<link rel='icon' type='image/svg+xml' href='../../../assets/favicon.svg'>
+<link rel='preconnect' href='https://fonts.googleapis.com'>
+<link href='https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap' rel='stylesheet'>
+<style>#reading-progress-wrap{position:fixed;top:60px;left:0;right:0;height:2px;z-index:199}#reading-progress{height:2px;background:#F97316;width:0;transition:width .1s}</style>
+<link rel='stylesheet' href='../../../docs/docs.css'>
+</head>
+<body>
+<div id='reading-progress-wrap'><div id='reading-progress'></div></div>
+<header class='docs-header'><div class='docs-header-inner'><button class='mobile-menu-btn' id='mobile-menu-btn' aria-label='Open menu'><svg width='18' height='18' fill='none' viewBox='0 0 24 24' stroke='currentColor' stroke-width='2'><line x1='3' y1='6' x2='21' y2='6'/><line x1='3' y1='12' x2='21' y2='12'/><line x1='3' y1='18' x2='21' y2='18'/></svg></button><a href='../../../index.html' class='docs-logo'><span class='docs-logo-slm'>SLM</span><span class='docs-logo-name'>Marketplace</span><span class='docs-logo-sep'>/</span><span class='docs-logo-docs'>Docs</span></a><div class='docs-header-search'><svg class='search-icon-wrap' width='14' height='14' fill='none' viewBox='0 0 24 24' stroke='currentColor' stroke-width='2'><circle cx='11' cy='11' r='8'/><line x1='21' y1='21' x2='16.65' y2='16.65'/></svg><input type='search' id='docs-search' placeholder='Search docs...' autocomplete='off'><div class='search-results' id='search-results'></div></div><nav class='docs-header-nav'><a href='../../../explore.html'>Explore Models</a><a href='../../../upload.html'>Upload Model</a><a href='../../../auth.html' class='btn-cta'>Sign Up Free</a></nav></div></header>
+<div class='docs-layout'>
+<nav class="docs-sidebar" id="docs-sidebar">
+<div class="nav-section"><div class="nav-section-title">Getting Started</div>
+<a href="../../../docs/getting-started/" class="nav-link">🌐 Introduction to SLMs</a>
+<a href="../../../docs/getting-started/slm-vs-llm.html" class="nav-link">⚖️ SLM vs LLM</a>
+<a href="../../../docs/getting-started/use-cases.html" class="nav-link">💼 Use Cases</a>
+<a href="../../../docs/getting-started/popular-slms.html" class="nav-link">⭐ Popular SLMs</a>
+</div>
+<div class="nav-section"><div class="nav-section-title">AI Foundations</div>
+<a href="../../../docs/foundations/" class="nav-link">🔬 Overview</a>
+<a href="../../../docs/foundations/transformers.html" class="nav-link" style="padding-left:24px;font-size:12px">Transformers</a>
+<a href="../../../docs/foundations/tokens.html" class="nav-link" style="padding-left:24px;font-size:12px">Tokens</a>
+<a href="../../../docs/foundations/lora.html" class="nav-link" style="padding-left:24px;font-size:12px">LoRA &amp; QLoRA</a>
+<a href="../../../docs/foundations/quantization.html" class="nav-link" style="padding-left:24px;font-size:12px">Quantization</a>
+</div>
+<div class="nav-section"><div class="nav-section-title">Roadmap</div>
+<a href="../../../docs/roadmap/" class="nav-link">🗺️ Learning Roadmap</a>
+</div>
+<div class="nav-section"><div class="nav-section-title">Setup</div>
+<a href="../../../docs/setup/" class="nav-link">⚙️ Overview</a>
+<a href="../../../docs/setup/windows.html" class="nav-link" style="padding-left:24px;font-size:12px">🪟 Windows</a>
+<a href="../../../docs/setup/macos.html" class="nav-link" style="padding-left:24px;font-size:12px">🍎 macOS</a>
+<a href="../../../docs/setup/linux.html" class="nav-link" style="padding-left:24px;font-size:12px">🐧 Linux</a>
+<a href="../../../docs/setup/colab.html" class="nav-link" style="padding-left:24px;font-size:12px">☁️ Google Colab</a>
+<a href="../../../docs/setup/runpod.html" class="nav-link" style="padding-left:24px;font-size:12px">🚀 RunPod</a>
+<a href="../../../docs/setup/gpu-guide.html" class="nav-link" style="padding-left:24px;font-size:12px">🎮 GPU Guide</a>
+</div>
+<div class="nav-section"><div class="nav-section-title">Tools</div>
+<a href="../../../docs/tools/" class="nav-link">🔧 Tools Directory</a>
+</div>
+<div class="nav-section"><div class="nav-section-title">Tutorial</div>
+<a href="../../../docs/tutorials/" class="nav-link" style="color:var(--orange);font-weight:600">🏗️ Build First SLM</a>
+</div>
+<div class="nav-section"><div class="nav-section-title">Academies</div>
+<a href="../../../docs/fine-tuning/" class="nav-link">⚡ Fine-Tuning</a>
+<a href="../../../docs/fine-tuning/qlora.html" class="nav-link" style="padding-left:24px;font-size:12px">QLoRA</a>
+<a href="../../../docs/fine-tuning/unsloth.html" class="nav-link" style="padding-left:24px;font-size:12px">Unsloth 🦥</a>
+<a href="../../../docs/datasets/" class="nav-link">📦 Datasets</a>
+<a href="../../../docs/evaluation/" class="nav-link">📊 Evaluation</a>
+<a href="../../../docs/quantization/" class="nav-link">💾 Quantization</a>
+<a href="../../../docs/inference/" class="nav-link">🚀 Inference</a>
+<a href="../../../docs/inference/ollama.html" class="nav-link" style="padding-left:24px;font-size:12px">🦙 Ollama</a>
+<a href="../../../docs/inference/vllm.html" class="nav-link" style="padding-left:24px;font-size:12px">vLLM</a>
+<a href="../../../docs/deployment/" class="nav-link">☁️ Deployment</a>
+<a href="../../../docs/rag/" class="nav-link">🔍 RAG</a>
+</div>
+<div class="nav-section"><div class="nav-section-title">Projects</div>
+<a href="../../../docs/projects/" class="nav-link">🏗️ All Projects</a>
+<a href="../../../docs/projects/medical.html" class="nav-link" style="padding-left:24px;font-size:12px">🏥 Medical SLM</a>
+<a href="../../../docs/projects/legal.html" class="nav-link" style="padding-left:24px;font-size:12px">⚖️ Legal SLM</a>
+<a href="../../../docs/projects/coding.html" class="nav-link" style="padding-left:24px;font-size:12px">💻 Coding SLM</a>
+<a href="../../../docs/projects/finance.html" class="nav-link" style="padding-left:24px;font-size:12px">📈 Finance SLM</a>
+</div>
+<div class="nav-section"><div class="nav-section-title">Reference</div>
+<a href="../../../docs/hardware/" class="nav-link">🎮 Hardware Guide</a>
+<a href="../../../docs/costs/" class="nav-link">💰 Cost Guide</a>
+<a href="../../../docs/publishing/" class="nav-link">📤 Publishing Guide</a>
+<a href="../../../docs/best-practices/" class="nav-link">🛡️ Best Practices</a>
+<a href="../../../docs/troubleshooting/" class="nav-link">🔴 Troubleshooting</a>
+</div>
+</nav>
+<main class='docs-content'>
+<div class='breadcrumb'><a href='../../'>Docs</a> &rsaquo; <a href='../'>Setup</a> &rsaquo; <span>Google Colab</span></div><div class='page-hero'><div class='page-label'>☁️ Setup &mdash; Google Colab</div><h1 class='page-title'>Google Colab Setup</h1><p class='page-desc'>Free T4 GPU, runs in browser, zero local install. The fastest way to start fine-tuning SLMs.</p><div class='page-meta'><span class='page-meta-item'>⏱ 5 min setup</span><span class='difficulty diff-beginner'>Beginner</span><span class='page-meta-item'>💰 Free</span></div></div><hr class='page-divider'><h2 id='start'>Get Started in 5 Steps</h2><div class='steps'><div class='step'><div class='step-num'>1</div><div class='step-body'><div class='step-title'>Go to colab.google.com</div><div class='step-desc'>Sign in with your Google account. Click <strong>New notebook</strong>.</div></div></div><div class='step'><div class='step-num'>2</div><div class='step-body'><div class='step-title'>Enable GPU runtime</div><div class='step-desc'>Runtime &rarr; Change runtime type &rarr; Hardware accelerator &rarr; <strong>T4 GPU</strong> &rarr; Save.</div></div></div><div class='step'><div class='step-num'>3</div><div class='step-body'><div class='step-title'>Verify GPU</div><div class='step-desc'><div class='code-block'><div class='code-block-header'><span class='code-block-lang'>python</span><button class='code-copy-btn'>Copy</button></div><pre><code>!nvidia-smi
+import torch
+print(torch.cuda.get_device_name(0))
+print(f'VRAM: {torch.cuda.get_device_properties(0).total_memory/1e9:.1f} GB')</code></pre></div></div></div></div><div class='step'><div class='step-num'>4</div><div class='step-body'><div class='step-title'>Install Unsloth (fastest SLM training)</div><div class='step-desc'><div class='code-block'><div class='code-block-header'><span class='code-block-lang'>bash</span><button class='code-copy-btn'>Copy</button></div><pre><code>%%capture
+!pip install unsloth
+!pip install --no-deps trl peft accelerate bitsandbytes</code></pre></div></div></div></div><div class='step'><div class='step-num'>5</div><div class='step-body'><div class='step-title'>Load a model and start training</div><div class='step-desc'><div class='code-block'><div class='code-block-header'><span class='code-block-lang'>python</span><button class='code-copy-btn'>Copy</button></div><pre><code>from unsloth import FastLanguageModel
+
+model, tokenizer = FastLanguageModel.from_pretrained(
+    model_name='unsloth/Llama-3.2-1B-Instruct',
+    max_seq_length=2048,
+    load_in_4bit=True,  # QLoRA
+)
+print('Model loaded successfully!')</code></pre></div></div></div></div></div><h2 id='limits'>Free Tier Limits</h2><div class='table-wrap'><table><thead><tr><th>Resource</th><th>Free Tier</th><th>Colab Pro</th></tr></thead><tbody><tr><td>GPU type</td><td>T4 (16GB)</td><td>A100 (40GB)</td></tr><tr><td>Session limit</td><td>~4&ndash;6 hours</td><td>24 hours</td></tr><tr><td>Idle timeout</td><td>~90 minutes</td><td>~3 hours</td></tr><tr><td>RAM</td><td>12GB</td><td>52GB</td></tr><tr><td>Cost</td><td class='td-good'>Free</td><td>$10&ndash;50/mo</td></tr></tbody></table></div><div class='callout callout-warn'><span class='callout-icon'>⚠️</span><div class='callout-body'><div class='callout-title'>Save your work!</div><p>Colab sessions are temporary. Always save your trained model to Google Drive or push to HuggingFace Hub before the session ends.</p></div></div><h2 id='tips'>Tips to Maximize Free GPU Hours</h2><ul><li>Don't open multiple Colab tabs — they share your GPU quota</li><li>Use <strong>Runtime &rarr; Disconnect and delete runtime</strong> when done to free your quota</li><li>Save checkpoints to Google Drive every 30 minutes during long training runs</li><li>Use Unsloth — it's 2x faster and uses 70% less VRAM, so training finishes before timeout</li><li>For runs over 4 hours, use RunPod or Kaggle instead</li></ul>
+<div class="page-nav"><a href="../" class="page-nav-btn"><div class="page-nav-label">&larr; Previous</div><div class="page-nav-title">Setup Overview</div></a><a href="runpod.html" class="page-nav-btn page-nav-next"><div class="page-nav-label">Next &rarr;</div><div class="page-nav-title">RunPod Setup</div></a></div>
+</main>
+<aside class='docs-toc'><div class='toc-title'>On this page</div>
+<a href="#start" class="toc-link">Get Started</a>
+<a href="#limits" class="toc-link">Free Tier Limits</a>
+<a href="#tips" class="toc-link">Pro Tips</a>
+</aside>
+</div>
+<script src='../../../docs/docs.js'></script>
+</body></html>

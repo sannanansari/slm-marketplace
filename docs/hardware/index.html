@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+<meta charset='UTF-8'>
+<meta name='viewport' content='width=device-width,initial-scale=1.0'>
+<title>GPU Hardware Guide for SLM Training and Inference &mdash; SLM Docs</title>
+<meta name='description' content='Complete GPU comparison for SLM development. VRAM requirements, training speed, cost per hour. Consumer, workstation, and cloud GPUs.'>
+<link rel='icon' type='image/svg+xml' href='../../assets/favicon.svg'>
+<link rel='preconnect' href='https://fonts.googleapis.com'>
+<link href='https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap' rel='stylesheet'>
+<style>#reading-progress-wrap{position:fixed;top:60px;left:0;right:0;height:2px;z-index:199}#reading-progress{height:2px;background:#F97316;width:0;transition:width .1s}</style>
+<link rel='stylesheet' href='../../docs/docs.css'>
+</head>
+<body>
+<div id='reading-progress-wrap'><div id='reading-progress'></div></div>
+<header class='docs-header'><div class='docs-header-inner'><button class='mobile-menu-btn' id='mobile-menu-btn' aria-label='Menu'><svg width='18' height='18' fill='none' viewBox='0 0 24 24' stroke='currentColor' stroke-width='2'><line x1='3' y1='6' x2='21' y2='6'/><line x1='3' y1='12' x2='21' y2='12'/><line x1='3' y1='18' x2='21' y2='18'/></svg></button><a href='../../index.html' class='docs-logo'><span class='docs-logo-slm'>SLM</span><span class='docs-logo-name'>Marketplace</span><span class='docs-logo-sep'>/</span><span class='docs-logo-docs'>Docs</span></a><div class='docs-header-search'><svg class='search-icon-wrap' width='14' height='14' fill='none' viewBox='0 0 24 24' stroke='currentColor' stroke-width='2'><circle cx='11' cy='11' r='8'/><line x1='21' y1='21' x2='16.65' y2='16.65'/></svg><input type='search' id='docs-search' placeholder='Search docs...' autocomplete='off'><div class='search-results' id='search-results'></div></div><nav class='docs-header-nav'><a href='../../explore.html'>Explore</a><a href='../../upload.html'>Upload Model</a><a href='../../auth.html' class='btn-cta'>Sign Up Free</a></nav></div></header>
+<div class='docs-layout'>
+<nav class="docs-sidebar" id="docs-sidebar">
+<div class="nav-section"><div class="nav-section-title">Getting Started</div>
+<a href="../../docs/getting-started/" class="nav-link">🌐 Introduction to SLMs</a>
+</div>
+<div class="nav-section"><div class="nav-section-title">AI Foundations</div>
+<a href="../../docs/foundations/" class="nav-link">🔬 Overview</a>
+</div>
+<div class="nav-section"><div class="nav-section-title">Roadmap</div>
+<a href="../../docs/roadmap/" class="nav-link">🗺️ Learning Roadmap</a>
+</div>
+<div class="nav-section"><div class="nav-section-title">Setup</div>
+<a href="../../docs/setup/" class="nav-link">⚙️ Overview</a>
+<a href="../../docs/setup/colab.html" class="nav-link" style="padding-left:24px;font-size:12px">☁️ Google Colab</a>
+<a href="../../docs/setup/gpu-guide.html" class="nav-link" style="padding-left:24px;font-size:12px">🎮 GPU Guide</a>
+</div>
+<div class="nav-section"><div class="nav-section-title">Tools</div>
+<a href="../../docs/tools/" class="nav-link">🔧 Tools Directory</a>
+</div>
+<div class="nav-section"><div class="nav-section-title">Tutorial</div>
+<a href="../../docs/tutorials/" class="nav-link" style="color:var(--orange);font-weight:600">🏗️ Build First SLM</a>
+</div>
+<div class="nav-section"><div class="nav-section-title">Academies</div>
+<a href="../../docs/fine-tuning/" class="nav-link">⚡ Fine-Tuning</a>
+<a href="../../docs/datasets/" class="nav-link">📦 Datasets</a>
+<a href="../../docs/evaluation/" class="nav-link">📊 Evaluation</a>
+<a href="../../docs/quantization/" class="nav-link">💾 Quantization</a>
+<a href="../../docs/inference/" class="nav-link">🚀 Inference</a>
+<a href="../../docs/deployment/" class="nav-link">☁️ Deployment</a>
+<a href="../../docs/rag/" class="nav-link">🔍 RAG</a>
+</div>
+<div class="nav-section"><div class="nav-section-title">Projects</div>
+<a href="../../docs/projects/" class="nav-link">🏗️ All Projects</a>
+<a href="../../docs/projects/medical.html" class="nav-link" style="padding-left:24px;font-size:12px">🏥 Medical SLM</a>
+<a href="../../docs/projects/legal.html" class="nav-link" style="padding-left:24px;font-size:12px">⚖️ Legal SLM</a>
+<a href="../../docs/projects/coding.html" class="nav-link" style="padding-left:24px;font-size:12px">💻 Coding SLM</a>
+<a href="../../docs/projects/finance.html" class="nav-link" style="padding-left:24px;font-size:12px">📈 Finance SLM</a>
+</div>
+<div class="nav-section"><div class="nav-section-title">Reference</div>
+<a href="../../docs/hardware/" class="nav-link">🎮 Hardware Guide</a>
+<a href="../../docs/costs/" class="nav-link">💰 Cost Guide</a>
+<a href="../../docs/publishing/" class="nav-link">📤 Publishing Guide</a>
+<a href="../../docs/best-practices/" class="nav-link">🛡️ Best Practices</a>
+<a href="../../docs/troubleshooting/" class="nav-link">🔴 Troubleshooting</a>
+</div>
+</nav>
+<main class='docs-content'>
+<div class='breadcrumb'><a href='../'>Docs</a> &rsaquo; <span>Hardware Guide</span></div><div class='page-hero'><div class='page-label'>🎮 Hardware Guide</div><h1 class='page-title'>GPU Hardware Guide</h1><p class='page-desc'>Which GPU to buy or rent for SLM training and inference. Full comparison with real benchmarks.</p><div class='page-meta'><span class='page-meta-item'>⏱ 10 min read</span></div></div><hr class='page-divider'><h2 id='consumer'>Consumer GPUs</h2><div class='table-wrap'><table><thead><tr><th>GPU</th><th>VRAM</th><th>Fine-tune (QLoRA)</th><th>Price (used)</th><th>Verdict</th></tr></thead><tbody><tr><td>RTX 3060</td><td>12GB</td><td class='td-good'>1B&ndash;3B</td><td>~$250</td><td>Best budget entry</td></tr><tr><td>RTX 3080</td><td>10GB</td><td class='td-warn'>1B only</td><td>~$300</td><td>Skip &mdash; 3060 has more VRAM</td></tr><tr><td>RTX 3080 Ti</td><td>12GB</td><td class='td-good'>1B&ndash;3B</td><td>~$400</td><td>Good if priced right</td></tr><tr><td><strong>RTX 3090</strong></td><td>24GB</td><td class='td-good'>1B&ndash;7B</td><td>~$500</td><td class='td-good'>Best value overall ✓</td></tr><tr><td>RTX 4080</td><td>16GB</td><td class='td-good'>1B&ndash;7B</td><td>~$900</td><td>Good but 3090 is cheaper</td></tr><tr><td><strong>RTX 4090</strong></td><td>24GB</td><td class='td-good'>1B&ndash;7B</td><td>~$1,600</td><td>Fastest consumer GPU</td></tr><tr><td>RX 7900 XTX</td><td>24GB</td><td class='td-warn'>Limited (ROCm)</td><td>~$700</td><td>AMD &mdash; driver issues</td></tr></tbody></table></div><h2 id='cloud'>Cloud GPU Comparison</h2><div class='table-wrap'><table><thead><tr><th>GPU</th><th>VRAM</th><th>Provider</th><th>$/hr</th><th>Best For</th></tr></thead><tbody><tr><td>T4</td><td>16GB</td><td>Colab / GCP</td><td class='td-good'>Free / $0.35</td><td>Learning, 1B fine-tuning</td></tr><tr><td>RTX 3090</td><td>24GB</td><td>RunPod</td><td class='td-good'>$0.20</td><td>7B fine-tuning, dev</td></tr><tr><td>RTX 4090</td><td>24GB</td><td>RunPod / Vast.ai</td><td class='td-good'>$0.50</td><td>Fast 7B training</td></tr><tr><td>A10G</td><td>24GB</td><td>Modal / AWS</td><td class='td-warn'>$1.10</td><td>Production inference</td></tr><tr><td>A100 40GB</td><td>40GB</td><td>Colab Pro / RunPod</td><td class='td-warn'>$1.90</td><td>7B&ndash;13B full fine-tune</td></tr><tr><td>A100 80GB</td><td>80GB</td><td>RunPod / AWS</td><td class='td-bad'>$2.20</td><td>Full fine-tune 13B+</td></tr><tr><td>H100</td><td>80GB</td><td>Modal / Lambda</td><td class='td-bad'>$3.50</td><td>Maximum speed</td></tr></tbody></table></div><h2 id='recommend'>Recommendations by Budget</h2><div class='card-grid-2'><div class='doc-card card-green'><div class='doc-card-icon'>💚</div><div class='doc-card-title'>$0 &mdash; Google Colab</div><div class='doc-card-desc'>Free T4 16GB. Fine-tunes 1B models. Limited to 4&ndash;6 hr sessions. Perfect to start.</div></div><div class='doc-card card-blue'><div class='doc-card-icon'>💙</div><div class='doc-card-title'>$0.20/hr &mdash; RunPod RTX 3090</div><div class='doc-card-desc'>24GB VRAM. Fine-tunes 7B with QLoRA. Pay only when training. Best cloud value.</div></div><div class='doc-card card-orange'><div class='doc-card-icon'>🧡</div><div class='doc-card-title'>$500 owned &mdash; RTX 3090</div><div class='doc-card-desc'>Buy used. Unlimited training hours. Pays for itself after ~2,500 hours vs RunPod.</div></div><div class='doc-card card-purple'><div class='doc-card-icon'>💜</div><div class='doc-card-title'>$1,600 owned &mdash; RTX 4090</div><div class='doc-card-desc'>Fastest consumer GPU. Same VRAM as 3090 but 2x faster training. For serious builders.</div></div></div><h2 id='apple'>Apple Silicon (M1/M2/M3)</h2><p>Apple Silicon uses unified memory &mdash; the GPU and CPU share the same RAM pool. An M3 Max with 96GB unified memory can run and fine-tune models that won't fit on any consumer NVIDIA GPU.</p><div class='table-wrap'><table><thead><tr><th>Chip</th><th>Unified Memory</th><th>ML Performance</th><th>Cost</th></tr></thead><tbody><tr><td>M3 (base)</td><td>8&ndash;16GB</td><td class='td-warn'>Inference only</td><td>$1,299</td></tr><tr><td>M3 Pro</td><td>18&ndash;36GB</td><td class='td-good'>1B&ndash;3B fine-tuning (MLX)</td><td>$1,999</td></tr><tr><td>M3 Max</td><td>36&ndash;128GB</td><td class='td-good'>7B+ fine-tuning</td><td>$3,499+</td></tr><tr><td>M4 Max</td><td>48&ndash;128GB</td><td class='td-good'>7B+ faster than M3</td><td>$3,999+</td></tr></tbody></table></div>
+</main>
+<aside class='docs-toc'><div class='toc-title'>On this page</div>
+<a href="#consumer" class="toc-link">Consumer GPUs</a>
+<a href="#cloud" class="toc-link">Cloud GPU Comparison</a>
+<a href="#recommend" class="toc-link">Recommendations</a>
+<a href="#apple" class="toc-link">Apple Silicon</a>
+</aside>
+</div>
+<script src='../../docs/docs.js'></script>
+</body></html>

@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RAG — Retrieval-Augmented Generation Guide — SLM Marketplace Docs</title>
+<meta name="description" content="Complete guide to building RAG pipelines with SLMs. FAISS, Chroma, PGVector, embedding models, chunking strategies, and production patterns.">
+<link rel="canonical" href="https://slm-market.sannan.app/docs/rag/">
+<link rel="icon" type="image/svg+xml" href="../../assets/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" media="print" onload="this.media='all'" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"></noscript>
+<style>#reading-progress-wrap{position:fixed;top:60px;left:0;right:0;height:2px;z-index:199}#reading-progress{height:2px;background:#F97316;width:0;transition:width .1s}</style>
+<link rel="stylesheet" href="../../docs/docs.css">
+</head>
+<body>
+<div id="reading-progress-wrap"><div id="reading-progress"></div></div>
+<header class="docs-header">
+  <div class="docs-header-inner">
+    <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="Open menu">
+      <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+    </button>
+    <a href="../../index.html" class="docs-logo">
+      <span class="docs-logo-slm">SLM</span><span class="docs-logo-name">Marketplace</span>
+      <span class="docs-logo-sep">/</span><span class="docs-logo-docs">Docs</span>
+    </a>
+    <div class="docs-header-search">
+      <svg class="search-icon-wrap" width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input type="search" id="docs-search" placeholder="Search docs… (Press /)" autocomplete="off" aria-label="Search docs">
+      <div class="search-results" id="search-results" aria-live="polite"></div>
+    </div>
+    <nav class="docs-header-nav" aria-label="Site navigation">
+      <a href="../../explore.html">Explore Models</a>
+      <a href="../../upload.html">Upload Model</a>
+      <a href="../../auth.html" class="btn-cta">Sign Up Free</a>
+    </nav>
+  </div>
+</header>
+<div class="docs-layout">
+<nav class="docs-sidebar" id="docs-sidebar" aria-label="Documentation navigation">
+  <div class="nav-section"><div class="nav-section-title">Getting Started</div>
+    <a href="../../docs/getting-started/" class="nav-link">🌐 Introduction to SLMs</a>
+  </div>
+  <div class="nav-section"><div class="nav-section-title">Roadmap</div>
+    <a href="../../docs/roadmap/" class="nav-link">🗺️ 6-Month Roadmap</a>
+  </div>
+  <div class="nav-section"><div class="nav-section-title">Setup</div>
+    <a href="../../docs/setup/" class="nav-link">⚙️ Environment Setup</a>
+  </div>
+  <div class="nav-section"><div class="nav-section-title">Academies</div>
+    <a href="../../docs/fine-tuning/" class="nav-link">⚡ Fine-Tuning</a>
+    <a href="../../docs/datasets/" class="nav-link">📦 Datasets</a>
+    <a href="../../docs/evaluation/" class="nav-link">📊 Evaluation</a>
+    <a href="../../docs/quantization/" class="nav-link">💾 Quantization</a>
+    <a href="../../docs/inference/" class="nav-link">🚀 Inference</a>
+    <a href="../../docs/inference/ollama.html" class="nav-link" style="padding-left:24px;font-size:12px">🦙 Ollama</a>
+    <a href="../../docs/inference/vllm.html" class="nav-link" style="padding-left:24px;font-size:12px">vLLM</a>
+    <a href="../../docs/deployment/" class="nav-link">☁️ Deployment</a>
+    <a href="../../docs/rag/" class="nav-link active" aria-current="page">🔍 RAG</a>
+  </div>
+  <div class="nav-section"><div class="nav-section-title">Reference</div>
+    <a href="../../docs/hardware/" class="nav-link">🎮 Hardware Guide</a>
+    <a href="../../docs/costs/" class="nav-link">💰 Cost Guide</a>
+    <a href="../../docs/publishing/" class="nav-link">📤 Publishing Guide</a>
+    <a href="../../docs/best-practices/" class="nav-link">🛡️ Best Practices</a>
+    <a href="../../docs/troubleshooting/" class="nav-link">🔴 Troubleshooting</a>
+  </div>
+</nav>
+<main class="docs-content" id="main-content">
+
+<div class="breadcrumb"><a href="../../docs/">Docs</a> &rsaquo; <span>RAG</span></div>
+
+<div class="page-hero">
+  <div class="page-label">🔍 RAG Guide</div>
+  <h1 class="page-title">Retrieval-Augmented Generation</h1>
+  <p class="page-desc">Give your SLM access to any knowledge base without retraining. RAG retrieves relevant documents at query time and feeds them to the model as context. This guide covers the full pipeline — embedding, storage, retrieval, and generation — with production-ready code.</p>
+  <div class="page-meta">
+    <span class="page-meta-item">⏱ 40 min read</span>
+    <span class="page-meta-item">💻 CPU sufficient</span>
+    <span class="page-meta-item">🎯 Intermediate</span>
+    <span class="page-meta-item">📄 Full code</span>
+  </div>
+</div>
+
+<hr class="page-divider">
+
+<h2 id="why-rag">Why RAG? The Problem It Solves</h2>
+
+<p>SLMs have two fundamental limitations:</p>
+<ol style="line-height:2.2;margin:16px 0 16px 20px">
+  <li><strong>Knowledge cutoff</strong> — The model only knows what was in its training data. It can't answer questions about events after training.</li>
+  <li><strong>Limited context window</strong> — You can't stuff an entire company knowledge base into a prompt. Context windows are 4K–128K tokens — large, but not large enough for most real document collections.</li>
+</ol>
+
+<p>RAG solves both by turning your model into a retrieval system: at query time, find the most relevant documents from your knowledge base, then pass them to the model as context.</p>
+
+<div class="code-block" style="background:#1E2433;border-radius:12px;padding:24px;margin:24px 0;color:#E2E8F0;font-family:monospace;font-size:12px;line-height:1.9">
+<pre>
+WITHOUT RAG:
+  User: "What did our company announce in Q3 2025?"
+  SLM:  "I don't have information about your company's Q3 2025 announcements."
+
+WITH RAG:
+  User query → embed → search vector DB → retrieve top-3 docs
+  → augment prompt with docs → SLM generates answer from docs
+
+  User: "What did our company announce in Q3 2025?"
+  [RAG retrieves: press_release_q3_2025.pdf, earnings_call_transcript.txt]
+  SLM:  "According to your Q3 2025 press release, the company announced
+         a 23% revenue increase and the launch of three new product lines..."
+
+RESULT: Accurate, grounded, up-to-date answers from your private knowledge base.
+</pre>
+</div>
+
+<h2 id="architecture">RAG Architecture</h2>
+
+<div class="code-block" style="background:#1E2433;border-radius:12px;padding:24px;margin:24px 0;color:#E2E8F0;font-family:monospace;font-size:12px;line-height:2">
+<pre>
+INGESTION PIPELINE (run once, or incrementally):
+  Documents (PDF, TXT, MD, HTML)
+       │
+       ▼
+  Document Loader  ─────────────────────────────────────
+       │                                                │
+       ▼                                                ▼
+  Text Chunker                               Metadata extractor
+  (split into 256-512 token chunks)          (filename, page, date)
+       │
+       ▼
+  Embedding Model (e.g. BAAI/bge-small-en-v1.5)
+  [chunk text → 384-dim float vector]
+       │
+       ▼
+  Vector Database (Chroma / FAISS / PGVector)
+  Store: {chunk_text, embedding, metadata}
+
+─────────────────────────────────────────────────
+
+QUERY PIPELINE (runs on every user question):
+  User question: "What are the payment terms?"
+       │
+       ▼
+  Same Embedding Model
+  [question → 384-dim query vector]
+       │
+       ▼
+  Vector DB similarity search
+  top-k = 3 most similar chunks (cosine similarity)
+       │
+       ▼
+  Prompt Builder:
+  ┌──────────────────────────────────────────┐
+  │ System: You are a helpful assistant.     │
+  │ Use ONLY the context below to answer.   │
+  │                                          │
+  │ Context:                                 │
+  │   [Chunk 1 text]                         │
+  │   [Chunk 2 text]                         │
+  │   [Chunk 3 text]                         │
+  │                                          │
+  │ Question: What are the payment terms?    │
+  └──────────────────────────────────────────┘
+       │
+       ▼
+  Your SLM generates grounded answer
+</pre>
+</div>
+
+<h2 id="embedding-models">Choosing an Embedding Model</h2>
+
+<p>The embedding model converts text into vectors. Quality of the embedding model directly determines retrieval quality. Use a model designed for retrieval — not a generation model.</p>
+
+<div style="overflow-x:auto;margin:20px 0">
+<table class="comparison-table">
+  <thead><tr><th>Model</th><th>Dims</th><th>Size</th><th>Speed</th><th>Quality</th><th>Best for</th></tr></thead>
+  <tbody>
+    <tr><td>all-MiniLM-L6-v2</td><td>384</td><td>22MB</td><td>⚡⚡⚡</td><td>Good</td><td>Quick prototypes</td></tr>
+    <tr><td><strong>BAAI/bge-small-en-v1.5</strong></td><td>384</td><td>33MB</td><td>⚡⚡⚡</td><td>Very Good</td><td>✅ Default recommendation</td></tr>
+    <tr><td>BAAI/bge-base-en-v1.5</td><td>768</td><td>109MB</td><td>⚡⚡</td><td>Excellent</td><td>Higher quality retrieval</td></tr>
+    <tr><td>BAAI/bge-large-en-v1.5</td><td>1024</td><td>335MB</td><td>⚡</td><td>Best open</td><td>Maximum quality</td></tr>
+    <tr><td>nomic-embed-text-v1.5</td><td>768</td><td>137MB</td><td>⚡⚡</td><td>Excellent</td><td>Long documents (8192 tokens)</td></tr>
+    <tr><td>multilingual-e5-large</td><td>1024</td><td>560MB</td><td>⚡</td><td>Best multilingual</td><td>Non-English documents</td></tr>
+  </tbody>
+</table>
+</div>
+
+<div class="callout callout-info">
+  <strong>Critical rule:</strong> Use the <em>same embedding model</em> for ingestion and query. Mixing models breaks retrieval. If you re-embed with a different model, you must re-index all documents.
+</div>
+
+<h2 id="chunking">Chunking Strategies</h2>
+
+<p>Chunking is the most underestimated part of RAG. Bad chunking breaks retrieval even with a perfect embedding model.</p>
+
+<div class="code-block">
+  <div class="code-block-header"><span class="code-lang">python</span><button class="code-copy-btn">Copy</button></div>
+  <pre>"""
+chunking_strategies.py
+Demonstrates 4 chunking strategies with tradeoffs.
+"""
+
+from langchain.text_splitter import (
+    RecursiveCharacterTextSplitter,
+    SentenceTransformersTokenTextSplitter,
+)
+import re
+
+# ─────────────────────────────────────────
+# STRATEGY 1: Fixed-size character chunking
+# Simple, fast, ignores sentence boundaries
+# ─────────────────────────────────────────
+def chunk_fixed(text, chunk_size=512, overlap=64):
+    splitter = RecursiveCharacterTextSplitter(
+        chunk_size=chunk_size,
+        chunk_overlap=overlap,
+        separators=["\n\n", "\n", ". ", " ", ""]
+    )
+    return splitter.split_text(text)
+
+# ─────────────────────────────────────────
+# STRATEGY 2: Sentence-based chunking
+# Respects sentence boundaries — better for prose
+# ─────────────────────────────────────────
+def chunk_sentences(text, sentences_per_chunk=5, overlap=1):
+    sentences = re.split(r'(?<=[.!?])\s+', text.strip())
+    chunks = []
+    for i in range(0, len(sentences), sentences_per_chunk - overlap):
+        chunk = " ".join(sentences[i : i + sentences_per_chunk])
+        if chunk.strip():
+            chunks.append(chunk)
+    return chunks
+
+# ─────────────────────────────────────────
+# STRATEGY 3: Token-based chunking
+# Chunks by token count — matches model context
+# ─────────────────────────────────────────
+def chunk_tokens(text, tokens_per_chunk=256, overlap=32):
+    splitter = SentenceTransformersTokenTextSplitter(
+        model_name="BAAI/bge-small-en-v1.5",
+        chunk_overlap=overlap,
+        tokens_per_chunk=tokens_per_chunk
+    )
+    return splitter.split_text(text)
+
+# ─────────────────────────────────────────
+# STRATEGY 4: Semantic chunking (best quality)
+# Groups sentences by semantic similarity
+# Requires: pip install semantic-text-splitter
+# ─────────────────────────────────────────
+def chunk_semantic(text, max_chunk_size=400):
+    try:
+        from semantic_text_splitter import TextSplitter
+        splitter = TextSplitter(max_chunk_size)
+        return splitter.chunks(text)
+    except ImportError:
+        print("pip install semantic-text-splitter")
+        return chunk_fixed(text)
+
+# ─────────────────────────────────────────
+# RECOMMENDATION:
+# ─────────────────────────────────────────
+# FAQs / short answers   → chunk_sentences(sentences=3)
+# Legal / technical docs → chunk_tokens(tokens=256, overlap=32)
+# Articles / prose       → chunk_semantic(max=400)
+# Code                   → split by function/class, not characters</pre>
+</div>
+
+<h2 id="vector-databases">Vector Databases</h2>
+
+<h3>Chroma — Best for Getting Started</h3>
+
+<div class="code-block">
+  <div class="code-block-header"><span class="code-lang">python</span><button class="code-copy-btn">Copy</button></div>
+  <pre">"""
+rag_chroma.py — Complete RAG pipeline with ChromaDB
+pip install chromadb sentence-transformers
+"""
+
+import chromadb
+from chromadb.utils import embedding_functions
+from pathlib import Path
+
+# ── Setup ─────────────────────────────────────
+COLLECTION_NAME  = "my_knowledge_base"
+EMBED_MODEL_NAME = "BAAI/bge-small-en-v1.5"
+PERSIST_DIR      = "./chroma_db"
+
+embed_fn = embedding_functions.SentenceTransformerEmbeddingFunction(
+    model_name=EMBED_MODEL_NAME
+)
+
+client     = chromadb.PersistentClient(path=PERSIST_DIR)
+collection = client.get_or_create_collection(
+    name=COLLECTION_NAME,
+    embedding_function=embed_fn,
+    metadata={"hnsw:space": "cosine"}  # use cosine similarity
+)
+
+# ── Ingestion ─────────────────────────────────
+def ingest_documents(doc_dir: str, chunk_size=400):
+    """Load all .txt and .md files from a directory and add to Chroma."""
+    from langchain.text_splitter import RecursiveCharacterTextSplitter
+    
+    splitter = RecursiveCharacterTextSplitter(
+        chunk_size=chunk_size,
+        chunk_overlap=50,
+        separators=["\n\n", "\n", ". ", " "]
+    )
+    
+    docs, ids, metadatas = [], [], []
+    existing_ids = set(collection.get()["ids"])
+    
+    for path in Path(doc_dir).rglob("*.txt"):
+        text = path.read_text(encoding="utf-8", errors="ignore")
+        chunks = splitter.split_text(text)
+        
+        for i, chunk in enumerate(chunks):
+            chunk_id = f"{path.stem}_{i}"
+            if chunk_id in existing_ids:
+                continue  # skip already-indexed chunks
+            docs.append(chunk)
+            ids.append(chunk_id)
+            metadatas.append({
+                "source": str(path),
+                "filename": path.name,
+                "chunk_index": i,
+                "total_chunks": len(chunks)
+            })
+    
+    if docs:
+        # Chroma handles embedding automatically via embed_fn
+        collection.add(documents=docs, ids=ids, metadatas=metadatas)
+        print(f"Indexed {len(docs)} new chunks from {doc_dir}")
+    else:
+        print("No new documents to index.")
+
+# ── Retrieval ──────────────────────────────────
+def retrieve(query: str, top_k: int = 3) -> list[dict]:
+    """Find the most relevant chunks for a query."""
+    results = collection.query(
+        query_texts=[query],
+        n_results=top_k,
+        include=["documents", "metadatas", "distances"]
+    )
+    
+    retrieved = []
+    for doc, meta, dist in zip(
+        results["documents"][0],
+        results["metadatas"][0],
+        results["distances"][0]
+    ):
+        retrieved.append({
+            "text": doc,
+            "source": meta.get("filename", "unknown"),
+            "similarity": 1 - dist,   # convert distance to similarity
+        })
+    
+    return retrieved
+
+# ── Answer Generation ──────────────────────────
+def answer(query: str, model_fn, top_k: int = 3) -> dict:
+    """
+    Full RAG query: retrieve + generate.
+    model_fn: callable that takes a prompt string, returns answer string.
+    """
+    chunks = retrieve(query, top_k=top_k)
+    
+    if not chunks:
+        return {"answer": "No relevant documents found.", "sources": []}
+    
+    # Build context block
+    context_parts = []
+    for i, chunk in enumerate(chunks, 1):
+        context_parts.append(
+            f"[Source {i}: {chunk['source']} (similarity: {chunk['similarity']:.2f})]\n"
+            f"{chunk['text']}"
+        )
+    context = "\n\n---\n\n".join(context_parts)
+    
+    # Build grounded prompt
+    prompt = f"""You are a helpful assistant. Answer the question using ONLY
+the provided context. If the context doesn't contain the answer, say
+"I don't have enough information to answer this question."
+
+Context:
+{context}
+
+Question: {query}
+
+Answer:"""
+    
+    answer_text = model_fn(prompt)
+    sources = [c["source"] for c in chunks]
+    
+    return {
+        "answer": answer_text,
+        "sources": sources,
+        "chunks_used": len(chunks)
+    }
+
+# ── Example usage ──────────────────────────────
+if __name__ == "__main__":
+    # Ingest your documents
+    ingest_documents("./my_documents")
+    
+    # Connect to Ollama (or swap for any model)
+    import ollama
+    def ollama_fn(prompt):
+        response = ollama.chat(
+            model="llama3.2:1b",
+            messages=[{"role": "user", "content": prompt}]
+        )
+        return response["message"]["content"]
+    
+    # Query
+    result = answer("What are the payment terms in the contract?", ollama_fn)
+    print("Answer:", result["answer"])
+    print("Sources:", result["sources"])</pre>
+</div>
+
+<h3>FAISS — Best for Large-Scale In-Memory Search</h3>
+
+<div class="code-block">
+  <div class="code-block-header"><span class="code-lang">python</span><button class="code-copy-btn">Copy</button></div>
+  <pre">"""
+rag_faiss.py — RAG with FAISS for high-performance retrieval
+pip install faiss-cpu sentence-transformers numpy
+"""
+
+import faiss
+import numpy as np
+import json
+from sentence_transformers import SentenceTransformer
+
+EMBED_MODEL = "BAAI/bge-small-en-v1.5"
+INDEX_FILE  = "faiss_index.bin"
+META_FILE   = "faiss_meta.json"
+
+embedder = SentenceTransformer(EMBED_MODEL)
+
+class FAISSRetriever:
+    def __init__(self):
+        self.index = None
+        self.documents = []   # list of {"text": str, "source": str}
+        self.dim = 384        # bge-small-en-v1.5 output dimension
+
+    def build_index(self, documents: list[dict]):
+        """Build FAISS index from a list of {text, source} dicts."""
+        self.documents = documents
+        texts = [d["text"] for d in documents]
+        
+        print(f"Embedding {len(texts)} chunks...")
+        embeddings = embedder.encode(
+            texts,
+            normalize_embeddings=True,  # required for cosine similarity
+            show_progress_bar=True,
+            batch_size=64
+        )
+        
+        # IndexFlatIP = inner product = cosine similarity (after normalization)
+        self.index = faiss.IndexFlatIP(self.dim)
+        self.index.add(embeddings.astype(np.float32))
+        print(f"Index built with {self.index.ntotal} vectors.")
+
+    def save(self, index_file=INDEX_FILE, meta_file=META_FILE):
+        faiss.write_index(self.index, index_file)
+        with open(meta_file, "w") as f:
+            json.dump(self.documents, f)
+        print(f"Saved: {index_file}, {meta_file}")
+
+    def load(self, index_file=INDEX_FILE, meta_file=META_FILE):
+        self.index = faiss.read_index(index_file)
+        with open(meta_file) as f:
+            self.documents = json.load(f)
+        print(f"Loaded index with {self.index.ntotal} vectors.")
+
+    def search(self, query: str, top_k: int = 3) -> list[dict]:
+        query_vec = embedder.encode(
+            [query], normalize_embeddings=True
+        ).astype(np.float32)
+        
+        scores, indices = self.index.search(query_vec, top_k)
+        
+        results = []
+        for score, idx in zip(scores[0], indices[0]):
+            if idx == -1:   # FAISS returns -1 for empty slots
+                continue
+            doc = self.documents[idx].copy()
+            doc["similarity"] = float(score)
+            results.append(doc)
+        
+        return results
+
+# ── Usage ──────────────────────────────────────
+if __name__ == "__main__":
+    retriever = FAISSRetriever()
+    
+    # First time: build and save
+    sample_docs = [
+        {"text": "Payment is due within 30 days of invoice.", "source": "contract.txt"},
+        {"text": "The warranty period is 12 months from delivery.", "source": "terms.txt"},
+        {"text": "Either party may terminate with 60 days written notice.", "source": "contract.txt"},
+    ]
+    retriever.build_index(sample_docs)
+    retriever.save()
+    
+    # Subsequent runs: load saved index
+    # retriever.load()
+    
+    results = retriever.search("What are the payment terms?", top_k=2)
+    for r in results:
+        print(f"[{r['similarity']:.3f}] {r['source']}: {r['text'][:100]}")</pre>
+</div>
+
+<h3>PGVector — RAG with Supabase</h3>
+
+<div class="code-block">
+  <div class="code-block-header"><span class="code-lang">python</span><button class="code-copy-btn">Copy</button></div>
+  <pre">"""
+rag_pgvector.py — RAG using Supabase + pgvector
+Perfect for SLM Marketplace projects with Supabase backend.
+pip install supabase sentence-transformers
+"""
+
+from supabase import create_client
+from sentence_transformers import SentenceTransformer
+import os
+
+SUPABASE_URL = os.environ["SUPABASE_URL"]
+SUPABASE_KEY = os.environ["SUPABASE_SERVICE_KEY"]  # use service key for server-side
+EMBED_MODEL  = "BAAI/bge-small-en-v1.5"
+
+supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
+embedder = SentenceTransformer(EMBED_MODEL)
+
+# First, create the table in Supabase SQL editor:
+# ---------------------------------------------
+# create extension if not exists vector;
+#
+# create table documents (
+#   id bigserial primary key,
+#   content text not null,
+#   source text,
+#   embedding vector(384)
+# );
+#
+# create index on documents
+#   using ivfflat (embedding vector_cosine_ops)
+#   with (lists = 100);
+# ---------------------------------------------
+
+def ingest(chunks: list[dict]):
+    """chunks: [{text, source}]"""
+    texts = [c["text"] for c in chunks]
+    embeddings = embedder.encode(texts, normalize_embeddings=True)
+    
+    rows = [
+        {
+            "content":   chunk["text"],
+            "source":    chunk["source"],
+            "embedding": emb.tolist()
+        }
+        for chunk, emb in zip(chunks, embeddings)
+    ]
+    
+    supabase.table("documents").insert(rows).execute()
+    print(f"Inserted {len(rows)} chunks.")
+
+def retrieve(query: str, top_k: int = 3) -> list[dict]:
+    query_vec = embedder.encode([query], normalize_embeddings=True)[0].tolist()
+    
+    # Call the match_documents RPC function (create in Supabase):
+    # create or replace function match_documents(
+    #   query_embedding vector(384),
+    #   match_count int default 3
+    # ) returns table(id bigint, content text, source text, similarity float)
+    # language sql stable as $$
+    #   select id, content, source,
+    #     1 - (embedding <=> query_embedding) as similarity
+    #   from documents
+    #   order by embedding <=> query_embedding
+    #   limit match_count;
+    # $$;
+    
+    result = supabase.rpc("match_documents", {
+        "query_embedding": query_vec,
+        "match_count": top_k
+    }).execute()
+    
+    return result.data
+
+if __name__ == "__main__":
+    ingest([
+        {"text": "Annual subscription renews automatically.", "source": "tos.txt"},
+        {"text": "Refunds are available within 14 days.", "source": "tos.txt"},
+    ])
+    
+    results = retrieve("Can I get a refund?")
+    for r in results:
+        print(f"[{r['similarity']:.3f}] {r['content']}")</pre>
+</div>
+
+<h2 id="advanced-rag">Advanced RAG Patterns</h2>
+
+<h3>Hybrid Search — BM25 + Vector</h3>
+<p>Pure vector search misses exact keyword matches. Hybrid search combines BM25 (keyword) with vector (semantic) search using Reciprocal Rank Fusion (RRF).</p>
+
+<div class="code-block">
+  <div class="code-block-header"><span class="code-lang">python</span><button class="code-copy-btn">Copy</button></div>
+  <pre">"""
+hybrid_search.py
+pip install rank_bm25 sentence-transformers
+"""
+
+from rank_bm25 import BM25Okapi
+from sentence_transformers import SentenceTransformer, util
+import numpy as np
+
+def hybrid_search(query, documents, top_k=3, alpha=0.5):
+    """
+    alpha=0.0  → pure BM25 (keyword)
+    alpha=1.0  → pure vector (semantic)
+    alpha=0.5  → balanced (recommended default)
+    """
+    texts = [d["text"] for d in documents]
+    
+    # BM25 scores
+    tokenized = [t.lower().split() for t in texts]
+    bm25 = BM25Okapi(tokenized)
+    bm25_scores = np.array(bm25.get_scores(query.lower().split()))
+    
+    # Normalize BM25 to 0-1
+    bm25_max = bm25_scores.max()
+    if bm25_max > 0:
+        bm25_scores = bm25_scores / bm25_max
+    
+    # Vector scores
+    model = SentenceTransformer("BAAI/bge-small-en-v1.5")
+    query_emb = model.encode(query, normalize_embeddings=True)
+    doc_embs  = model.encode(texts, normalize_embeddings=True)
+    vector_scores = util.cos_sim(query_emb, doc_embs)[0].numpy()
+    
+    # Combine: higher alpha = more semantic weight
+    combined = alpha * vector_scores + (1 - alpha) * bm25_scores
+    
+    top_indices = combined.argsort()[::-1][:top_k]
+    return [
+        {**documents[i], "score": float(combined[i])}
+        for i in top_indices
+    ]
+
+# Example
+docs = [
+    {"text": "The NDA expires after 5 years.", "source": "contract.pdf"},
+    {"text": "Confidential information must not be disclosed.", "source": "contract.pdf"},
+    {"text": "Payment is due on the first of each month.", "source": "invoice.pdf"},
+]
+
+results = hybrid_search("When does the non-disclosure agreement expire?", docs)
+for r in results:
+    print(f"[{r['score']:.3f}] {r['text']}")</pre>
+</div>
+
+<h3>Evaluating RAG with RAGAS</h3>
+
+<div class="code-block">
+  <div class="code-block-header"><span class="code-lang">python</span><button class="code-copy-btn">Copy</button></div>
+  <pre">"""
+evaluate_rag.py
+pip install ragas datasets
+"""
+
+from datasets import Dataset
+from ragas import evaluate
+from ragas.metrics import (
+    faithfulness,          # Does the answer stay faithful to the retrieved context?
+    answer_relevancy,      # Is the answer relevant to the question?
+    context_precision,     # Are the retrieved chunks actually useful?
+    context_recall,        # Did we retrieve all necessary information?
+)
+
+# Your RAG evaluation dataset
+eval_data = {
+    "question": [
+        "What are the payment terms?",
+        "How long is the warranty?",
+    ],
+    "answer": [
+        "Payment is due within 30 days of invoice.",
+        "The warranty period is 12 months from delivery.",
+    ],
+    "contexts": [
+        # The chunks your RAG retrieved for each question
+        ["Payment is due within 30 days of invoice date. Late payments incur 1.5% monthly interest."],
+        ["The warranty covers defects in materials and workmanship for 12 months from delivery."],
+    ],
+    "ground_truth": [
+        # The ideal answer for scoring recall
+        "Payment is due within 30 days.",
+        "12 months from delivery.",
+    ],
+}
+
+dataset = Dataset.from_dict(eval_data)
+
+results = evaluate(
+    dataset,
+    metrics=[faithfulness, answer_relevancy, context_precision, context_recall]
+)
+
+print(results)
+# Output:
+# {'faithfulness': 0.95, 'answer_relevancy': 0.91,
+#  'context_precision': 0.88, 'context_recall': 0.92}
+
+# Interpretation:
+# faithfulness > 0.9  → answers grounded in retrieved context ✓
+# answer_relevancy > 0.85 → answers actually address the question ✓
+# context_precision > 0.8 → retrieved chunks are mostly useful ✓
+# context_recall > 0.8  → found the necessary information ✓</pre>
+</div>
+
+<h2 id="common-mistakes">Common Mistakes</h2>
+
+<div class="callout callout-warning">
+  <ul style="margin:0;padding-left:20px;line-height:2.2">
+    <li><strong>Chunks too large</strong> — Chunks of 1000+ tokens dilute the embedding signal. Stick to 256–512 tokens.</li>
+    <li><strong>No overlap between chunks</strong> — Without overlap, sentences that span chunk boundaries are split and never fully retrieved. Use 10–15% overlap.</li>
+    <li><strong>Different embedding models for indexing vs querying</strong> — Always use identical models. Even minor version differences can degrade retrieval.</li>
+    <li><strong>Ignoring metadata filtering</strong> — Use metadata (date, source, category) to pre-filter before vector search. Searching 10K relevant docs beats searching 1M irrelevant ones.</li>
+    <li><strong>Never evaluating retrieval quality</strong> — Use RAGAS or manual inspection. Bad retrieval causes hallucination even with a perfect generation model.</li>
+    <li><strong>Stuffing too many chunks into context</strong> — More context isn't always better. 3–5 focused chunks typically outperforms 10 noisy ones. "Lost in the middle" is a real phenomenon.</li>
+    <li><strong>Not re-indexing after document updates</strong> — Stale indexes return outdated information. Implement incremental updates using document hashes.</li>
+  </ul>
+</div>
+
+<h2 id="faq">FAQ</h2>
+
+<div class="faq-list">
+  <div class="faq-item">
+    <button class="faq-q">Should I use RAG or fine-tuning?</button>
+    <div class="faq-a">
+      <p><strong>Use RAG when:</strong> your knowledge base changes frequently, you need source citations, you have large document collections, or you need to avoid hallucination on factual queries.</p>
+      <p><strong>Use fine-tuning when:</strong> you need the model to adopt a writing style, follow specific output formats, perform reasoning in a specialized domain, or improve instruction-following behavior.</p>
+      <p><strong>Best answer:</strong> combine both. Fine-tune for style/format/reasoning, add RAG for up-to-date factual grounding.</p>
+    </div>
+  </div>
+  <div class="faq-item">
+    <button class="faq-q">What chunk size should I use?</button>
+    <div class="faq-a">
+      <p>Start with 256–512 tokens with 10% overlap. Smaller chunks (128 tokens) improve precision but can miss context. Larger chunks (1024+) reduce precision and dilute embeddings. The right answer depends on your document type — test with your actual data using RAGAS metrics.</p>
+    </div>
+  </div>
+  <div class="faq-item">
+    <button class="faq-q">How many chunks should I retrieve (top_k)?</button>
+    <div class="faq-a">
+      <p>3–5 is usually optimal. Below 3 you might miss relevant context; above 5 you introduce noise. Experiment with your eval set. If context_recall is low, increase top_k. If faithfulness is low, decrease it.</p>
+    </div>
+  </div>
+  <div class="faq-item">
+    <button class="faq-q">Which vector database should I use?</button>
+    <div class="faq-a">
+      <p><strong>Chroma</strong> — start here. Easy to set up, persistent, good Python API. Perfect for &lt;1M documents.<br><strong>FAISS</strong> — when you need speed and have millions of documents. In-memory, no server needed.<br><strong>PGVector</strong> — when you already use Postgres/Supabase and want vectors in your existing database.<br><strong>Pinecone/Weaviate/Qdrant</strong> — managed cloud options when you don't want to operate infrastructure.</p>
+    </div>
+  </div>
+</div>
+
+<h2 id="next-steps">Next Steps</h2>
+<div class="card-grid-2" style="margin:24px 0">
+  <a href="../projects/" class="doc-card card-orange">
+    <div class="doc-card-icon">🏗️</div>
+    <div class="doc-card-title">Build a Document Q&amp;A System</div>
+    <div class="doc-card-desc">Step-by-step project combining RAG + your fine-tuned SLM + Chroma into a complete app.</div>
+    <div class="doc-card-footer">Project →</div>
+  </a>
+  <a="../deployment/" class="doc-card">
+    <div class="doc-card-icon">☁️</div>
+    <div class="doc-card-title">Deploy Your RAG System</div>
+    <div class="doc-card-desc">Package your RAG pipeline as a FastAPI service and deploy to RunPod or Hugging Face Spaces.</div>
+    <div class="doc-card-footer">Deployment →</div>
+  </a>
+</div>
+
+</main>
+<aside class="docs-toc" aria-label="On this page">
+  <div class="toc-title">On this page</div>
+  <a href="#why-rag" class="toc-link">Why RAG?</a>
+  <a href="#architecture" class="toc-link">Architecture</a>
+  <a href="#embedding-models" class="toc-link">Embedding Models</a>
+  <a href="#chunking" class="toc-link">Chunking Strategies</a>
+  <a href="#vector-databases" class="toc-link">Vector Databases</a>
+  <a href="#advanced-rag" class="toc-link">Advanced RAG Patterns</a>
+  <a href="#common-mistakes" class="toc-link">Common Mistakes</a>
+  <a href="#faq" class="toc-link">FAQ</a>
+  <a href="#next-steps" class="toc-link">Next Steps</a>
+</aside>
+</div>
+<script src="../../docs/docs.js"></script>
+</body>
+</html>

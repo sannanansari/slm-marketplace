@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fine-Tuning Small Language Models — SLM Marketplace Docs</title>
+<meta name="description" content="Complete guide to fine-tuning SLMs with LoRA, QLoRA, and Unsloth. From dataset preparation to publishing your model.">
+<link rel="canonical" href="https://slm-market.sannan.app/docs/fine-tuning/">
+<link rel="icon" type="image/svg+xml" href="../../assets/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" media="print" onload="this.media='all'" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"></noscript>
+<style>#reading-progress-wrap{position:fixed;top:60px;left:0;right:0;height:2px;z-index:199}#reading-progress{height:2px;background:#F97316;width:0;transition:width .1s}</style>
+<link rel="stylesheet" href="../../docs/docs.css">
+</head>
+<body>
+<div id="reading-progress-wrap"><div id="reading-progress"></div></div>
+<header class="docs-header">
+  <div class="docs-header-inner">
+    <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="Open menu">
+      <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+    </button>
+    <a href="../../index.html" class="docs-logo">
+      <span class="docs-logo-slm">SLM</span><span class="docs-logo-name">Marketplace</span>
+      <span class="docs-logo-sep">/</span><span class="docs-logo-docs">Docs</span>
+    </a>
+    <div class="docs-header-search">
+      <svg class="search-icon-wrap" width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input type="search" id="docs-search" placeholder="Search docs… (Press /)" autocomplete="off" aria-label="Search docs">
+      <div class="search-results" id="search-results" aria-live="polite"></div>
+    </div>
+    <nav class="docs-header-nav" aria-label="Site navigation">
+      <a href="../../explore.html">Explore Models</a>
+      <a href="../../upload.html">Upload Model</a>
+      <a href="../../auth.html" class="btn-cta">Sign Up Free</a>
+    </nav>
+  </div>
+</header>
+<div class="docs-layout">
+<nav class="docs-sidebar" id="docs-sidebar" aria-label="Documentation navigation">
+  <div class="nav-section"><div class="nav-section-title">Getting Started</div>
+    <a href="../../docs/getting-started/" class="nav-link">🌐 Introduction to SLMs</a>
+  </div>
+  <div class="nav-section"><div class="nav-section-title">Roadmap</div>
+    <a href="../../docs/roadmap/" class="nav-link">🗺️ 6-Month Roadmap</a>
+  </div>
+  <div class="nav-section"><div class="nav-section-title">Setup</div>
+    <a href="../../docs/setup/" class="nav-link">⚙️ Environment Setup</a>
+    <a href="../../docs/setup/colab.html" class="nav-link" style="padding-left:24px;font-size:12px">☁️ Google Colab</a>
+    <a href="../../docs/setup/gpu-guide.html" class="nav-link" style="padding-left:24px;font-size:12px">🎮 GPU Guide</a>
+  </div>
+  <div class="nav-section"><div class="nav-section-title">Foundations</div>
+    <a href="../../docs/foundations/" class="nav-link">🔬 AI Foundations</a>
+  </div>
+  <div class="nav-section"><div class="nav-section-title">Tutorial</div>
+    <a href="../../docs/tutorials/" class="nav-link">🏗️ Build First SLM</a>
+  </div>
+  <div class="nav-section"><div class="nav-section-title">Academies</div>
+    <a href="../../docs/fine-tuning/" class="nav-link active" aria-current="page">⚡ Fine-Tuning</a>
+    <a href="../../docs/fine-tuning/qlora.html" class="nav-link" style="padding-left:24px;font-size:12px">QLoRA Deep Dive</a>
+    <a href="../../docs/datasets/" class="nav-link">📦 Datasets</a>
+    <a href="../../docs/evaluation/" class="nav-link">📊 Evaluation</a>
+    <a href="../../docs/quantization/" class="nav-link">💾 Quantization</a>
+    <a href="../../docs/inference/" class="nav-link">🚀 Inference</a>
+    <a href="../../docs/inference/ollama.html" class="nav-link" style="padding-left:24px;font-size:12px">🦙 Ollama</a>
+    <a href="../../docs/inference/vllm.html" class="nav-link" style="padding-left:24px;font-size:12px">vLLM</a>
+    <a href="../../docs/deployment/" class="nav-link">☁️ Deployment</a>
+    <a href="../../docs/rag/" class="nav-link">🔍 RAG</a>
+  </div>
+  <div class="nav-section"><div class="nav-section-title">Reference</div>
+    <a href="../../docs/hardware/" class="nav-link">🎮 Hardware Guide</a>
+    <a href="../../docs/costs/" class="nav-link">💰 Cost Guide</a>
+    <a href="../../docs/publishing/" class="nav-link">📤 Publishing Guide</a>
+    <a href="../../docs/best-practices/" class="nav-link">🛡️ Best Practices</a>
+    <a href="../../docs/troubleshooting/" class="nav-link">🔴 Troubleshooting</a>
+  </div>
+</nav>
+
+<main class="docs-content" id="main-content">
+
+<div class="breadcrumb"><a href="../../docs/">Docs</a> &rsaquo; <span>Fine-Tuning</span></div>
+
+<div class="page-hero">
+  <div class="page-label">⚡ Fine-Tuning Academy</div>
+  <h1 class="page-title">Fine-Tuning Small Language Models</h1>
+  <p class="page-desc">The complete guide to making a pre-trained SLM perform brilliantly on your specific task. Covers LoRA, QLoRA, dataset formatting, training, evaluation, and publishing — with real code for every step.</p>
+  <div class="page-meta">
+    <span class="page-meta-item">⏱ 45 min read</span>
+    <span class="page-meta-item">💻 GPU needed (free Colab)</span>
+    <span class="page-meta-item">🎯 Intermediate</span>
+    <span class="page-meta-item">📄 Full code included</span>
+  </div>
+</div>
+
+<hr class="page-divider">
+
+<h2 id="what-is-finetuning">What Is Fine-Tuning?</h2>
+
+<p>A base language model like Llama 3.2-1B has learned general language patterns from trillions of tokens of internet text. It knows grammar, facts, reasoning patterns. But it doesn't know <em>your domain</em>.</p>
+
+<p><strong>Fine-tuning</strong> is the process of continuing training on your specific dataset so the model becomes an expert in your domain. It's the difference between a general doctor and a cardiologist.</p>
+
+<div class="callout callout-info">
+  <strong>The core idea:</strong> Start with a smart, general model. Teach it your specific task on your specific data. Get a model that's better at your task than anything money can buy.
+</div>
+
+<h3>Types of Fine-Tuning</h3>
+
+<div style="overflow-x:auto;margin:20px 0">
+<table class="comparison-table">
+  <thead><tr><th>Type</th><th>What it trains</th><th>VRAM needed</th><th>Use when</th></tr></thead>
+  <tbody>
+    <tr><td><strong>Full fine-tuning</strong></td><td>All parameters</td><td>80GB+ (A100×2)</td><td>You have serious compute budget</td></tr>
+    <tr><td><strong>LoRA</strong></td><td>Low-rank adapter matrices</td><td>16–24GB</td><td>Single A100 or high-end consumer</td></tr>
+    <tr><td><strong>QLoRA</strong></td><td>LoRA on quantized model</td><td>4–8GB</td><td>RTX 3080/4080, Colab T4 ✅</td></tr>
+    <tr><td><strong>Prompt tuning</strong></td><td>Soft prompt tokens only</td><td>2–4GB</td><td>Minimal change, large model</td></tr>
+  </tbody>
+</table>
+</div>
+
+<p>For 99% of use cases: <strong>QLoRA with Unsloth</strong>. It runs on a free Colab GPU and produces excellent results.</p>
+
+<h2 id="lora-explained">LoRA Explained — Simply</h2>
+
+<p>A 7B parameter model has matrices everywhere. Each attention layer has weight matrices W_q, W_k, W_v, W_o. Full fine-tuning updates all of them — billions of gradients, enormous memory.</p>
+
+<p>LoRA's insight: <em>the updates to these matrices during fine-tuning are low-rank</em>. You don't need to update the full matrix. You can add a small adapter: two tiny matrices A and B where rank is much smaller than the full matrix.</p>
+
+<div class="code-block" style="background:#1E2433;border-radius:12px;padding:24px;margin:24px 0;color:#E2E8F0;font-family:monospace;font-size:13px;line-height:1.8">
+<pre>
+# Full fine-tuning: update W (d × d matrix, millions of params)
+W_new = W_original + ΔW
+
+# LoRA: update via low-rank decomposition
+#   A is (d × r), B is (r × d), where r << d (e.g. r=16, d=4096)
+#   Only A and B are trained — that's 2 × d × r params instead of d × d
+
+W_new = W_original + (B @ A) × (alpha / r)
+
+# For a 4096-dim layer with r=16:
+# Full: 4096 × 4096 = 16.7M params
+# LoRA: 2 × 4096 × 16 = 131K params  ← 128x fewer params to train
+</pre>
+</div>
+
+<p>The <code>alpha</code> hyperparameter controls the magnitude of the update. A common setting is <code>alpha = 2 × r</code>.</p>
+
+<h2 id="qlora-explained">QLoRA — LoRA on a Quantized Model</h2>
+
+<p>QLoRA (Quantized LoRA) adds one more trick: load the base model in 4-bit precision (NF4 quantization). This cuts VRAM by 4× compared to fp16. Then train LoRA adapters in fp16 on top.</p>
+
+<div class="code-block" style="background:#1E2433;border-radius:12px;padding:20px;margin:20px 0;color:#E2E8F0;font-family:monospace;font-size:13px;line-height:1.8">
+<pre>
+┌────────────────────────────────────────────────┐
+│              QLoRA Architecture                 │
+│                                                 │
+│  Base Model (4-bit NF4 quantized, FROZEN)       │
+│  ┌─────────────────────────────────────────┐   │
+│  │  W_q (4-bit)  W_k (4-bit)  W_v (4-bit) │   │  ← not updated, low VRAM
+│  └─────────────────────────────────────────┘   │
+│         +                                       │
+│  LoRA Adapters (fp16, TRAINABLE)               │
+│  ┌─────────────────────────────────────────┐   │
+│  │  A_q, B_q    A_k, B_k    A_v, B_v      │   │  ← updated during training
+│  └─────────────────────────────────────────┘   │
+│                                                 │
+│  Memory: 7B model = ~4.5GB VRAM  (vs 14GB fp16) │
+└────────────────────────────────────────────────┘
+</pre>
+</div>
+
+<h2 id="dataset-preparation">Step 1 — Dataset Preparation</h2>
+
+<p>The most common fine-tuning format is the <strong>instruction format</strong>. Each example has a system message, a user question, and an assistant answer.</p>
+
+<h3>Alpaca Format (simple)</h3>
+<div class="code-block">
+  <div class="code-block-header"><span class="code-lang">json</span><button class="code-copy-btn">Copy</button></div>
+  <pre>{
+  "instruction": "Classify the sentiment of the following review.",
+  "input": "The product was delivered late and the quality was poor.",
+  "output": "Negative"
+}</pre>
+</div>
+
+<h3>ChatML Format (recommended for conversation)</h3>
+<div class="code-block">
+  <div class="code-block-header"><span class="code-lang">json</span><button class="code-copy-btn">Copy</button></div>
+  <pre>{
+  "messages": [
+    {
+      "role": "system",
+      "content": "You are a legal contract analyst. Identify key clauses."
+    },
+    {
+      "role": "user",
+      "content": "Analyze this clause: 'Either party may terminate with 30 days notice.'"
+    },
+    {
+      "role": "assistant",
+      "content": "This is a termination clause with bilateral rights. Key details: (1) Either party can terminate — symmetric power, (2) 30-day notice period required — standard commercial practice, (3) No cause required — at-will termination. Risk: low notice period may cause operational disruption."
+    }
+  ]
+}</pre>
+</div>
+
+<h3>Building Your Dataset Script</h3>
+<div class="code-block">
+  <div class="code-block-header"><span class="code-lang">python</span><button class="code-copy-btn">Copy</button></div>
+  <pre>import json
+import random
+from datasets import Dataset
+
+# --- Step 1: Load your raw examples ---
+with open("raw_examples.json", "r") as f:
+    raw = json.load(f)
+
+# --- Step 2: Format into ChatML ---
+def format_example(ex):
+    return {
+        "messages": [
+            {"role": "system",  "content": "You are an expert in " + ex["domain"] + "."},
+            {"role": "user",    "content": ex["question"]},
+            {"role": "assistant", "content": ex["answer"]}
+        ]
+    }
+
+formatted = [format_example(ex) for ex in raw]
+
+# --- Step 3: Deduplicate (basic) ---
+seen = set()
+unique = []
+for ex in formatted:
+    key = ex["messages"][1]["content"][:100]
+    if key not in seen:
+        seen.add(key)
+        unique.append(ex)
+
+print(f"Before dedup: {len(formatted)}, After: {len(unique)}")
+
+# --- Step 4: Train / Val / Test split ---
+random.shuffle(unique)
+n = len(unique)
+train = unique[:int(n * 0.80)]
+val   = unique[int(n * 0.80):int(n * 0.90)]
+test  = unique[int(n * 0.90):]
+
+# --- Step 5: Save as HuggingFace Dataset ---
+train_ds = Dataset.from_list(train)
+val_ds   = Dataset.from_list(val)
+test_ds  = Dataset.from_list(test)
+
+from datasets import DatasetDict
+ds = DatasetDict({"train": train_ds, "validation": val_ds, "test": test_ds})
+ds.push_to_hub("your-username/your-dataset-name")</pre>
+</div>
+
+<h2 id="training-script">Step 2 — The Training Script</h2>
+
+<p>This is a production-ready QLoRA fine-tuning script using Unsloth. Copy, modify the config block, run on Colab T4.</p>
+
+<div class="code-block">
+  <div class="code-block-header"><span class="code-lang">python</span><button class="code-copy-btn">Copy</button></div>
+  <pre># finetune.py — QLoRA fine-tuning with Unsloth
+# Install: pip install unsloth datasets trl
+# Run on: Google Colab T4 (free) or any GPU with 8GB+ VRAM
+
+# ═══════════════════════════════════
+# CONFIG — edit this section only
+# ═══════════════════════════════════
+BASE_MODEL     = "unsloth/Llama-3.2-1B-Instruct"
+DATASET_NAME   = "your-username/your-dataset-name"
+OUTPUT_NAME    = "llama-1b-your-domain-lora"
+HF_USERNAME    = "your-hf-username"
+
+LORA_R         = 16      # LoRA rank. 8–64 typical. Higher = more capacity but more VRAM.
+LORA_ALPHA     = 32      # Usually 2 × r
+LORA_DROPOUT   = 0.05    # Small dropout prevents overfitting
+TARGET_MODULES = ["q_proj", "k_proj", "v_proj", "o_proj",
+                  "gate_proj", "up_proj", "down_proj"]
+
+LEARNING_RATE  = 2e-4    # Standard for LoRA
+BATCH_SIZE     = 2       # Per GPU. Increase if VRAM allows.
+GRAD_ACCUM     = 4       # Effective batch size = BATCH_SIZE × GRAD_ACCUM = 8
+MAX_STEPS      = 200     # For quick test. Use 500–2000 for real training.
+EPOCHS         = 3       # Alternative to MAX_STEPS (comment one out)
+MAX_SEQ_LEN    = 2048    # Context window. Match your data's typical length.
+WARMUP_RATIO   = 0.03    # 3% of steps for warmup
+# ═══════════════════════════════════
+
+from unsloth import FastLanguageModel
+from trl import SFTTrainer
+from transformers import TrainingArguments
+from datasets import load_dataset
+import torch
+
+# 1. Load model in 4-bit
+model, tokenizer = FastLanguageModel.from_pretrained(
+    model_name=BASE_MODEL,
+    max_seq_length=MAX_SEQ_LEN,
+    dtype=None,          # auto-detects bf16/fp16
+    load_in_4bit=True,   # QLoRA: base model in 4-bit
+)
+
+# 2. Add LoRA adapters
+model = FastLanguageModel.get_peft_model(
+    model,
+    r=LORA_R,
+    target_modules=TARGET_MODULES,
+    lora_alpha=LORA_ALPHA,
+    lora_dropout=LORA_DROPOUT,
+    bias="none",
+    use_gradient_checkpointing="unsloth",  # saves VRAM
+    random_state=42,
+)
+
+# 3. Load dataset
+dataset = load_dataset(DATASET_NAME)
+train_ds = dataset["train"]
+val_ds   = dataset.get("validation", None)
+
+# 4. Format messages into prompt strings
+def format_prompt(examples):
+    texts = []
+    for messages in examples["messages"]:
+        text = tokenizer.apply_chat_template(
+            messages,
+            tokenize=False,
+            add_generation_prompt=False
+        )
+        texts.append(text)
+    return {"text": texts}
+
+train_ds = train_ds.map(format_prompt, batched=True)
+if val_ds:
+    val_ds = val_ds.map(format_prompt, batched=True)
+
+# 5. Training arguments
+args = TrainingArguments(
+    output_dir=f"./{OUTPUT_NAME}",
+    per_device_train_batch_size=BATCH_SIZE,
+    gradient_accumulation_steps=GRAD_ACCUM,
+    warmup_ratio=WARMUP_RATIO,
+    num_train_epochs=EPOCHS,
+    learning_rate=LEARNING_RATE,
+    fp16=not torch.cuda.is_bf16_supported(),
+    bf16=torch.cuda.is_bf16_supported(),
+    logging_steps=10,
+    eval_strategy="steps" if val_ds else "no",
+    eval_steps=50 if val_ds else None,
+    save_strategy="steps",
+    save_steps=100,
+    load_best_model_at_end=True if val_ds else False,
+    metric_for_best_model="eval_loss",
+    greater_is_better=False,
+    optim="adamw_8bit",    # memory-efficient optimizer
+    weight_decay=0.01,
+    lr_scheduler_type="cosine",
+    seed=42,
+    report_to="none",      # set to "wandb" for experiment tracking
+)
+
+# 6. Trainer
+trainer = SFTTrainer(
+    model=model,
+    tokenizer=tokenizer,
+    train_dataset=train_ds,
+    eval_dataset=val_ds,
+    dataset_text_field="text",
+    max_seq_length=MAX_SEQ_LEN,
+    dataset_num_proc=2,
+    args=args,
+)
+
+# 7. Train
+print("Starting training...")
+trainer_stats = trainer.train()
+print(f"Training complete. Steps: {trainer_stats.global_step}")
+print(f"Final loss: {trainer_stats.training_loss:.4f}")
+
+# 8. Save LoRA adapter
+model.save_pretrained(OUTPUT_NAME)
+tokenizer.save_pretrained(OUTPUT_NAME)
+print(f"Adapter saved to ./{OUTPUT_NAME}")
+
+# 9. Push to HuggingFace Hub (adapter only — small!)
+model.push_to_hub(f"{HF_USERNAME}/{OUTPUT_NAME}", token=True)
+tokenizer.push_to_hub(f"{HF_USERNAME}/{OUTPUT_NAME}", token=True)
+print(f"Pushed to HuggingFace: {HF_USERNAME}/{OUTPUT_NAME}")</pre>
+</div>
+
+<h2 id="merging">Step 3 — Merge LoRA into Base Model</h2>
+
+<p>Publishing a LoRA adapter requires users to have the base model downloaded separately. For easier distribution, merge the adapter into the base model and publish the full model.</p>
+
+<div class="code-block">
+  <div class="code-block-header"><span class="code-lang">python</span><button class="code-copy-btn">Copy</button></div>
+  <pre># merge_and_export.py — merge LoRA adapter into base model
+from unsloth import FastLanguageModel
+
+LORA_PATH   = "./llama-1b-your-domain-lora"
+OUTPUT_PATH = "./llama-1b-your-domain-merged"
+HF_REPO     = "your-username/llama-1b-your-domain"
+
+# Load model with adapter
+model, tokenizer = FastLanguageModel.from_pretrained(
+    model_name=LORA_PATH,
+    max_seq_length=2048,
+    dtype=None,
+    load_in_4bit=True,
+)
+
+# Merge and save as fp16 (for serving)
+model.save_pretrained_merged(
+    OUTPUT_PATH,
+    tokenizer,
+    save_method="merged_16bit",   # fp16 full model
+)
+
+# Push merged model to HuggingFace Hub
+model.push_to_hub_merged(
+    HF_REPO,
+    tokenizer,
+    save_method="merged_16bit",
+    token=True
+)
+
+print(f"Full merged model available at: huggingface.co/{HF_REPO}")
+
+# Also export GGUF for Ollama
+model.save_pretrained_gguf(
+    OUTPUT_PATH + "-gguf",
+    tokenizer,
+    quantization_method="q4_k_m"  # best balance of size/quality
+)
+model.push_to_hub_gguf(
+    HF_REPO + "-GGUF",
+    tokenizer,
+    quantization_method=["q4_k_m", "q8_0"],  # publish two quants
+    token=True
+)
+print("GGUF versions also uploaded.")</pre>
+</div>
+
+<h2 id="inference">Step 4 — Test Your Fine-Tuned Model</h2>
+
+<div class="code-block">
+  <div class="code-block-header"><span class="code-lang">python</span><button class="code-copy-btn">Copy</button></div>
+  <pre># test_model.py — compare base model vs fine-tuned
+from unsloth import FastLanguageModel
+import torch
+
+def load_and_test(model_path, prompts):
+    model, tokenizer = FastLanguageModel.from_pretrained(
+        model_name=model_path,
+        max_seq_length=2048,
+        dtype=None,
+        load_in_4bit=True,
+    )
+    FastLanguageModel.for_inference(model)
+
+    results = []
+    for prompt in prompts:
+        messages = [
+            {"role": "system", "content": "You are a domain expert."},
+            {"role": "user",   "content": prompt}
+        ]
+        text = tokenizer.apply_chat_template(
+            messages, tokenize=False, add_generation_prompt=True
+        )
+        inputs = tokenizer(text, return_tensors="pt").to("cuda")
+
+        with torch.no_grad():
+            outputs = model.generate(
+                **inputs,
+                max_new_tokens=200,
+                temperature=0.1,       # low temp for factual tasks
+                do_sample=True,
+                repetition_penalty=1.1
+            )
+
+        response = tokenizer.decode(outputs[0], skip_special_tokens=True)
+        # Extract just the assistant's response
+        response = response.split("assistant")[-1].strip()
+        results.append(response)
+
+    return results
+
+TEST_PROMPTS = [
+    "What are the key risks in a force majeure clause?",
+    "How should an indemnification clause be structured?",
+    "Explain the difference between warranty and representation.",
+]
+
+print("=== BASE MODEL ===")
+base_results = load_and_test("unsloth/Llama-3.2-1B-Instruct", TEST_PROMPTS)
+for p, r in zip(TEST_PROMPTS, base_results):
+    print(f"\nQ: {p}\nA: {r[:300]}\n" + "-"*60)
+
+print("\n=== FINE-TUNED MODEL ===")
+ft_results = load_and_test("./llama-1b-your-domain-lora", TEST_PROMPTS)
+for p, r in zip(TEST_PROMPTS, ft_results):
+    print(f"\nQ: {p}\nA: {r[:300]}\n" + "-"*60)</pre>
+</div>
+
+<h2 id="hyperparameters">Hyperparameter Reference</h2>
+
+<div style="overflow-x:auto;margin:24px 0">
+<table class="comparison-table">
+  <thead><tr><th>Parameter</th><th>Default</th><th>Range</th><th>Effect</th></tr></thead>
+  <tbody>
+    <tr><td>lora_r</td><td>16</td><td>4–128</td><td>Higher = more capacity, more VRAM, slower. Start at 16.</td></tr>
+    <tr><td>lora_alpha</td><td>32</td><td>r to 4×r</td><td>Scale factor. Higher alpha = larger weight updates.</td></tr>
+    <tr><td>learning_rate</td><td>2e-4</td><td>1e-5 to 5e-4</td><td>Too high = diverges. Too low = slow, may underfit.</td></tr>
+    <tr><td>batch_size</td><td>2</td><td>1–32</td><td>Larger = more stable gradients. Limited by VRAM.</td></tr>
+    <tr><td>grad_accum</td><td>4</td><td>1–16</td><td>Simulates larger batch without VRAM cost.</td></tr>
+    <tr><td>epochs</td><td>3</td><td>1–5</td><td>More epochs → risk of overfitting. Watch eval loss.</td></tr>
+    <tr><td>max_seq_len</td><td>2048</td><td>512–8192</td><td>Match your data's length. Longer = more VRAM.</td></tr>
+    <tr><td>warmup_ratio</td><td>0.03</td><td>0.01–0.1</td><td>Prevents unstable early updates. Keep small.</td></tr>
+    <tr><td>lora_dropout</td><td>0.05</td><td>0–0.1</td><td>Regularization. Increase if overfitting.</td></tr>
+  </tbody>
+</table>
+</div>
+
+<h2 id="reading-loss">Reading Your Loss Curves</h2>
+
+<p>The training loss should decrease consistently. The validation loss tells you whether you're overfitting.</p>
+
+<div class="code-block" style="background:#1E2433;border-radius:12px;padding:20px;margin:20px 0;color:#E2E8F0;font-family:monospace;font-size:12px;line-height:1.7">
+<pre>
+Step  100 | Train Loss: 1.842 | Val Loss: 1.901  ← Normal (val slightly higher)
+Step  200 | Train Loss: 1.654 | Val Loss: 1.698  ← Both decreasing — 
+Step  300 | Train Loss: 1.512 | Val Loss: 1.557  ← Still good
+Step  400 | Train Loss: 1.401 | Val Loss: 1.612  ← Val loss rising! Overfitting.
+Step  500 | Train Loss: 1.289 | Val Loss: 1.743  ← Stop here, use step-300 checkpoint
+
+Symptoms of good training:
+  ✓ Train loss decreases smoothly
+  ✓ Val loss decreases slightly behind train loss
+  ✓ Loss curve is smooth (not spiky)
+
+Symptoms of problems:
+  ✗ Loss stays flat → learning rate too low, or data formatting wrong
+  ✗ Loss spikes wildly → learning rate too high
+  ✗ Val loss rises while train loss falls → overfitting (reduce epochs or add data)
+  ✗ NaN loss → learning rate way too high, or NaN in data
+</pre>
+</div>
+
+<h2 id="common-mistakes">Common Mistakes</h2>
+
+<div class="callout callout-warning">
+  <strong>The 7 most common fine-tuning mistakes:</strong>
+  <ol style="margin:12px 0 0;padding-left:20px;line-height:2">
+    <li><strong>Wrong chat template</strong> — Each model family has a specific template (Llama-3, ChatML, Alpaca). Using the wrong one causes the model to learn the template instead of the task.</li>
+    <li><strong>Loss masking forgotten</strong> — You should only calculate loss on the assistant's tokens, not the prompt. TRL's SFTTrainer handles this automatically if you use the messages format.</li>
+    <li><strong>Too few examples</strong> — 50 examples is almost never enough. Target 500+ for simple tasks, 2000+ for complex ones.</li>
+    <li><strong>Low-quality synthetic data</strong> — If you generate training data with GPT-4 and GPT-4 makes errors, your model learns those errors.</li>
+    <li><strong>Not using eval set</strong> — Without validation loss, you can't tell if you're overfitting until it's too late.</li>
+    <li><strong>Forgetting to merge before distributing</strong> — Publishing a LoRA adapter without the base model means users need to download both and merge themselves. Publish merged too.</li>
+    <li><strong>Skipping model card</strong> — A model without a card gets zero downloads. Write the card before pushing.</li>
+  </ol>
+</div>
+
+<h2 id="interview-questions">Interview Questions</h2>
+
+<div class="faq-list">
+  <div class="faq-item">
+    <button class="faq-q">What is the difference between LoRA and full fine-tuning?</button>
+    <div class="faq-a"><p>Full fine-tuning updates all model parameters — billions of gradients, enormous VRAM. LoRA freezes the base model and adds small low-rank adapter matrices to specific layers. Only the adapters are updated (typically 0.1–1% of total parameters). This reduces VRAM 10–100× while achieving comparable quality for most tasks.</p></div>
+  </div>
+  <div class="faq-item">
+    <button class="faq-q">What is catastrophic forgetting?</button>
+    <div class="faq-a"><p>When you fine-tune a model heavily on a narrow dataset, it can "forget" its general language ability. For example, fine-tuning on medical text might cause the model to fail at basic arithmetic. Mitigations: use LoRA (adapters don't overwrite base weights), mix general data with domain data, use fewer epochs, use a lower learning rate.</p></div>
+  </div>
+  <div class="faq-item">
+    <button class="faq-q">How do you choose the LoRA rank r?</button>
+    <div class="faq-a"><p>Start with r=16. If the model underfits (val loss stays high), increase to 32 or 64. If VRAM is tight, try r=8. Higher rank gives more expressive power but costs VRAM. For simple classification tasks, r=8 is often enough. For complex instruction following or reasoning, r=32–64 helps.</p></div>
+  </div>
+  <div class="faq-item">
+    <button class="faq-q">Why is loss masking important?</button>
+    <div class="faq-a"><p>You want the model to learn to generate good <em>responses</em>, not to memorize the input prompts. Loss masking means you only compute the gradient on the assistant's response tokens, not the system/user tokens. Without loss masking, the model wastes capacity learning to reproduce prompts it will never have to generate.</p></div>
+  </div>
+  <div class="faq-item">
+    <button class="faq-q">What is QLoRA and how does it differ from LoRA?</button>
+    <div class="faq-a"><p>QLoRA loads the base model in 4-bit NF4 quantization, which cuts VRAM ~4× vs fp16 LoRA. LoRA adapters are kept in fp16 for training precision. The key innovation is dequantization during the forward pass — the 4-bit weights are temporarily cast to fp16 for computation. Result: train a 7B model in ~6GB VRAM instead of ~24GB.</p></div>
+  </div>
+</div>
+
+<h2 id="next-steps">Next Steps</h2>
+
+<div class="card-grid-2" style="margin:24px 0">
+  <a href="qlora.html" class="doc-card">
+    <div class="doc-card-icon">🔬</div>
+    <div class="doc-card-title">QLoRA Deep Dive</div>
+    <div class="doc-card-desc">NF4 quantization, double quantization, paged optimizers — all the details behind the technique.</div>
+    <div class="doc-card-footer">Read →</div>
+  </a>
+  <a href="../datasets/" class="doc-card">
+    <div class="doc-card-icon">📦</div>
+    <div class="doc-card-title">Dataset Building Guide</div>
+    <div class="doc-card-desc">How to collect, clean, format and publish training datasets that actually improve your model.</div>
+    <div class="doc-card-footer">Read →</div>
+  </a>
+  <a href="../evaluation/" class="doc-card">
+    <div class="doc-card-icon">📊</div>
+    <div class="doc-card-title">Evaluation Guide</div>
+    <div class="doc-card-desc">Measure whether your fine-tuned model actually works. Metrics, benchmarks, LLM-as-judge.</div>
+    <div class="doc-card-footer">Read →</div>
+  </a>
+  <a href="../quantization/" class="doc-card">
+    <div class="doc-card-icon">💾</div>
+    <div class="doc-card-title">Quantization Guide</div>
+    <div class="doc-card-desc">Convert to GGUF, GPTQ, AWQ. Make your model 4× smaller without hurting quality.</div>
+    <div class="doc-card-footer">Read →</div>
+  </a>
+</div>
+
+</main>
+<aside class="docs-toc" aria-label="On this page">
+  <div class="toc-title">On this page</div>
+  <a href="#what-is-finetuning" class="toc-link">What Is Fine-Tuning?</a>
+  <a href="#lora-explained" class="toc-link">LoRA Explained</a>
+  <a href="#qlora-explained" class="toc-link">QLoRA Explained</a>
+  <a href="#dataset-preparation" class="toc-link">Step 1 — Dataset Prep</a>
+  <a href="#training-script" class="toc-link">Step 2 — Training Script</a>
+  <a href="#merging" class="toc-link">Step 3 — Merge Model</a>
+  <a href="#inference" class="toc-link">Step 4 — Test Model</a>
+  <a href="#hyperparameters" class="toc-link">Hyperparameter Reference</a>
+  <a href="#reading-loss" class="toc-link">Reading Loss Curves</a>
+  <a href="#common-mistakes" class="toc-link">Common Mistakes</a>
+  <a href="#interview-questions" class="toc-link">Interview Questions</a>
+  <a href="#next-steps" class="toc-link">Next Steps</a>
+</aside>
+</div>
+<script src="../../docs/docs.js"></script>
+</body>
+</html>

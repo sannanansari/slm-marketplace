@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quantization Guide — GGUF, GPTQ, AWQ — SLM Marketplace Docs</title>
+<meta name="description" content="Make your SLM 4x smaller and 2x faster. Complete guide to GGUF, GPTQ, AWQ quantization with real code and benchmarks.">
+<link rel="canonical" href="https://slm-market.sannan.app/docs/quantization/">
+<link rel="icon" type="image/svg+xml" href="../../assets/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" media="print" onload="this.media='all'" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"></noscript>
+<style>#reading-progress-wrap{position:fixed;top:60px;left:0;right:0;height:2px;z-index:199}#reading-progress{height:2px;background:#F97316;width:0;transition:width .1s}</style>
+<link rel="stylesheet" href="../../docs/docs.css">
+</head>
+<body>
+<div id="reading-progress-wrap"><div id="reading-progress"></div></div>
+<header class="docs-header">
+  <div class="docs-header-inner">
+    <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="Open menu">
+      <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+    </button>
+    <a href="../../index.html" class="docs-logo">
+      <span class="docs-logo-slm">SLM</span><span class="docs-logo-name">Marketplace</span>
+      <span class="docs-logo-sep">/</span><span class="docs-logo-docs">Docs</span>
+    </a>
+    <div class="docs-header-search">
+      <svg class="search-icon-wrap" width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input type="search" id="docs-search" placeholder="Search docs… (Press /)" autocomplete="off" aria-label="Search docs">
+      <div class="search-results" id="search-results" aria-live="polite"></div>
+    </div>
+    <nav class="docs-header-nav" aria-label="Site navigation">
+      <a href="../../explore.html">Explore Models</a>
+      <a href="../../upload.html">Upload Model</a>
+      <a href="../../auth.html" class="btn-cta">Sign Up Free</a>
+    </nav>
+  </div>
+</header>
+<div class="docs-layout">
+<nav class="docs-sidebar" id="docs-sidebar" aria-label="Documentation navigation">
+  <div class="nav-section"><div class="nav-section-title">Getting Started</div>
+    <a href="../../docs/getting-started/" class="nav-link">🌐 Introduction to SLMs</a>
+  </div>
+  <div class="nav-section"><div class="nav-section-title">Roadmap</div>
+    <a href="../../docs/roadmap/" class="nav-link">🗺️ 6-Month Roadmap</a>
+  </div>
+  <div class="nav-section"><div class="nav-section-title">Setup</div>
+    <a href="../../docs/setup/" class="nav-link">⚙️ Environment Setup</a>
+  </div>
+  <div class="nav-section"><div class="nav-section-title">Academies</div>
+    <a href="../../docs/fine-tuning/" class="nav-link">⚡ Fine-Tuning</a>
+    <a href="../../docs/datasets/" class="nav-link">📦 Datasets</a>
+    <a href="../../docs/evaluation/" class="nav-link">📊 Evaluation</a>
+    <a href="../../docs/quantization/" class="nav-link active" aria-current="page">💾 Quantization</a>
+    <a href="../../docs/inference/" class="nav-link">🚀 Inference</a>
+    <a href="../../docs/inference/ollama.html" class="nav-link" style="padding-left:24px;font-size:12px">🦙 Ollama</a>
+    <a href="../../docs/inference/vllm.html" class="nav-link" style="padding-left:24px;font-size:12px">vLLM</a>
+    <a href="../../docs/deployment/" class="nav-link">☁️ Deployment</a>
+    <a href="../../docs/rag/" class="nav-link">🔍 RAG</a>
+  </div>
+  <div class="nav-section"><div class="nav-section-title">Reference</div>
+    <a href="../../docs/hardware/" class="nav-link">🎮 Hardware Guide</a>
+    <a href="../../docs/costs/" class="nav-link">💰 Cost Guide</a>
+    <a href="../../docs/publishing/" class="nav-link">📤 Publishing Guide</a>
+    <a href="../../docs/best-practices/" class="nav-link">🛡️ Best Practices</a>
+    <a href="../../docs/troubleshooting/" class="nav-link">🔴 Troubleshooting</a>
+  </div>
+</nav>
+<main class="docs-content" id="main-content">
+
+<div class="breadcrumb"><a href="../../docs/">Docs</a> &rsaquo; <span>Quantization</span></div>
+
+<div class="page-hero">
+  <div class="page-label">💾 Quantization Guide</div>
+  <h1 class="page-title">Make Your Model 4× Smaller Without Killing Quality</h1>
+  <p class="page-desc">Quantization reduces model weight precision from 32-bit floats to 4-bit integers. Same intelligence, fraction of the size. This guide covers GGUF, GPTQ, and AWQ — with real benchmarks and full code.</p>
+  <div class="page-meta">
+    <span class="page-meta-item">⏱ 30 min read</span>
+    <span class="page-meta-item">💻 CPU or GPU</span>
+    <span class="page-meta-item">🎯 Intermediate</span>
+  </div>
+</div>
+
+<hr class="page-divider">
+
+<h2 id="what-is-quantization">What Is Quantization?</h2>
+
+<p>Every weight in a neural network is a number. In a standard model, each number uses 32 bits (fp32) or 16 bits (fp16/bf16). A 7B parameter model in fp16 needs <strong>14GB</strong> just to load into memory.</p>
+
+<p>Quantization reduces those numbers to 8-bit integers (INT8) or 4-bit integers (INT4). A 7B model in 4-bit needs only <strong>3.5–4.5GB</strong>.</p>
+
+<div class="code-block" style="background:#1E2433;border-radius:12px;padding:22px;margin:24px 0;color:#E2E8F0;font-family:monospace;font-size:13px;line-height:1.9">
+<pre>
+Precision    Bits  7B Model Size   Notes
+─────────────────────────────────────────────────────────────
+fp32          32    28 GB          Training precision (rare for inference)
+bf16 / fp16   16    14 GB          Standard inference — good quality
+INT8           8     7 GB          8-bit quantization — minimal quality loss
+Q5_K_M         5     4.8 GB        GGUF 5-bit — near-lossless
+Q4_K_M         4     4.1 GB        GGUF 4-bit — sweet spot ✅ recommended
+Q3_K_M         3     3.1 GB        Noticeable degradation
+Q2_K           2     2.5 GB        Significant quality loss
+</pre>
+</div>
+
+<div class="callout callout-info">
+  <strong>The sweet spot:</strong> <code>Q4_K_M</code> is the recommended starting point for almost every use case. It's 4× smaller than fp16, typically loses less than 2% on benchmarks, and runs on any modern laptop.
+</div>
+
+<h2 id="quantization-methods">The Three Methods</h2>
+
+<div class="card-grid-3" style="margin:24px 0">
+  <div class="doc-card">
+    <div class="doc-card-icon">📦</div>
+    <div class="doc-card-title">GGUF (llama.cpp)</div>
+    <div class="doc-card-desc">CPU and GPU inference. Works in Ollama and LM Studio. Best for local/desktop use. Multiple quantization levels.</div>
+  </div>
+  <div class="doc-card">
+    <div class="doc-card-icon">⚡</div>
+    <div class="doc-card-title">GPTQ</div>
+    <div class="doc-card-desc">GPU-only. Post-training quantization using calibration data. Fast inference on NVIDIA. ExLlamaV2 backend.</div>
+  </div>
+  <div class="doc-card">
+    <div class="doc-card-icon">🎯</div>
+    <div class="doc-card-title">AWQ</div>
+    <div class="doc-card-desc">Activation-aware. Better quality than GPTQ at same bit-width. Best for vLLM production serving. AutoAWQ library.</div>
+  </div>
+</div>
+
+<h2 id="gguf">GGUF — The Universal Format</h2>
+
+<p>GGUF (GPT-Generated Unified Format) is the file format used by llama.cpp, Ollama, LM Studio, and most local inference tools. It packages the model weights, tokenizer, and metadata into a single portable file.</p>
+
+<h3>Convert to GGUF with llama.cpp</h3>
+
+<div class="code-block">
+  <div class="code-block-header"><span class="code-lang">bash</span><button class="code-copy-btn">Copy</button></div>
+  <pre># 1. Clone and build llama.cpp
+git clone https://github.com/ggerganov/llama.cpp
+cd llama.cpp
+make -j$(nproc)           # Linux/Mac
+# For GPU support: make LLAMA_CUDA=1 -j$(nproc)
+
+# 2. Install Python requirements
+pip install -r requirements.txt
+
+# 3. Download your HuggingFace model
+pip install huggingface_hub
+python -c "
+from huggingface_hub import snapshot_download
+snapshot_download('your-username/your-model', local_dir='./my-model-hf')
+"
+
+# 4. Convert to GGUF fp16 (lossless, large)
+python convert_hf_to_gguf.py ./my-model-hf \
+  --outfile ./my-model-f16.gguf \
+  --outtype f16
+
+# 5. Quantize to Q4_K_M (recommended)
+./llama-quantize ./my-model-f16.gguf ./my-model-q4_k_m.gguf Q4_K_M
+
+# 6. Also create Q8_0 for higher quality users
+./llama-quantize ./my-model-f16.gguf ./my-model-q8_0.gguf Q8_0
+
+# 7. Test it runs correctly
+./llama-cli -m ./my-model-q4_k_m.gguf \
+  -p "What is a transformer model?" \
+  -n 200 --temp 0.7
+
+# 8. Run as API server
+./llama-server -m ./my-model-q4_k_m.gguf \
+  --host 0.0.0.0 --port 8080 --ctx-size 4096</pre>
+</div>
+
+<h3>GGUF Quantization Levels Explained</h3>
+
+<div style="overflow-x:auto;margin:20px 0">
+<table class="comparison-table">
+  <thead>
+    <tr>
+      <th>Format</th><th>Bits/weight</th><th>7B Size</th><th>Quality vs fp16</th><th>Use case</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr><td>F16</td><td>16</td><td>13.5 GB</td><td>100% (reference)</td><td>Baseline for conversion</td></tr>
+    <tr><td>Q8_0</td><td>8</td><td>7.2 GB</td><td>~99.5%</td><td>Maximum quality, GPU with 8GB+</td></tr>
+    <tr><td>Q6_K</td><td>6</td><td>5.5 GB</td><td>~99%</td><td>High quality, 6GB GPU</td></tr>
+    <tr><td><strong>Q5_K_M</strong></td><td>5</td><td>4.8 GB</td><td>~98%</td><td>Quality-focused, 6GB GPU</td></tr>
+    <tr><td><strong>Q4_K_M</strong></td><td>4</td><td>4.1 GB</td><td>~97%</td><td>✅ Sweet spot — recommended default</td></tr>
+    <tr><td>Q4_K_S</td><td>4</td><td>3.9 GB</td><td>~96%</td><td>Slightly smaller than Q4_K_M</td></tr>
+    <tr><td>Q3_K_M</td><td>3</td><td>3.3 GB</td><td>~93%</td><td>Tight VRAM, acceptable quality</td></tr>
+    <tr><td>Q2_K</td><td>2</td><td>2.6 GB</td><td>~85%</td><td>Extreme size constraint only</td></tr>
+  </tbody>
+</table>
+</div>
+
+<div class="callout callout-warning">
+  <strong>K-quants explained:</strong> The <code>K</code> in Q4_K_M refers to "k-quants" — a smarter quantization scheme that uses different precision for different layers. Attention layers get slightly higher precision than MLP layers. The <code>M</code> means "medium" (vs S=small, L=large) and refers to how many layers get the higher precision. K-quants are always better than non-K equivalents at the same file size.
+</div>
+
+<h3>Upload GGUF to HuggingFace</h3>
+
+<div class="code-block">
+  <div class="code-block-header"><span class="code-lang">python</span><button class="code-copy-btn">Copy</button></div>
+  <pre">from huggingface_hub import HfApi, upload_file
+
+api = HfApi()
+repo_id = "your-username/your-model-GGUF"
+
+# Create the repo
+api.create_repo(repo_id=repo_id, repo_type="model", exist_ok=True)
+
+# Upload GGUF files
+for filename in ["my-model-q4_k_m.gguf", "my-model-q8_0.gguf", "my-model-f16.gguf"]:
+    upload_file(
+        path_or_fileobj=f"./{filename}",
+        path_in_repo=filename,
+        repo_id=repo_id,
+        commit_message=f"Add {filename}"
+    )
+    print(f"Uploaded {filename}")
+
+# Write a README for the GGUF repo
+readme = """---
+license: apache-2.0
+tags:
+- gguf
+- quantized
+- llama
+---
+
+# Your Model — GGUF Versions
+
+Quantized versions of [your-username/your-model](https://huggingface.co/your-username/your-model).
+
+## Available Files
+
+| File | Quant | Size | Quality |
+|------|-------|------|---------|
+| `my-model-q4_k_m.gguf` | Q4_K_M | 4.1 GB | ⭐⭐⭐⭐ Recommended |
+| `my-model-q5_k_m.gguf` | Q5_K_M | 4.8 GB | ⭐⭐⭐⭐⭐ |
+| `my-model-q8_0.gguf`   | Q8_0   | 7.2 GB | ⭐⭐⭐⭐⭐ Max quality |
+
+## Run with Ollama
+
+```bash
+ollama run hf.co/your-username/your-model-GGUF:q4_k_m
+```
+
+## Run with llama.cpp
+
+```bash
+./llama-cli -m my-model-q4_k_m.gguf -p "Your prompt here" -n 200
+```
+"""
+
+api.upload_file(
+    path_or_fileobj=readme.encode(),
+    path_in_repo="README.md",
+    repo_id=repo_id
+)
+print("README uploaded.")</pre>
+</div>
+
+<h2 id="gptq">GPTQ — GPU-Optimized Quantization</h2>
+
+<p>GPTQ uses a calibration dataset to find optimal quantization points layer by layer. It's more accurate than basic INT4 quantization and runs natively on NVIDIA GPUs using ExLlamaV2.</p>
+
+<div class="code-block">
+  <div class="code-block-header"><span class="code-lang">bash</span><button class="code-copy-btn">Copy</button></div>
+  <pre># Install AutoGPTQ
+pip install auto-gptq optimum</pre>
+</div>
+
+<div class="code-block">
+  <div class="code-block-header"><span class="code-lang">python</span><button class="code-copy-btn">Copy</button></div>
+  <pre"># gptq_quantize.py
+from auto_gptq import AutoGPTQForCausalLM, BaseQuantizeConfig
+from transformers import AutoTokenizer
+from datasets import load_dataset
+
+MODEL_PATH = "your-username/your-model"
+OUTPUT_PATH = "./your-model-gptq-4bit"
+
+# 1. Load tokenizer
+tokenizer = AutoTokenizer.from_pretrained(MODEL_PATH)
+
+# 2. Prepare calibration dataset
+# Use ~128 representative samples from your domain
+def get_calibration_data(n_samples=128):
+    dataset = load_dataset("wikitext", "wikitext-2-raw-v1", split="train")
+    samples = []
+    for text in dataset["text"]:
+        if len(text.strip()) > 50:
+            tokens = tokenizer(
+                text, return_tensors="pt",
+                max_length=512, truncation=True
+            )
+            samples.append(tokens["input_ids"])
+        if len(samples) >= n_samples:
+            break
+    return samples
+
+calibration_data = get_calibration_data()
+
+# 3. Configure quantization
+quant_config = BaseQuantizeConfig(
+    bits=4,              # 4-bit quantization
+    group_size=128,      # group size — 128 is standard
+    damp_percent=0.01,   # dampening factor for numerical stability
+    desc_act=False,      # activation ordering — False for faster inference
+)
+
+# 4. Load model and quantize
+model = AutoGPTQForCausalLM.from_pretrained(
+    MODEL_PATH,
+    quant_config,
+    device_map="auto"
+)
+
+# This takes 5–30 mins depending on model size
+model.quantize(calibration_data)
+
+# 5. Save quantized model
+model.save_quantized(OUTPUT_PATH, use_safetensors=True)
+tokenizer.save_pretrained(OUTPUT_PATH)
+
+# 6. Push to HuggingFace
+model.push_to_hub("your-username/your-model-GPTQ", use_safetensors=True)
+tokenizer.push_to_hub("your-username/your-model-GPTQ")
+
+print("GPTQ quantization complete!")</pre>
+</div>
+
+<h2 id="awq">AWQ — Best Quality at 4-bit</h2>
+
+<p>AWQ (Activation-Aware Weight Quantization) identifies which weights are most important by looking at activation magnitudes, then protects those weights with higher precision. This produces better quality than GPTQ at the same 4-bit level and is the preferred format for vLLM production serving.</p>
+
+<div class="code-block">
+  <div class="code-block-header"><span class="code-lang">bash</span><button class="code-copy-btn">Copy</button></div>
+  <pre>pip install autoawq autoawq_kernels</pre>
+</div>
+
+<div class="code-block">
+  <div class="code-block-header"><span class="code-lang">python</span><button class="code-copy-btn">Copy</button></div>
+  <pre"># awq_quantize.py
+from awq import AutoAWQForCausalLM
+from transformers import AutoTokenizer
+
+MODEL_PATH  = "your-username/your-model"
+OUTPUT_PATH = "./your-model-awq-4bit"
+
+# 1. Load model and tokenizer
+model     = AutoAWQForCausalLM.from_pretrained(MODEL_PATH, device_map="auto")
+tokenizer = AutoTokenizer.from_pretrained(MODEL_PATH, trust_remote_code=True)
+
+# 2. AWQ quantization config
+quant_config = {
+    "zero_point": True,   # Zero-point quantization
+    "q_group_size": 128,  # Group size
+    "w_bit": 4,           # 4-bit weights
+    "version": "GEMM"     # GEMM kernel (use GEMV for batch size 1)
+}
+
+# 3. Quantize (runs calibration automatically)
+# Uses MIT's PILE calibration dataset by default
+model.quantize(tokenizer, quant_config=quant_config)
+
+# 4. Save
+model.save_quantized(OUTPUT_PATH)
+tokenizer.save_pretrained(OUTPUT_PATH)
+
+# 5. Push to hub
+model.push_to_hub("your-username/your-model-AWQ")
+tokenizer.push_to_hub("your-username/your-model-AWQ")
+
+print("AWQ quantization complete!")
+
+# --- Test it ---
+from awq import AutoAWQForCausalLM
+model     = AutoAWQForCausalLM.from_quantized(OUTPUT_PATH, fuse_layers=True)
+tokenizer = AutoTokenizer.from_pretrained(OUTPUT_PATH)
+
+inputs  = tokenizer("What is quantization?", return_tensors="pt").to("cuda")
+outputs = model.generate(**inputs, max_new_tokens=100)
+print(tokenizer.decode(outputs[0], skip_special_tokens=True))</pre>
+</div>
+
+<h2 id="decision-guide">Which Format Should You Use?</h2>
+
+<div class="code-block" style="background:#1E2433;border-radius:12px;padding:24px;margin:24px 0;color:#E2E8F0;font-family:monospace;font-size:13px;line-height:2">
+<pre>
+Where will the model run?
+│
+├── On my laptop / desktop (no dedicated GPU)
+│   └── GGUF Q4_K_M  →  run with Ollama or llama.cpp
+│
+├── On my laptop with GPU (RTX 3080, M1/M2 Mac)
+│   ├── Want best speed?  →  GGUF Q4_K_M via Ollama
+│   └── Want best quality? →  GGUF Q5_K_M or Q8_0
+│
+├── On a server (production API)
+│   ├── Need OpenAI-compatible API at scale?
+│   │   └── AWQ 4-bit  +  vLLM  (best throughput)
+│   ├── Running on consumer GPU (RTX 3090/4090)?
+│   │   └── GPTQ 4-bit  +  ExLlamaV2
+│   └── Flexibility / compatibility?
+│       └── GGUF Q4_K_M  +  llama-server
+│
+├── In mobile / embedded device
+│   └── GGUF Q4_K_M or Q3_K_M (extreme size constraint)
+│
+└── Publishing for others to download
+    └── Publish ALL: fp16 + GGUF Q4_K_M + GGUF Q8_0 + AWQ
+        (different users have different needs)
+</pre>
+</div>
+
+<h2 id="benchmark">Quantization Benchmark — Real Numbers</h2>
+
+<p>These benchmarks use Llama 3.2-3B on an RTX 4080 (16GB VRAM) with HellaSwag accuracy and tokens/second throughput:</p>
+
+<div style="overflow-x:auto;margin:24px 0">
+<table class="comparison-table">
+  <thead>
+    <tr><th>Format</th><th>Size</th><th>VRAM</th><th>HellaSwag</th><th>Tokens/sec</th><th>Notes</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>fp16 (baseline)</td><td>6.4 GB</td><td>7.2 GB</td><td>79.2%</td><td>85</td><td>Reference</td></tr>
+    <tr><td>Q8_0 GGUF</td><td>3.4 GB</td><td>4.1 GB</td><td>79.1%</td><td>102</td><td>Near-lossless</td></tr>
+    <tr><td>Q5_K_M GGUF</td><td>2.2 GB</td><td>3.0 GB</td><td>78.8%</td><td>118</td><td>Excellent quality</td></tr>
+    <tr><td><strong>Q4_K_M GGUF</strong></td><td><strong>1.9 GB</strong></td><td><strong>2.6 GB</strong></td><td><strong>78.4%</strong></td><td><strong>138</strong></td><td><strong>✅ Recommended</strong></td></tr>
+    <tr><td>Q3_K_M GGUF</td><td>1.5 GB</td><td>2.2 GB</td><td>76.1%</td><td>155</td><td>Noticeable loss</td></tr>
+    <tr><td>AWQ 4-bit</td><td>1.9 GB</td><td>2.5 GB</td><td>78.6%</td><td>210*</td><td>*GPU kernel — faster</td></tr>
+    <tr><td>GPTQ 4-bit</td><td>1.9 GB</td><td>2.6 GB</td><td>78.3%</td><td>195*</td><td>*GPU kernel</td></tr>
+  </tbody>
+</table>
+</div>
+
+<h2 id="unsloth-export">Export GGUF Directly from Unsloth</h2>
+
+<p>If you fine-tuned with Unsloth, you can export directly to GGUF without installing llama.cpp separately:</p>
+
+<div class="code-block">
+  <div class="code-block-header"><span class="code-lang">python</span><button class="code-copy-btn">Copy</button></div>
+  <pre># After fine-tuning with Unsloth (in the same Colab notebook)
+
+# Export multiple quantization levels at once
+model.save_pretrained_gguf(
+    "my-model",
+    tokenizer,
+    quantization_method="q4_k_m"   # single level
+)
+
+# Or push multiple to Hub in one call
+model.push_to_hub_gguf(
+    "your-username/your-model-GGUF",
+    tokenizer,
+    quantization_method=["q4_k_m", "q5_k_m", "q8_0"],
+    token="hf_..."
+)
+
+# Test locally with Ollama (after ollama pull)
+# Ollama can load GGUF directly from HuggingFace:
+# ollama run hf.co/your-username/your-model-GGUF:q4_k_m</pre>
+</div>
+
+<h2 id="common-mistakes">Common Mistakes</h2>
+
+<div class="callout callout-warning">
+  <ul style="margin:0;padding-left:20px;line-height:2">
+    <li><strong>Quantizing without testing</strong> — Always run your eval suite after quantizing. Some models degrade more than expected at Q4.</li>
+    <li><strong>Using Q2 or Q3 for production</strong> — Below Q4, quality loss is noticeable in longer conversations. Q4_K_M is the floor for production use.</li>
+    <li><strong>Forgetting to convert the tokenizer</strong> — GGUF conversion includes the tokenizer, but GPTQ/AWQ repos need the tokenizer uploaded separately.</li>
+    <li><strong>Publishing only one quant level</strong> — Publish at least Q4_K_M and Q8_0. Users have different hardware. Multiple quants = more downloads.</li>
+    <li><strong>Using GPTQ on CPU</strong> — GPTQ requires CUDA. For CPU inference, use GGUF.</li>
+  </ul>
+</div>
+
+<h2 id="interview-questions">Interview Questions</h2>
+
+<div class="faq-list">
+  <div class="faq-item">
+    <button class="faq-q">What is the difference between GGUF Q4_K_M and Q4_K_S?</button>
+    <div class="faq-a"><p>Both use 4-bit quantization. The difference is which layers get "mixed" precision. Q4_K_M (Medium) keeps more layers at slightly higher precision — specifically the attention projection layers. Q4_K_S (Small) is more aggressive. Q4_K_M is about 5% larger in file size but noticeably better in quality, especially on complex reasoning tasks.</p></div>
+  </div>
+  <div class="faq-item">
+    <button class="faq-q">Why does AWQ often outperform GPTQ at the same bit-width?</button>
+    <div class="faq-a"><p>GPTQ quantizes weights layer by layer to minimize reconstruction error without considering activation patterns. AWQ looks at which weights are activated most frequently during inference (using a calibration set) and protects those weights with higher precision. Since a small fraction of weights are responsible for most output quality, protecting the right ones produces better results.</p></div>
+  </div>
+  <div class="faq-item">
+    <button class="faq-q">What is group_size in GPTQ and AWQ?</button>
+    <div class="faq-a"><p>Instead of quantizing all weights with a single scale factor, group quantization divides weights into groups (typically 128) and computes a separate scale factor per group. This preserves more information at the cost of slightly more overhead. Smaller group sizes = better quality but larger file. Group size 128 is the standard tradeoff.</p></div>
+  </div>
+  <div class="faq-item">
+    <button class="faq-q">Can you quantize an already-fine-tuned model?</button>
+    <div class="faq-a"><p>Yes, and this is the standard workflow: (1) fine-tune to get the merged fp16 model, (2) quantize the merged model. Quantization is a post-training step applied to the final merged weights. Never quantize during fine-tuning — QLoRA loading in 4-bit is for memory efficiency during training, not permanent quantization.</p></div>
+  </div>
+</div>
+
+<h2 id="next-steps">Next Steps</h2>
+<div class="card-grid-2" style="margin:24px 0">
+  <a href="../inference/ollama.html" class="doc-card">
+    <div class="doc-card-icon">🦙</div>
+    <div class="doc-card-title">Run GGUF with Ollama</div>
+    <div class="doc-card-desc">Load your quantized GGUF model locally in seconds.</div>
+    <div class="doc-card-footer">Ollama Guide →</div>
+  </a>
+  <a href="../inference/vllm.html" class="doc-card">
+    <div class="doc-card-icon">⚡</div>
+    <div class="doc-card-title">Serve AWQ with vLLM</div>
+    <div class="doc-card-desc">Production inference with high throughput and OpenAI-compatible API.</div>
+    <div class="doc-card-footer">vLLM Guide →</div>
+  </a>
+  <a href="../publishing/" class="doc-card">
+    <div class="doc-card-icon">📤</div>
+    <div class="doc-card-title">Publishing Guide</div>
+    <div class="doc-card-desc">Publish your quantized models on HuggingFace and SLM Marketplace.</div>
+    <div class="doc-card-footer">Publishing →</div>
+  </a>
+  <a href="../costs/" class="doc-card">
+    <div class="doc-card-icon">💰</div>
+    <div class="doc-card-title">Cost Guide</div>
+    <div class="doc-card-desc">How much does it cost to run a quantized model vs cloud APIs?</div>
+    <div class="doc-card-footer">Costs →</div>
+  </a>
+</div>
+
+</main>
+<aside class="docs-toc" aria-label="On this page">
+  <div class="toc-title">On this page</div>
+  <a href="#what-is-quantization" class="toc-link">What Is Quantization?</a>
+  <a href="#quantization-methods" class="toc-link">The Three Methods</a>
+  <a href="#gguf" class="toc-link">GGUF (llama.cpp)</a>
+  <a href="#gptq" class="toc-link">GPTQ</a>
+  <a href="#awq" class="toc-link">AWQ</a>
+  <a href="#decision-guide" class="toc-link">Which Format to Use?</a>
+  <a href="#benchmark" class="toc-link">Real Benchmarks</a>
+  <a href="#unsloth-export" class="toc-link">Export from Unsloth</a>
+  <a href="#common-mistakes" class="toc-link">Common Mistakes</a>
+  <a href="#interview-questions" class="toc-link">Interview Questions</a>
+  <a href="#next-steps" class="toc-link">Next Steps</a>
+</aside>
+</div>
+<script src="../../docs/docs.js"></script>
+</body>
+</html>

@@ -1,0 +1,1329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>6-Month SLM Learning Roadmap — Beginner to AI Engineer — SLM Marketplace Docs</title>
+<meta name="description" content="The complete 6-month day-by-day roadmap to go from zero to publishing Small Language Models. Python, PyTorch, fine-tuning, RAG, deployment and more.">
+<link rel="canonical" href="https://slm-market.sannan.app/docs/roadmap/">
+<link rel="icon" type="image/svg+xml" href="../../assets/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" media="print" onload="this.media='all'" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"></noscript>
+<style>
+#reading-progress-wrap{position:fixed;top:60px;left:0;right:0;height:2px;z-index:199}
+#reading-progress{height:2px;background:#F97316;width:0;transition:width .1s}
+</style>
+<link rel="stylesheet" href="../../docs/docs.css">
+<style>
+/* Roadmap-specific styles */
+.month-block{margin:0 0 56px}
+.month-header{background:linear-gradient(135deg,#1E2433,#2D3748);color:white;padding:24px 28px;border-radius:12px 12px 0 0;margin-bottom:0}
+.month-title{font-size:22px;font-weight:800;margin:0 0 4px}
+.month-subtitle{font-size:13px;opacity:.7;margin:0}
+.month-theme{display:inline-block;background:rgba(249,115,22,.25);color:#F97316;font-size:11px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;padding:3px 10px;border-radius:20px;margin-top:10px}
+.week-block{border:1px solid var(--border,#E5E7EB);border-top:none;padding:24px 28px}
+.week-block:last-child{border-radius:0 0 12px 12px}
+.week-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--orange,#F97316);margin-bottom:12px}
+.week-title{font-size:17px;font-weight:700;color:var(--text,#111827);margin-bottom:4px}
+.week-desc{font-size:13px;color:var(--text-3,#6B7280);margin-bottom:16px;line-height:1.6}
+.day-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px;margin-bottom:20px}
+.day-card{background:var(--bg-2,#F9FAFB);border:1px solid var(--border,#E5E7EB);border-radius:10px;padding:14px 16px}
+.day-number{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--orange,#F97316);margin-bottom:6px}
+.day-topic{font-size:13px;font-weight:600;color:var(--text,#111827);margin-bottom:4px}
+.day-detail{font-size:12px;color:var(--text-3,#6B7280);line-height:1.5}
+.resources-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+.resource-tag{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:600;padding:4px 10px;border-radius:20px;text-decoration:none;border:1px solid}
+.resource-tag-gh{background:#F0FDF4;color:#166534;border-color:#86EFAC}
+.resource-tag-hf{background:#FFF7ED;color:#9A3412;border-color:#FDBA74}
+.resource-tag-paper{background:#EFF6FF;color:#1E40AF;border-color:#93C5FD}
+.resource-tag-video{background:#FEF3C7;color:#92400E;border-color:#FCD34D}
+.resource-tag-tool{background:#F5F3FF;color:#5B21B6;border-color:#C4B5FD}
+.mini-project{background:linear-gradient(135deg,#FFF7ED,#FFFBEB);border:1px solid #FED7AA;border-radius:10px;padding:16px 20px;margin-top:16px}
+.mini-project-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:#F97316;margin-bottom:6px}
+.mini-project-title{font-size:14px;font-weight:700;color:#111827;margin-bottom:4px}
+.mini-project-desc{font-size:12px;color:#6B7280;line-height:1.5}
+.deliverables{background:#F0FDF4;border:1px solid #86EFAC;border-radius:10px;padding:16px 20px;margin-top:12px}
+.deliverables-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:#166534;margin-bottom:8px}
+.deliverable-item{font-size:12px;color:#374151;padding:3px 0;display:flex;align-items:flex-start;gap:8px}
+.deliverable-item::before{content:"✓";color:#16A34A;font-weight:700;flex-shrink:0}
+.mistakes-block{background:#FEF2F2;border:1px solid #FECACA;border-radius:10px;padding:14px 18px;margin-top:12px}
+.mistakes-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:#991B1B;margin-bottom:8px}
+.mistake-item{font-size:12px;color:#374151;padding:2px 0;display:flex;align-items:flex-start;gap:8px}
+.mistake-item::before{content:"⚠";flex-shrink:0}
+.milestone-bar{background:linear-gradient(135deg,#1E2433,#374151);color:white;border-radius:12px;padding:20px 24px;margin:24px 0;display:flex;align-items:center;gap:16px}
+.milestone-emoji{font-size:28px}
+.milestone-text{font-size:15px;font-weight:700}
+.milestone-sub{font-size:12px;opacity:.7;margin-top:2px}
+@media(max-width:640px){.day-grid{grid-template-columns:1fr}.week-block{padding:16px 18px}}
+</style>
+</head>
+<body>
+<div id="reading-progress-wrap"><div id="reading-progress"></div></div>
+
+<header class="docs-header">
+  <div class="docs-header-inner">
+    <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="Open menu">
+      <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+    </button>
+    <a href="../../index.html" class="docs-logo">
+      <span class="docs-logo-slm">SLM</span><span class="docs-logo-name">Marketplace</span>
+      <span class="docs-logo-sep">/</span><span class="docs-logo-docs">Docs</span>
+    </a>
+    <div class="docs-header-search">
+      <svg class="search-icon-wrap" width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input type="search" id="docs-search" placeholder="Search docs… (Press /)" autocomplete="off" aria-label="Search documentation">
+      <div class="search-results" id="search-results" aria-live="polite"></div>
+    </div>
+    <nav class="docs-header-nav" aria-label="Site navigation">
+      <a href="../../explore.html">Explore Models</a>
+      <a href="../../upload.html">Upload Model</a>
+      <a href="../../auth.html" class="btn-cta">Sign Up Free</a>
+    </nav>
+  </div>
+</header>
+
+<div class="docs-layout">
+
+<nav class="docs-sidebar" id="docs-sidebar" aria-label="Documentation navigation">
+  <div class="nav-section"><div class="nav-section-title">Getting Started</div>
+    <a href="../../docs/getting-started/" class="nav-link">🌐 Introduction to SLMs</a>
+  </div>
+  <div class="nav-section"><div class="nav-section-title">Roadmap</div>
+    <a href="../../docs/roadmap/" class="nav-link active" aria-current="page">🗺️ 6-Month Roadmap</a>
+  </div>
+  <div class="nav-section"><div class="nav-section-title">Setup</div>
+    <a href="../../docs/setup/" class="nav-link">⚙️ Environment Setup</a>
+    <a href="../../docs/setup/colab.html" class="nav-link" style="padding-left:24px;font-size:12px">☁️ Google Colab</a>
+    <a href="../../docs/setup/gpu-guide.html" class="nav-link" style="padding-left:24px;font-size:12px">🎮 GPU Guide</a>
+  </div>
+  <div class="nav-section"><div class="nav-section-title">Foundations</div>
+    <a href="../../docs/foundations/" class="nav-link">🔬 AI Foundations</a>
+  </div>
+  <div class="nav-section"><div class="nav-section-title">Tutorial</div>
+    <a href="../../docs/tutorials/" class="nav-link" style="color:var(--orange);font-weight:600">
+      <span class="nav-badge nav-badge-new" style="margin-right:4px">NEW</span>Build First SLM
+    </a>
+  </div>
+  <div class="nav-section"><div class="nav-section-title">Academies</div>
+    <a href="../../docs/fine-tuning/" class="nav-link">⚡ Fine-Tuning</a>
+    <a href="../../docs/fine-tuning/qlora.html" class="nav-link" style="padding-left:24px;font-size:12px">QLoRA</a>
+    <a href="../../docs/datasets/" class="nav-link">📦 Datasets</a>
+    <a href="../../docs/evaluation/" class="nav-link">📊 Evaluation</a>
+    <a href="../../docs/quantization/" class="nav-link">💾 Quantization</a>
+    <a href="../../docs/inference/" class="nav-link">🚀 Inference</a>
+    <a href="../../docs/inference/ollama.html" class="nav-link" style="padding-left:24px;font-size:12px">🦙 Ollama</a>
+    <a href="../../docs/inference/vllm.html" class="nav-link" style="padding-left:24px;font-size:12px">vLLM</a>
+    <a href="../../docs/deployment/" class="nav-link">☁️ Deployment</a>
+    <a href="../../docs/rag/" class="nav-link">🔍 RAG</a>
+  </div>
+  <div class="nav-section"><div class="nav-section-title">Projects</div>
+    <a href="../../docs/projects/" class="nav-link">🏗️ All Projects</a>
+  </div>
+  <div class="nav-section"><div class="nav-section-title">Reference</div>
+    <a href="../../docs/hardware/" class="nav-link">🎮 Hardware Guide</a>
+    <a href="../../docs/costs/" class="nav-link">💰 Cost Guide</a>
+    <a href="../../docs/publishing/" class="nav-link">📤 Publishing Guide</a>
+    <a href="../../docs/best-practices/" class="nav-link">🛡️ Best Practices</a>
+    <a href="../../docs/troubleshooting/" class="nav-link">🔴 Troubleshooting</a>
+  </div>
+</nav>
+
+<main class="docs-content" id="main-content">
+
+<div class="breadcrumb"><a href="../../docs/">Docs</a> &rsaquo; <span>Learning Roadmap</span></div>
+
+<div class="page-hero">
+  <div class="page-label">🗺️ 6-Month Roadmap</div>
+  <h1 class="page-title">Zero to SLM Engineer in 6 Months</h1>
+  <p class="page-desc">A realistic, day-by-day curriculum from absolute beginner to published AI engineer. Every week has learning objectives, exercises, a mini-project, and free resources.</p>
+  <div class="page-meta">
+    <span class="page-meta-item">⏱ 1–2 hours per day</span>
+    <span class="page-meta-item">🆓 100% free resources</span>
+    <span class="page-meta-item">💻 Hands-on from Day 1</span>
+    <span class="page-meta-item">🏆 Publish by Month 6</span>
+  </div>
+</div>
+
+<div class="callout callout-info" style="margin-bottom:32px">
+  <strong>How to use this roadmap:</strong> Follow the months in order. Each day is 1–2 hours. Skip days you already know. The mini-projects build on each other — by Month 6 you have a complete, published SLM.
+</div>
+
+<hr class="page-divider">
+
+<!-- ═══════════════════════════════════════════════════
+     MONTH 1: FOUNDATIONS
+══════════════════════════════════════════════════════ -->
+<div class="month-block" id="month-1">
+
+<div class="month-header">
+  <div class="month-title">Month 1 — Foundations &amp; First Steps</div>
+  <div class="month-subtitle">Goal: Understand AI/ML fundamentals and run your first SLM locally</div>
+  <span class="month-theme">Python · Linux · Git · Math Basics · Run Ollama</span>
+</div>
+
+<!-- Week 1 -->
+<div class="week-block" id="m1w1">
+  <div class="week-label">Month 1 · Week 1</div>
+  <div class="week-title">Python &amp; Linux Fundamentals</div>
+  <div class="week-desc">Before you touch AI, you need the tools. Python is the language of AI. Linux is where models run in production. Git tracks your work. This week sets the foundation everything else builds on.</div>
+
+  <div class="day-grid">
+    <div class="day-card">
+      <div class="day-number">Day 1</div>
+      <div class="day-topic">Python Environment Setup</div>
+      <div class="day-detail">Install Python 3.11+. Learn pip, virtual environments, and Jupyter notebooks. Run your first Python script.</div>
+    </div>
+    <div class="day-card">
+      <div class="day-number">Day 2</div>
+      <div class="day-topic">Python Basics I — Variables, Types, Control Flow</div>
+      <div class="day-detail">Integers, floats, strings, booleans. if/else, for loops, while loops. List comprehensions.</div>
+    </div>
+    <div class="day-card">
+      <div class="day-number">Day 3</div>
+      <div class="day-topic">Python Basics II — Functions &amp; Modules</div>
+      <div class="day-detail">def, args, kwargs, return values. Import standard library modules. Write reusable functions.</div>
+    </div>
+    <div class="day-card">
+      <div class="day-number">Day 4</div>
+      <div class="day-topic">Python Basics III — Files, JSON, Error Handling</div>
+      <div class="day-detail">Read/write files. Parse JSON. try/except. This is how you load training datasets.</div>
+    </div>
+    <div class="day-card">
+      <div class="day-number">Day 5</div>
+      <div class="day-topic">Linux Command Line</div>
+      <div class="day-detail">cd, ls, mkdir, cp, mv, rm, cat, grep, curl, wget, ps, kill. SSH basics. Why this matters for servers.</div>
+    </div>
+    <div class="day-card">
+      <div class="day-number">Day 6</div>
+      <div class="day-topic">Git &amp; GitHub</div>
+      <div class="day-detail">init, add, commit, push, pull, branch, merge. Create a GitHub account. Push your first repo.</div>
+    </div>
+    <div class="day-card">
+      <div class="day-number">Day 7</div>
+      <div class="day-topic">Review + Practice</div>
+      <div class="day-detail">Solve 10 Python exercises on HackerRank. Commit every solution to GitHub. Set up VS Code with Python extension.</div>
+    </div>
+  </div>
+
+  <div class="resources-row">
+    <a href="https://docs.python.org/3/tutorial/" class="resource-tag resource-tag-tool" target="_blank" rel="noopener">📘 Python Official Tutorial</a>
+    <a href="https://missing.csail.mit.edu/" class="resource-tag resource-tag-video" target="_blank" rel="noopener">🎓 MIT Missing Semester (Linux/Git)</a>
+    <a href="https://www.hackerrank.com/domains/python" class="resource-tag resource-tag-tool" target="_blank" rel="noopener">💻 HackerRank Python</a>
+    <a href="https://learngitbranching.js.org/" class="resource-tag resource-tag-tool" target="_blank" rel="noopener">🌿 Learn Git Branching (visual)</a>
+  </div>
+
+  <div class="mini-project">
+    <div class="mini-project-label">🏗️ Week 1 Mini-Project</div>
+    <div class="mini-project-title">JSON Dataset Explorer</div>
+    <div class="mini-project-desc">Write a Python script that reads a JSON file of text samples, counts tokens (split by spaces), prints statistics (total samples, avg length, max length), and writes a summary to a new file. Commit to GitHub.</div>
+  </div>
+
+  <div class="deliverables">
+    <div class="deliverables-label">Week 1 Deliverables</div>
+    <div class="deliverable-item">Python 3.11 installed with virtual environment</div>
+    <div class="deliverable-item">GitHub account with first repo pushed</div>
+    <div class="deliverable-item">JSON Dataset Explorer script committed</div>
+    <div class="deliverable-item">Comfortable with basic Linux commands</div>
+  </div>
+
+  <div class="mistakes-block">
+    <div class="mistakes-label">Common Mistakes This Week</div>
+    <div class="mistake-item">Using Python 2 (it's dead — use 3.11+)</div>
+    <div class="mistake-item">Not using virtual environments — causes package conflicts</div>
+    <div class="mistake-item">Committing to git only at the end of the week, not daily</div>
+  </div>
+</div>
+
+<!-- Week 2 -->
+<div class="week-block" id="m1w2">
+  <div class="week-label">Month 1 · Week 2</div>
+  <div class="week-title">NumPy, Math Foundations &amp; Your First Neural Network</div>
+  <div class="week-desc">Machine learning is applied linear algebra and statistics. You don't need to become a mathematician — you need enough intuition to understand what PyTorch is doing under the hood.</div>
+
+  <div class="day-grid">
+    <div class="day-card">
+      <div class="day-number">Day 8</div>
+      <div class="day-topic">Linear Algebra Intuition</div>
+      <div class="day-detail">Vectors, matrices, dot products, matrix multiplication. Why these power neural networks. Visual explanations.</div>
+    </div>
+    <div class="day-card">
+      <div class="day-number">Day 9</div>
+      <div class="day-topic">NumPy Crash Course</div>
+      <div class="day-detail">Arrays, shapes, indexing, broadcasting. np.dot, np.mean, np.std. This is the foundation of all ML code.</div>
+    </div>
+    <div class="day-card">
+      <div class="day-number">Day 10</div>
+      <div class="day-topic">Statistics Basics</div>
+      <div class="day-detail">Mean, variance, distributions, probability. Loss functions explained. Why cross-entropy makes sense.</div>
+    </div>
+    <div class="day-card">
+      <div class="day-number">Day 11</div>
+      <div class="day-topic">What is a Neural Network?</div>
+      <div class="day-detail">Weights, biases, activation functions, forward pass. Build a tiny 3-neuron network from scratch in NumPy.</div>
+    </div>
+    <div class="day-card">
+      <div class="day-number">Day 12</div>
+      <div class="day-topic">Gradient Descent &amp; Backpropagation</div>
+      <div class="day-detail">How neural networks learn. Gradients, learning rate, weight updates. Intuition without heavy calculus.</div>
+    </div>
+    <div class="day-card">
+      <div class="day-number">Day 13</div>
+      <div class="day-topic">PyTorch Introduction</div>
+      <div class="day-detail">Tensors vs NumPy arrays. autograd. Build your first linear model in PyTorch. Train it on toy data.</div>
+    </div>
+    <div class="day-card">
+      <div class="day-number">Day 14</div>
+      <div class="day-topic">Review + First PyTorch Model</div>
+      <div class="day-detail">Train a simple feedforward network to classify sentiment (positive/negative). Evaluate on a test set.</div>
+    </div>
+  </div>
+
+  <div class="resources-row">
+    <a href="https://www.3blue1brown.com/topics/neural-networks" class="resource-tag resource-tag-video" target="_blank" rel="noopener">🎬 3Blue1Brown Neural Networks</a>
+    <a href="https://numpy.org/doc/stable/user/quickstart.html" class="resource-tag resource-tag-tool" target="_blank" rel="noopener">📘 NumPy Quickstart</a>
+    <a href="https://pytorch.org/tutorials/beginner/basics/intro.html" class="resource-tag resource-tag-tool" target="_blank" rel="noopener">🔥 PyTorch Basics</a>
+    <a href="https://github.com/karpathy/micrograd" class="resource-tag resource-tag-gh" target="_blank" rel="noopener">⭐ karpathy/micrograd</a>
+  </div>
+
+  <div class="mini-project">
+    <div class="mini-project-label">🏗️ Week 2 Mini-Project</div>
+    <div class="mini-project-title">Tiny Sentiment Classifier</div>
+    <div class="mini-project-desc">Build a PyTorch model that classifies movie review sentences as positive or negative. Use bag-of-words features. Achieve >80% accuracy on the test set. Document your results in a README.</div>
+  </div>
+
+  <div class="deliverables">
+    <div class="deliverables-label">Week 2 Deliverables</div>
+    <div class="deliverable-item">NumPy fluency — shapes, broadcasting, matrix ops</div>
+    <div class="deliverable-item">PyTorch tensor operations and autograd understood</div>
+    <div class="deliverable-item">Sentiment classifier trained and committed to GitHub</div>
+  </div>
+</div>
+
+<!-- Week 3 -->
+<div class="week-block" id="m1w3">
+  <div class="week-label">Month 1 · Week 3</div>
+  <div class="week-title">How Language Models Work — Transformers &amp; Tokens</div>
+  <div class="week-desc">This is the most important conceptual week. If you understand transformers and tokenization, everything else — LoRA, fine-tuning, RAG — becomes obvious.</div>
+
+  <div class="day-grid">
+    <div class="day-card">
+      <div class="day-number">Day 15</div>
+      <div class="day-topic">What is a Language Model?</div>
+      <div class="day-detail">Next-token prediction. Probability distributions. How "the cat sat on the ___" becomes a model.</div>
+    </div>
+    <div class="day-card">
+      <div class="day-number">Day 16</div>
+      <div class="day-topic">Tokenization Deep Dive</div>
+      <div class="day-detail">BPE, WordPiece, SentencePiece. How words become numbers. Why "cat" and "cats" might be different tokens. Token count affects cost and context window.</div>
+    </div>
+    <div class="day-card">
+      <div class="day-number">Day 17</div>
+      <div class="day-topic">Embeddings</div>
+      <div class="day-detail">Word2Vec intuition. How embedding layers work. Cosine similarity. Why "king - man + woman ≈ queen" works.</div>
+    </div>
+    <div class="day-card">
+      <div class="day-number">Day 18</div>
+      <div class="day-topic">Attention Mechanism</div>
+      <div class="day-detail">Query, Key, Value. Self-attention. Why "it" in "the cat chased the dog because it was scared" needs context. Scaled dot-product attention formula.</div>
+    </div>
+    <div class="day-card">
+      <div class="day-number">Day 19</div>
+      <div class="day-topic">The Transformer Architecture</div>
+      <div class="day-detail">Encoder-decoder vs decoder-only. Multi-head attention. Feed-forward layers. Layer normalization. Positional encoding.</div>
+    </div>
+    <div class="day-card">
+      <div class="day-number">Day 20</div>
+      <div class="day-topic">SLMs vs LLMs — Why Size Matters</div>
+      <div class="day-detail">Parameter count and what it means. 1B vs 7B vs 70B. Why smaller can be better for specific tasks. Memory requirements.</div>
+    </div>
+    <div class="day-card">
+      <div class="day-number">Day 21</div>
+      <div class="day-topic">HuggingFace Transformers Library</div>
+      <div class="day-detail">AutoTokenizer, AutoModelForCausalLM. Load a model, tokenize text, generate. The pipeline() abstraction.</div>
+    </div>
+  </div>
+
+  <div class="resources-row">
+    <a href="https://jalammar.github.io/illustrated-transformer/" class="resource-tag resource-tag-paper" target="_blank" rel="noopener">📖 Illustrated Transformer (Jay Alammar)</a>
+    <a href="https://arxiv.org/abs/1706.03762" class="resource-tag resource-tag-paper" target="_blank" rel="noopener">📄 Attention Is All You Need (paper)</a>
+    <a href="https://github.com/karpathy/nanoGPT" class="resource-tag resource-tag-gh" target="_blank" rel="noopener">⭐ karpathy/nanoGPT</a>
+    <a href="https://huggingface.co/docs/transformers" class="resource-tag resource-tag-hf" target="_blank" rel="noopener">🤗 HuggingFace Transformers Docs</a>
+    <a href="https://bbycroft.net/llm" class="resource-tag resource-tag-video" target="_blank" rel="noopener">🎬 LLM Visualization (3D interactive)</a>
+  </div>
+
+  <div class="mini-project">
+    <div class="mini-project-label">🏗️ Week 3 Mini-Project</div>
+    <div class="mini-project-title">Tokenizer Explorer</div>
+    <div class="mini-project-desc">Write a script that loads GPT-2, Llama, and Mistral tokenizers. Compare how each tokenizes the same 10 sentences. Count tokens. Show which tokenizer is most efficient for code, for legal text, and for non-English text.</div>
+  </div>
+
+  <div class="deliverables">
+    <div class="deliverables-label">Week 3 Deliverables</div>
+    <div class="deliverable-item">Can explain attention mechanism to a non-technical person</div>
+    <div class="deliverable-item">Used HuggingFace to load a model and generate text</div>
+    <div class="deliverable-item">Tokenizer comparison notebook published on GitHub</div>
+  </div>
+</div>
+
+<!-- Week 4 -->
+<div class="week-block" id="m1w4">
+  <div class="week-label">Month 1 · Week 4</div>
+  <div class="week-title">Run SLMs Locally with Ollama &amp; Docker</div>
+  <div class="week-desc">Theory is done. This week you run real models. Ollama is the fastest way to get an SLM running locally. Docker ensures reproducibility when you move to servers.</div>
+
+  <div class="day-grid">
+    <div class="day-card">
+      <div class="day-number">Day 22</div>
+      <div class="day-topic">Install Ollama</div>
+      <div class="day-detail">Install on Mac/Linux/Windows. Run Llama 3.2-1B. Chat with it. Measure response time. Understand model files.</div>
+    </div>
+    <div class="day-card">
+      <div class="day-number">Day 23</div>
+      <div class="day-topic">Ollama API</div>
+      <div class="day-detail">REST API. POST /api/generate. Streaming responses. Call from Python with requests. Build a simple chatbot.</div>
+    </div>
+    <div class="day-card">
+      <div class="day-number">Day 24</div>
+      <div class="day-topic">Modelfile — Customize Any SLM</div>
+      <div class="day-detail">System prompt, temperature, context length. Create a custom Modelfile. Build a legal assistant on top of Llama.</div>
+    </div>
+    <div class="day-card">
+      <div class="day-number">Day 25</div>
+      <div class="day-topic">Docker Fundamentals</div>
+      <div class="day-detail">Images, containers, Dockerfile, docker-compose. Why Docker solves "it works on my machine." Run Ollama in Docker.</div>
+    </div>
+    <div class="day-card">
+      <div class="day-number">Day 26</div>
+      <div class="day-topic">Prompt Engineering Basics</div>
+      <div class="day-detail">Zero-shot, few-shot, chain-of-thought. System vs user messages. Temperature and top-p. Why prompts are the cheapest optimization.</div>
+    </div>
+    <div class="day-card">
+      <div class="day-number">Day 27</div>
+      <div class="day-topic">Compare SLMs Side by Side</div>
+      <div class="day-detail">Run Llama 3.2-1B, Phi-3-mini, Gemma-2-2B. Same prompts. Compare speed, accuracy, and quality for your target use case.</div>
+    </div>
+    <div class="day-card">
+      <div class="day-number">Day 28</div>
+      <div class="day-topic">Month 1 Review &amp; Portfolio</div>
+      <div class="day-detail">Write a blog post (even just a README) summarizing what you built. Update your GitHub profile. Share in an AI community.</div>
+    </div>
+  </div>
+
+  <div class="resources-row">
+    <a href="https://ollama.com/download" class="resource-tag resource-tag-tool" target="_blank" rel="noopener">🦙 Ollama Download</a>
+    <a href="https://docs.docker.com/get-started/" class="resource-tag resource-tag-tool" target="_blank" rel="noopener">🐳 Docker Getting Started</a>
+    <a href="https://www.promptingguide.ai/" class="resource-tag resource-tag-paper" target="_blank" rel="noopener">📖 Prompting Guide</a>
+    <a href="https://huggingface.co/microsoft/Phi-3-mini-4k-instruct" class="resource-tag resource-tag-hf" target="_blank" rel="noopener">🤗 Phi-3-mini on HuggingFace</a>
+  </div>
+
+  <div class="mini-project">
+    <div class="mini-project-label">🏗️ Month 1 Capstone Project</div>
+    <div class="mini-project-title">Domain-Specific Chatbot with Ollama</div>
+    <div class="mini-project-desc">Build a Python CLI chatbot for a domain you care about (legal, medical, coding). Use Ollama's API with a custom Modelfile. Include conversation history. Add response timing. Write a README with example conversations. Push to GitHub.</div>
+  </div>
+
+  <div class="deliverables">
+    <div class="deliverables-label">Month 1 Deliverables</div>
+    <div class="deliverable-item">GitHub with 4+ projects (Week 1–4 mini-projects)</div>
+    <div class="deliverable-item">Can run any Ollama model and call it from Python</div>
+    <div class="deliverable-item">Understand transformers, tokens, embeddings conceptually</div>
+    <div class="deliverable-item">Docker installed and can run containers</div>
+  </div>
+
+  <div class="milestone-bar">
+    <div class="milestone-emoji">🌱</div>
+    <div>
+      <div class="milestone-text">Month 1 Complete — Foundation Achieved</div>
+      <div class="milestone-sub">You can run any SLM locally and understand how they work</div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════
+     MONTH 2: PYTORCH + CUDA + DATASETS
+══════════════════════════════════════════════════════ -->
+<div class="month-block" id="month-2">
+
+<div class="month-header">
+  <div class="month-title">Month 2 — PyTorch Mastery, CUDA &amp; Datasets</div>
+  <div class="month-subtitle">Goal: Write real PyTorch training loops, use GPU, and build clean datasets</div>
+  <span class="month-theme">PyTorch · CUDA · Datasets · HuggingFace · Data Pipelines</span>
+</div>
+
+<!-- Week 5 -->
+<div class="week-block" id="m2w5">
+  <div class="week-label">Month 2 · Week 5</div>
+  <div class="week-title">PyTorch Deep Dive — Training Loops &amp; GPU</div>
+  <div class="week-desc">Most tutorials show you how to call a model. This week you learn how to train one. The training loop is the beating heart of every ML system.</div>
+
+  <div class="day-grid">
+    <div class="day-card">
+      <div class="day-number">Day 29</div>
+      <div class="day-topic">PyTorch Data Pipeline</div>
+      <div class="day-detail">Dataset, DataLoader, transforms. Batching, shuffling. Custom Dataset class. This is how training data flows into a model.</div>
+    </div>
+    <div class="day-card">
+      <div class="day-number">Day 30</div>
+      <div class="day-topic">Loss Functions &amp; Optimizers</div>
+      <div class="day-detail">CrossEntropyLoss, MSELoss. SGD, Adam, AdamW. Learning rate schedulers. Why AdamW is the default for transformers.</div>
+    </div>
+    <div class="day-card">
+      <div class="day-number">Day 31</div>
+      <div class="day-topic">The Training Loop</div>
+      <div class="day-detail">forward pass → loss → backward → optimizer.step(). zero_grad(). Gradient clipping. Evaluation loop. Save checkpoints.</div>
+    </div>
+    <div class="day-card">
+      <div class="day-number">Day 32</div>
+      <div class="day-topic">CUDA &amp; GPU Programming</div>
+      <div class="day-detail">CUDA basics. .to('cuda'). torch.cuda.is_available(). GPU memory management. Why VRAM is the bottleneck. nvidia-smi.</div>
+    </div>
+    <div class="day-card">
+      <div class="day-number">Day 33</div>
+      <div class="day-topic">Mixed Precision Training</div>
+      <div class="day-detail">fp16 vs bf16 vs fp32. torch.cuda.amp. Why training in fp16 uses half the VRAM. GradScaler to prevent underflow.</div>
+    </div>
+    <div class="day-card">
+      <div class="day-number">Day 34</div>
+      <div class="day-topic">Debugging PyTorch</div>
+      <div class="day-detail">NaN loss. Shape mismatches. CUDA OOM errors. Common failure modes and how to fix each one.</div>
+    </div>
+    <div class="day-card">
+      <div class="day-number">Day 35</div>
+      <div class="day-topic">Google Colab for Free GPU</div>
+      <div class="day-detail">T4 GPU on Colab. Mounting Google Drive. Saving checkpoints. Colab Pro vs free tier limits. When to use RunPod.</div>
+    </div>
+  </div>
+
+  <div class="resources-row">
+    <a href="https://pytorch.org/tutorials/beginner/blitz/cifar10_tutorial.html" class="resource-tag resource-tag-tool" target="_blank" rel="noopener">🔥 PyTorch 60-Minute Blitz</a>
+    <a href="https://colab.research.google.com" class="resource-tag resource-tag-tool" target="_blank" rel="noopener">☁️ Google Colab</a>
+    <a href="https://github.com/karpathy/nn-zero-to-hero" class="resource-tag resource-tag-gh" target="_blank" rel="noopener">⭐ karpathy/nn-zero-to-hero</a>
+    <a href="https://www.youtube.com/watch?v=VMj-3S1tku0" class="resource-tag resource-tag-video" target="_blank" rel="noopener">🎬 Andrej Karpathy — Neural Nets from Scratch</a>
+  </div>
+
+  <div class="mini-project">
+    <div class="mini-project-label">🏗️ Week 5 Mini-Project</div>
+    <div class="mini-project-title">Text Classifier with GPU Training</div>
+    <div class="mini-project-desc">Train a 3-layer transformer classifier on the AG News dataset (4 categories). Use a DataLoader, AdamW optimizer, and fp16 mixed precision on Colab's T4. Log training loss every 100 steps. Save the best checkpoint. Target: >90% accuracy.</div>
+  </div>
+</div>
+
+<!-- Week 6 -->
+<div class="week-block" id="m2w6">
+  <div class="week-label">Month 2 · Week 6</div>
+  <div class="week-title">HuggingFace Ecosystem — Models, Tokenizers, Hub</div>
+  <div class="week-desc">HuggingFace is where 90% of real SLM work happens. This week you go from using the library to being fluent in it.</div>
+
+  <div class="day-grid">
+    <div class="day-card">
+      <div class="day-number">Day 36</div>
+      <div class="day-topic">HuggingFace Hub Deep Dive</div>
+      <div class="day-detail">Model cards, datasets, spaces. Search for models by task and size. Understand license types (MIT, Apache 2.0, Llama licenses).</div>
+    </div>
+    <div class="day-card">
+      <div class="day-number">Day 37</div>
+      <div class="day-topic">Tokenizers In Depth</div>
+      <div class="day-detail">HuggingFace tokenizers library. Special tokens, padding, truncation. Instruction templates (ChatML, Alpaca, Llama-3 format).</div>
+    </div>
+    <div class="day-card">
+      <div class="day-number">Day 38</div>
+      <div class="day-topic">Model Loading Strategies</div>
+      <div class="day-detail">from_pretrained(). 4-bit/8-bit quantized loading. Device maps. torch_dtype. When to use each loading strategy.</div>
+    </div>
+    <div class="day-card">
+      <div class="day-number">Day 39</div>
+      <div class="day-topic">Generate &amp; Inference</div>
+      <div class="day-detail">model.generate() parameters. Temperature, top_p, top_k, repetition_penalty. Beam search vs greedy vs sampling. Streaming output.</div>
+    </div>
+    <div class="day-card">
+      <div class="day-number">Day 40</div>
+      <div class="day-topic">Datasets Library</div>
+      <div class="day-detail">load_dataset(). Filtering, mapping, batching. Push your own dataset to HuggingFace Hub. Dataset cards.</div>
+    </div>
+    <div class="day-card">
+      <div class="day-number">Day 41</div>
+      <div class="day-topic">PEFT — Parameter-Efficient Fine-Tuning</div>
+      <div class="day-detail">What PEFT is and why it exists. LoRA, QLoRA, prefix tuning, prompt tuning. When to use each. peft library overview.</div>
+    </div>
+    <div class="day-card">
+      <div class="day-number">Day 42</div>
+      <div class="day-topic">HuggingFace Account + API Token</div>
+      <div class="day-detail">Create HuggingFace account. Generate access token. huggingface-cli login. Push your first model to Hub (even a tiny one).</div>
+    </div>
+  </div>
+
+  <div class="resources-row">
+    <a href="https://huggingface.co/docs" class="resource-tag resource-tag-hf" target="_blank" rel="noopener">🤗 HuggingFace Docs</a>
+    <a href="https://huggingface.co/docs/peft" class="resource-tag resource-tag-hf" target="_blank" rel="noopener">🤗 PEFT Library Docs</a>
+    <a href="https://github.com/huggingface/transformers" class="resource-tag resource-tag-gh" target="_blank" rel="noopener">⭐ huggingface/transformers</a>
+  </div>
+
+  <div class="mini-project">
+    <div class="mini-project-label">🏗️ Week 6 Mini-Project</div>
+    <div class="mini-project-title">Publish a Dataset on HuggingFace Hub</div>
+    <div class="mini-project-desc">Collect 200+ domain-specific Q&amp;A pairs in your chosen domain. Format them as instruction-response pairs. Upload to HuggingFace Hub with a dataset card. This dataset will be used in Month 3 for fine-tuning.</div>
+  </div>
+</div>
+
+<!-- Week 7 -->
+<div class="week-block" id="m2w7">
+  <div class="week-label">Month 2 · Week 7</div>
+  <div class="week-title">Dataset Building — Collection, Cleaning &amp; Formatting</div>
+  <div class="week-desc">The best model with bad data will fail. This week is about building training data that actually makes your model better.</div>
+
+  <div class="day-grid">
+    <div class="day-card">
+      <div class="day-number">Day 43</div>
+      <div class="day-topic">Instruction Dataset Formats</div>
+      <div class="day-detail">Alpaca format, ChatML format, ShareGPT format. When to use each. How the format affects training. Converting between formats.</div>
+    </div>
+    <div class="day-card">
+      <div class="day-number">Day 44</div>
+      <div class="day-topic">Web Scraping for Training Data</div>
+      <div class="day-detail">BeautifulSoup, requests. Scrape domain-specific content. Respect robots.txt. Rate limiting. Legal considerations.</div>
+    </div>
+    <div class="day-card">
+      <div class="day-number">Day 45</div>
+      <div class="day-topic">Synthetic Data Generation</div>
+      <div class="day-detail">Use GPT-4/Claude to generate training examples. Self-instruct technique. Quality filtering. Why 1000 good examples beats 10000 bad ones.</div>
+    </div>
+    <div class="day-card">
+      <div class="day-number">Day 46</div>
+      <div class="day-topic">Data Cleaning &amp; Deduplication</div>
+      <div class="day-detail">Remove duplicates. Filter low-quality text. Detect and remove PII. MinHash for fuzzy dedup. Clean datasets train better models.</div>
+    </div>
+    <div class="day-card">
+      <div class="day-number">Day 47</div>
+      <div class="day-topic">Data Quality Evaluation</div>
+      <div class="day-detail">Manual review sampling. Automated quality checks. Length distribution analysis. Prompt diversity. How to know if your dataset is good.</div>
+    </div>
+    <div class="day-card">
+      <div class="day-number">Day 48</div>
+      <div class="day-topic">Train/Val/Test Splits</div>
+      <div class="day-detail">80/10/10 split. Stratified splitting. Avoiding data leakage. Why validation set must not overlap training data.</div>
+    </div>
+    <div class="day-card">
+      <div class="day-number">Day 49</div>
+      <div class="day-topic">Dataset Versioning</div>
+      <div class="day-detail">DVC (Data Version Control) basics. Why you need to version datasets just like code. Hash-based dataset IDs on HuggingFace.</div>
+    </div>
+  </div>
+
+  <div class="resources-row">
+    <a href="https://github.com/huggingface/datasets" class="resource-tag resource-tag-gh" target="_blank" rel="noopener">⭐ huggingface/datasets</a>
+    <a href="https://arxiv.org/abs/2212.10560" class="resource-tag resource-tag-paper" target="_blank" rel="noopener">📄 Self-Instruct Paper</a>
+    <a href="https://github.com/iterative/dvc" class="resource-tag resource-tag-gh" target="_blank" rel="noopener">⭐ DVC — Data Version Control</a>
+  </div>
+
+  <div class="mini-project">
+    <div class="mini-project-label">🏗️ Week 7 Mini-Project</div>
+    <div class="mini-project-title">500-Example Instruction Dataset</div>
+    <div class="mini-project-desc">Build a 500-example instruction dataset for your domain. Use a mix of: 200 scraped real examples, 200 synthetic examples generated with an LLM, and 100 manually written high-quality examples. Clean, deduplicate, split 80/10/10, and publish on HuggingFace with a dataset card.</div>
+  </div>
+</div>
+
+<!-- Week 8 -->
+<div class="week-block" id="m2w8">
+  <div class="week-label">Month 2 · Week 8</div>
+  <div class="week-title">Month 2 Review &amp; Hands-On GPU Lab</div>
+
+  <div class="day-grid">
+    <div class="day-card">
+      <div class="day-number">Day 50–52</div>
+      <div class="day-topic">PyTorch Training Loop from Scratch</div>
+      <div class="day-detail">Implement a full training loop: data loading, forward pass, loss, backward, optimizer. Add validation. Save best model. Log metrics.</div>
+    </div>
+    <div class="day-card">
+      <div class="day-number">Day 53–54</div>
+      <div class="day-topic">GPU Profiling</div>
+      <div class="day-detail">torch.profiler. CUDA memory summary. Identify bottlenecks. Optimize dataloader workers. Pin memory.</div>
+    </div>
+    <div class="day-card">
+      <div class="day-number">Day 55–56</div>
+      <div class="day-topic">Prepare for Fine-Tuning (Month 3)</div>
+      <div class="day-detail">Review your dataset quality. Plan which base model to fine-tune. Read the QLoRA paper. Set up Unsloth environment.</div>
+    </div>
+  </div>
+
+  <div class="milestone-bar">
+    <div class="milestone-emoji">💪</div>
+    <div>
+      <div class="milestone-text">Month 2 Complete — GPU Training Mastered</div>
+      <div class="milestone-sub">You have a clean dataset and can write PyTorch training loops</div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════
+     MONTH 3: FINE-TUNING
+══════════════════════════════════════════════════════ -->
+<div class="month-block" id="month-3">
+
+<div class="month-header">
+  <div class="month-title">Month 3 — Fine-Tuning with LoRA, QLoRA &amp; Unsloth</div>
+  <div class="month-subtitle">Goal: Fine-tune a real SLM on your domain dataset. Your first published model.</div>
+  <span class="month-theme">LoRA · QLoRA · PEFT · Unsloth · TRL · SFTTrainer · Evaluation</span>
+</div>
+
+<!-- Week 9 -->
+<div class="week-block" id="m3w9">
+  <div class="week-label">Month 3 · Week 9</div>
+  <div class="week-title">LoRA &amp; QLoRA — The Fine-Tuning Revolution</div>
+  <div class="week-desc">LoRA (Low-Rank Adaptation) is why you can fine-tune a 7B parameter model on a single consumer GPU. Understanding it is non-negotiable for SLM engineering.</div>
+
+  <div class="day-grid">
+    <div class="day-card">
+      <div class="day-number">Day 57</div>
+      <div class="day-topic">Why Full Fine-Tuning Is Impractical</div>
+      <div class="day-detail">VRAM requirements. A100 vs consumer GPU gap. Why fine-tuning GPT-3 costs $4.6M. The need for PEFT.</div>
+    </div>
+    <div class="day-card">
+      <div class="day-number">Day 58</div>
+      <div class="day-topic">LoRA Theory</div>
+      <div class="day-detail">Low-rank matrix decomposition. W = W₀ + AB where rank(AB) &lt;&lt; rank(W). r and alpha hyperparameters. Target modules (q_proj, v_proj, k_proj).</div>
+    </div>
+    <div class="day-card">
+      <div class="day-number">Day 59</div>
+      <div class="day-topic">QLoRA — Quantized LoRA</div>
+      <div class="day-detail">Load base model in 4-bit (NF4 quantization). Keep LoRA adapters in fp16. Double quantization. The QLoRA paper explained.</div>
+    </div>
+    <div class="day-card">
+      <div class="day-number">Day 60</div>
+      <div class="day-topic">Unsloth — 2x Faster Fine-Tuning</div>
+      <div class="day-detail">What Unsloth optimizes (Flash Attention 2, custom CUDA kernels). Install. Supported models. Memory savings vs standard HuggingFace.</div>
+    </div>
+    <div class="day-card">
+      <div class="day-number">Day 61</div>
+      <div class="day-topic">SFTTrainer &amp; TRL Library</div>
+      <div class="day-detail">HuggingFace TRL. SFTTrainer for supervised fine-tuning. TrainingArguments. DataCollatorForSeq2Seq. The training script structure.</div>
+    </div>
+    <div class="day-card">
+      <div class="day-number">Day 62</div>
+      <div class="day-topic">Hyperparameters for Fine-Tuning</div>
+      <div class="day-detail">LoRA r, alpha. Learning rate (2e-4 for LoRA). Epochs (1–3 typical). Batch size. Gradient accumulation steps. Warmup ratio.</div>
+    </div>
+    <div class="day-card">
+      <div class="day-number">Day 63</div>
+      <div class="day-topic">First Fine-Tune Run</div>
+      <div class="day-detail">Fine-tune Llama 3.2-1B on your domain dataset using Unsloth on Colab. Watch the loss curve. Spot overfitting. Save the adapter.</div>
+    </div>
+  </div>
+
+  <div class="resources-row">
+    <a href="https://arxiv.org/abs/2305.14314" class="resource-tag resource-tag-paper" target="_blank" rel="noopener">📄 QLoRA Paper (Dettmers et al.)</a>
+    <a href="https://arxiv.org/abs/2106.09685" class="resource-tag resource-tag-paper" target="_blank" rel="noopener">📄 LoRA Paper (Hu et al.)</a>
+    <a href="https://github.com/unslothai/unsloth" class="resource-tag resource-tag-gh" target="_blank" rel="noopener">⭐ unslothai/unsloth</a>
+    <a href="https://github.com/huggingface/trl" class="resource-tag resource-tag-gh" target="_blank" rel="noopener">⭐ huggingface/trl</a>
+    <a href="https://huggingface.co/blog/4bit-transformers-bitsandbytes" class="resource-tag resource-tag-hf" target="_blank" rel="noopener">🤗 4-bit Quantization Blog</a>
+  </div>
+
+  <div class="mini-project">
+    <div class="mini-project-label">🏗️ Week 9 Mini-Project</div>
+    <div class="mini-project-title">Domain SLM v0.1 — First Fine-Tune</div>
+    <div class="mini-project-desc">Fine-tune Llama 3.2-1B on your 500-example dataset using Unsloth on Colab. Use QLoRA with r=16, alpha=32. Train for 2 epochs. Log training loss. Run 10 test prompts and document the outputs. Compare base model vs fine-tuned model responses.</div>
+  </div>
+</div>
+
+<!-- Week 10 -->
+<div class="week-block" id="m3w10">
+  <div class="week-label">Month 3 · Week 10</div>
+  <div class="week-title">Evaluation — Does Your Model Actually Work?</div>
+  <div class="week-desc">Fine-tuning without evaluation is flying blind. This week you learn to measure model quality objectively. Numbers don't lie.</div>
+
+  <div class="day-grid">
+    <div class="day-card">
+      <div class="day-number">Day 64</div>
+      <div class="day-topic">Evaluation Metrics Overview</div>
+      <div class="day-detail">Accuracy, F1, Precision, Recall, BLEU, ROUGE, Perplexity. When to use each. Why single metrics mislead.</div>
+    </div>
+    <div class="day-card">
+      <div class="day-number">Day 65</div>
+      <div class="day-topic">Perplexity — The Core LM Metric</div>
+      <div class="day-detail">What perplexity measures. Lower = better (within same domain). How to compute with HuggingFace. Limitation: doesn't measure usefulness.</div>
+    </div>
+    <div class="day-card">
+      <div class="day-number">Day 66</div>
+      <div class="day-topic">ROUGE &amp; BLEU for Text Generation</div>
+      <div class="day-detail">ROUGE-L for summarization. BLEU for translation. How to compute with the evaluate library. Their well-known limitations.</div>
+    </div>
+    <div class="day-card">
+      <div class="day-number">Day 67</div>
+      <div class="day-topic">Hallucination Testing</div>
+      <div class="day-detail">What hallucination looks like in domain SLMs. Test with factual questions that have verifiable answers. Build a hallucination eval set.</div>
+    </div>
+    <div class="day-card">
+      <div class="day-number">Day 68</div>
+      <div class="day-topic">LLM-as-Judge</div>
+      <div class="day-detail">Use GPT-4 or Claude to evaluate your model's outputs. Prompt template for scoring. Why human eval is still gold standard.</div>
+    </div>
+    <div class="day-card">
+      <div class="day-number">Day 69</div>
+      <div class="day-topic">EleutherAI lm-evaluation-harness</div>
+      <div class="day-detail">The standard open-source eval framework. Run HellaSwag, TruthfulQA, MMLU on your model. Understand benchmark caveats.</div>
+    </div>
+    <div class="day-card">
+      <div class="day-number">Day 70</div>
+      <div class="day-topic">Building Your Own Eval Suite</div>
+      <div class="day-detail">100 domain-specific test questions with gold answers. Automated scoring. This is your model card eval section.</div>
+    </div>
+  </div>
+
+  <div class="resources-row">
+    <a href="https://github.com/EleutherAI/lm-evaluation-harness" class="resource-tag resource-tag-gh" target="_blank" rel="noopener">⭐ lm-evaluation-harness</a>
+    <a href="https://huggingface.co/docs/evaluate" class="resource-tag resource-tag-hf" target="_blank" rel="noopener">🤗 HuggingFace Evaluate</a>
+    <a href="https://arxiv.org/abs/2306.05685" class="resource-tag resource-tag-paper" target="_blank" rel="noopener">📄 Judging LLM-as-a-Judge (paper)</a>
+  </div>
+
+  <div class="mini-project">
+    <div class="mini-project-label">🏗️ Week 10 Mini-Project</div>
+    <div class="mini-project-title">Eval Report for Your Domain SLM</div>
+    <div class="mini-project-desc">Write a 1-page evaluation report for your fine-tuned model. Include: perplexity on validation set, ROUGE-L on 20 summarization tasks, hallucination rate on 50 factual questions, and 10 qualitative examples showing base vs fine-tuned. This becomes your model card.</div>
+  </div>
+</div>
+
+<!-- Week 11 -->
+<div class="week-block" id="m3w11">
+  <div class="week-label">Month 3 · Week 11</div>
+  <div class="week-title">Advanced Fine-Tuning Techniques</div>
+
+  <div class="day-grid">
+    <div class="day-card">
+      <div class="day-number">Day 71</div>
+      <div class="day-topic">DPO — Direct Preference Optimization</div>
+      <div class="day-detail">Beyond SFT: align model with human preferences. Preference datasets (chosen vs rejected). DPO vs RLHF. When to use it.</div>
+    </div>
+    <div class="day-card">
+      <div class="day-number">Day 72</div>
+      <div class="day-topic">Instruction Tuning Strategies</div>
+      <div class="day-detail">System prompt design. Multi-turn conversation fine-tuning. Packing sequences for efficiency. Loss masking on system tokens.</div>
+    </div>
+    <div class="day-card">
+      <div class="day-number">Day 73</div>
+      <div class="day-topic">Preventing Overfitting</div>
+      <div class="day-detail">Early stopping. Evaluation every N steps. Data augmentation. Mixing general + domain data. The catastrophic forgetting problem.</div>
+    </div>
+    <div class="day-card">
+      <div class="day-number">Day 74</div>
+      <div class="day-topic">LoRA Merging &amp; Model Export</div>
+      <div class="day-detail">Merge LoRA adapters into base model. Save as full model. Convert to GGUF. Push merged model to HuggingFace Hub.</div>
+    </div>
+    <div class="day-card">
+      <div class="day-number">Day 75</div>
+      <div class="day-topic">Model Card Writing</div>
+      <div class="day-detail">HuggingFace model card template. Intended use, training data, evaluation results, limitations, license. A good model card gets downloads.</div>
+    </div>
+    <div class="day-card">
+      <div class="day-number">Day 76–77</div>
+      <div class="day-topic">Fine-Tune v0.2 — Iteration</div>
+      <div class="day-detail">Fix issues from v0.1 eval. Add more data. Tune hyperparameters. Re-evaluate. Aim for 10% improvement on your eval suite.</div>
+    </div>
+  </div>
+
+  <div class="resources-row">
+    <a href="https://arxiv.org/abs/2305.18290" class="resource-tag resource-tag-paper" target="_blank" rel="noopener">📄 DPO Paper</a>
+    <a href="https://huggingface.co/docs/hub/model-cards" class="resource-tag resource-tag-hf" target="_blank" rel="noopener">🤗 Model Card Guide</a>
+  </div>
+</div>
+
+<!-- Week 12 -->
+<div class="week-block" id="m3w12">
+  <div class="week-label">Month 3 · Week 12</div>
+  <div class="week-title">Publish Your First SLM on HuggingFace</div>
+
+  <div class="day-grid">
+    <div class="day-card">
+      <div class="day-number">Day 78–80</div>
+      <div class="day-topic">Polish &amp; Publish</div>
+      <div class="day-detail">Write complete model card. Add eval results table. Tag with domain, language, license. Push to HuggingFace. Share on Twitter/Reddit/LinkedIn.</div>
+    </div>
+    <div class="day-card">
+      <div class="day-number">Day 81–84</div>
+      <div class="day-topic">SLM Marketplace Upload</div>
+      <div class="day-detail">Upload model to SLM Marketplace. Fill all fields (tags, benchmarks, description). Write a compelling description. This is your portfolio piece.</div>
+    </div>
+  </div>
+
+  <div class="milestone-bar">
+    <div class="milestone-emoji">🚀</div>
+    <div>
+      <div class="milestone-text">Month 3 Complete — Your First Published SLM</div>
+      <div class="milestone-sub">You are now a published AI engineer. That's real.</div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════
+     MONTH 4: QUANTIZATION + INFERENCE
+══════════════════════════════════════════════════════ -->
+<div class="month-block" id="month-4">
+
+<div class="month-header">
+  <div class="month-title">Month 4 — Quantization &amp; Production Inference</div>
+  <div class="month-subtitle">Goal: Make your model 4x smaller, 2x faster, and deploy it as a REST API</div>
+  <span class="month-theme">GGUF · GPTQ · AWQ · llama.cpp · vLLM · FastAPI · Benchmarking</span>
+</div>
+
+<!-- Week 13 -->
+<div class="week-block" id="m4w13">
+  <div class="week-label">Month 4 · Week 13</div>
+  <div class="week-title">Quantization — Shrink Your Model Without Killing Quality</div>
+
+  <div class="day-grid">
+    <div class="day-card">
+      <div class="day-number">Day 85</div>
+      <div class="day-topic">What Is Quantization?</div>
+      <div class="day-detail">Reduce weight precision from fp32 to int8/int4. Less VRAM, faster inference, slight quality loss. The tradeoffs explained clearly.</div>
+    </div>
+    <div class="day-card">
+      <div class="day-number">Day 86</div>
+      <div class="day-topic">GGUF &amp; llama.cpp</div>
+      <div class="day-detail">GGUF format (successor to GGML). Convert your HuggingFace model to GGUF Q4_K_M. Run with llama.cpp. CPU inference explained.</div>
+    </div>
+    <div class="day-card">
+      <div class="day-number">Day 87</div>
+      <div class="day-topic">GGUF Quantization Levels</div>
+      <div class="day-detail">Q2_K, Q4_K_M, Q5_K_M, Q8_0. Size vs quality comparison table. When each level is appropriate. Benchmark your model at each level.</div>
+    </div>
+    <div class="day-card">
+      <div class="day-number">Day 88</div>
+      <div class="day-topic">GPTQ Quantization</div>
+      <div class="day-detail">Post-training quantization with GPTQ. GPU-optimized. Use AutoGPTQ. Calibration dataset. When GPTQ beats GGUF.</div>
+    </div>
+    <div class="day-card">
+      <div class="day-number">Day 89</div>
+      <div class="day-topic">AWQ Quantization</div>
+      <div class="day-detail">Activation-aware Weight Quantization. Better quality than GPTQ at same bit width. AutoAWQ library. VRAM comparison.</div>
+    </div>
+    <div class="day-card">
+      <div class="day-number">Day 90</div>
+      <div class="day-topic">Choosing the Right Format</div>
+      <div class="day-detail">Decision tree: CPU-only → GGUF. GPU server → AWQ or GPTQ. Edge device → INT4 GGUF. Local Ollama → GGUF. Production API → AWQ+vLLM.</div>
+    </div>
+    <div class="day-card">
+      <div class="day-number">Day 91</div>
+      <div class="day-topic">Quantize &amp; Upload Your SLM</div>
+      <div class="day-detail">Convert your Month 3 model to GGUF Q4_K_M and Q8_0. Upload both to HuggingFace Hub. Test with Ollama.</div>
+    </div>
+  </div>
+
+  <div class="resources-row">
+    <a href="https://github.com/ggerganov/llama.cpp" class="resource-tag resource-tag-gh" target="_blank" rel="noopener">⭐ ggerganov/llama.cpp</a>
+    <a href="https://github.com/AutoGPTQ/AutoGPTQ" class="resource-tag resource-tag-gh" target="_blank" rel="noopener">⭐ AutoGPTQ</a>
+    <a href="https://github.com/casper-hansen/AutoAWQ" class="resource-tag resource-tag-gh" target="_blank" rel="noopener">⭐ AutoAWQ</a>
+    <a href="https://huggingface.co/docs/optimum" class="resource-tag resource-tag-hf" target="_blank" rel="noopener">🤗 Optimum (HF quantization)</a>
+  </div>
+</div>
+
+<!-- Week 14 -->
+<div class="week-block" id="m4w14">
+  <div class="week-label">Month 4 · Week 14</div>
+  <div class="week-title">Production Inference with vLLM &amp; FastAPI</div>
+
+  <div class="day-grid">
+    <div class="day-card">
+      <div class="day-number">Day 92</div>
+      <div class="day-topic">vLLM Introduction</div>
+      <div class="day-detail">PagedAttention. Continuous batching. Why vLLM is 10x faster than naive HuggingFace generate() for concurrent users. Install and run.</div>
+    </div>
+    <div class="day-card">
+      <div class="day-number">Day 93</div>
+      <div class="day-topic">vLLM OpenAI-Compatible API</div>
+      <div class="day-detail">vLLM serves an OpenAI-compatible API. Connect any OpenAI client to your own model. Streaming, max_tokens, temperature.</div>
+    </div>
+    <div class="day-card">
+      <div class="day-number">Day 94</div>
+      <div class="day-topic">FastAPI + Your SLM</div>
+      <div class="day-detail">Build a REST API wrapper around your model. POST /generate. Request/response models with Pydantic. Error handling. Rate limiting basics.</div>
+    </div>
+    <div class="day-card">
+      <div class="day-number">Day 95</div>
+      <div class="day-topic">Benchmarking Inference Speed</div>
+      <div class="day-detail">Tokens per second. Time to first token. Throughput under concurrent load. locust for load testing. Compare Ollama vs vLLM vs llama.cpp.</div>
+    </div>
+    <div class="day-card">
+      <div class="day-number">Day 96–98</div>
+      <div class="day-topic">Optimize &amp; Deploy API</div>
+      <div class="day-detail">Deploy FastAPI + vLLM on RunPod (cheap GPU cloud). Docker compose. Health checks. Auto-restart on failure.</div>
+    </div>
+  </div>
+
+  <div class="resources-row">
+    <a href="https://github.com/vllm-project/vllm" class="resource-tag resource-tag-gh" target="_blank" rel="noopener">⭐ vllm-project/vllm</a>
+    <a href="https://fastapi.tiangolo.com/" class="resource-tag resource-tag-tool" target="_blank" rel="noopener">🚀 FastAPI Docs</a>
+    <a href="https://www.runpod.io/" class="resource-tag resource-tag-tool" target="_blank" rel="noopener">☁️ RunPod</a>
+  </div>
+</div>
+
+<!-- Weeks 15-16 -->
+<div class="week-block" id="m4w15">
+  <div class="week-label">Month 4 · Weeks 15–16</div>
+  <div class="week-title">LM Studio, OpenWebUI &amp; Local Ecosystem</div>
+
+  <div class="day-grid">
+    <div class="day-card">
+      <div class="day-number">Day 99–103</div>
+      <div class="day-topic">LM Studio Desktop App</div>
+      <div class="day-detail">GUI for running GGUF models. Local server mode. Compare with Ollama. When to use for non-technical users.</div>
+    </div>
+    <div class="day-card">
+      <div class="day-number">Day 104–112</div>
+      <div class="day-topic">OpenWebUI + Monitoring</div>
+      <div class="day-detail">Self-hosted ChatGPT-like interface over Ollama. Add your model. Monitor usage. Prometheus + Grafana for production metrics.</div>
+    </div>
+  </div>
+
+  <div class="milestone-bar">
+    <div class="milestone-emoji">⚡</div>
+    <div>
+      <div class="milestone-text">Month 4 Complete — Production-Ready Inference</div>
+      <div class="milestone-sub">Your model serves a REST API. You can handle real traffic.</div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════
+     MONTH 5: RAG + AGENTS + ADVANCED TOPICS
+══════════════════════════════════════════════════════ -->
+<div class="month-block" id="month-5">
+
+<div class="month-header">
+  <div class="month-title">Month 5 — RAG, Vector Databases &amp; Agents</div>
+  <div class="month-subtitle">Goal: Build a retrieval-augmented SLM and a tool-using agent</div>
+  <span class="month-theme">RAG · FAISS · Chroma · PGVector · Agents · MCP · Function Calling</span>
+</div>
+
+<!-- Week 17 -->
+<div class="week-block" id="m5w17">
+  <div class="week-label">Month 5 · Week 17</div>
+  <div class="week-title">RAG — Retrieval-Augmented Generation</div>
+
+  <div class="day-grid">
+    <div class="day-card">
+      <div class="day-number">Day 113</div>
+      <div class="day-topic">Why RAG?</div>
+      <div class="day-detail">SLMs have limited context and stale knowledge. RAG adds a real-time knowledge base. Architecture: embed → store → retrieve → augment → generate.</div>
+    </div>
+    <div class="day-card">
+      <div class="day-number">Day 114</div>
+      <div class="day-topic">Embedding Models</div>
+      <div class="day-detail">sentence-transformers. all-MiniLM-L6-v2 vs BGE vs E5. Cosine similarity. How to embed your documents. Benchmark speed vs quality.</div>
+    </div>
+    <div class="day-card">
+      <div class="day-number">Day 115</div>
+      <div class="day-topic">FAISS Vector Database</div>
+      <div class="day-detail">Facebook AI Similarity Search. IndexFlatL2 vs IndexIVFFlat. Add 10,000 embeddings. Query in milliseconds. Save/load index.</div>
+    </div>
+    <div class="day-card">
+      <div class="day-number">Day 116</div>
+      <div class="day-topic">Chroma Vector Database</div>
+      <div class="day-detail">Open-source, persistent, with metadata filtering. chromadb Python API. Collections. Persist to disk. Compare with FAISS.</div>
+    </div>
+    <div class="day-card">
+      <div class="day-number">Day 117</div>
+      <div class="day-topic">PGVector — Vectors in Postgres</div>
+      <div class="day-detail">pgvector extension for PostgreSQL (Supabase supports it!). Store embeddings alongside metadata. SQL + vector search in one query.</div>
+    </div>
+    <div class="day-card">
+      <div class="day-number">Day 118</div>
+      <div class="day-topic">Chunking Strategies</div>
+      <div class="day-detail">Fixed-size, sentence-based, semantic chunking. Overlap. Why chunk size matters more than model size. Recursive text splitting.</div>
+    </div>
+    <div class="day-card">
+      <div class="day-number">Day 119</div>
+      <div class="day-topic">RAG Pipeline End to End</div>
+      <div class="day-detail">Ingest PDFs → chunk → embed → store. At query time: embed query → retrieve top-k → build prompt → generate. Evaluate faithfulness.</div>
+    </div>
+  </div>
+
+  <div class="resources-row">
+    <a href="https://github.com/facebookresearch/faiss" class="resource-tag resource-tag-gh" target="_blank" rel="noopener">⭐ facebookresearch/faiss</a>
+    <a href="https://github.com/chroma-core/chroma" class="resource-tag resource-tag-gh" target="_blank" rel="noopener">⭐ chroma-core/chroma</a>
+    <a href="https://github.com/pgvector/pgvector" class="resource-tag resource-tag-gh" target="_blank" rel="noopener">⭐ pgvector/pgvector</a>
+    <a href="https://huggingface.co/sentence-transformers" class="resource-tag resource-tag-hf" target="_blank" rel="noopener">🤗 sentence-transformers</a>
+    <a href="https://arxiv.org/abs/2005.11401" class="resource-tag resource-tag-paper" target="_blank" rel="noopener">📄 RAG Paper (Lewis et al.)</a>
+  </div>
+
+  <div class="mini-project">
+    <div class="mini-project-label">🏗️ Week 17 Mini-Project</div>
+    <div class="mini-project-title">Document Q&amp;A RAG System</div>
+    <div class="mini-project-desc">Build a system that ingests a 50-page PDF, chunks it, embeds with sentence-transformers, stores in Chroma, and lets users ask questions answered from the document. Use your fine-tuned SLM as the generator. Evaluate on 20 factual Q&amp;A pairs from the document.</div>
+  </div>
+</div>
+
+<!-- Week 18 -->
+<div class="week-block" id="m5w18">
+  <div class="week-label">Month 5 · Week 18</div>
+  <div class="week-title">Advanced RAG Techniques</div>
+
+  <div class="day-grid">
+    <div class="day-card">
+      <div class="day-number">Day 120–122</div>
+      <div class="day-topic">Hybrid Search</div>
+      <div class="day-detail">BM25 + vector search combined (reciprocal rank fusion). Why pure vector search misses exact keyword matches. Implement with rank_bm25.</div>
+    </div>
+    <div class="day-card">
+      <div class="day-number">Day 123–126</div>
+      <div class="day-topic">Re-ranking &amp; HyDE</div>
+      <div class="day-detail">Cross-encoder re-ranking (more accurate, slower). Hypothetical Document Embeddings (HyDE). Multi-query retrieval. Parent document retrieval.</div>
+    </div>
+  </div>
+</div>
+
+<!-- Week 19 -->
+<div class="week-block" id="m5w19">
+  <div class="week-label">Month 5 · Week 19</div>
+  <div class="week-title">Agents, Function Calling &amp; MCP</div>
+
+  <div class="day-grid">
+    <div class="day-card">
+      <div class="day-number">Day 127</div>
+      <div class="day-topic">What Are AI Agents?</div>
+      <div class="day-detail">ReAct pattern (Reason + Act). Tool use. Memory. Planning. Why agents need function calling. The agent loop: perceive → think → act → observe.</div>
+    </div>
+    <div class="day-card">
+      <div class="day-number">Day 128</div>
+      <div class="day-topic">Function Calling</div>
+      <div class="day-detail">Structured JSON tool definitions. Model selects tools. Parse the tool call. Execute. Return result. Supports: Llama 3.1+, Mistral, Phi-3.5.</div>
+    </div>
+    <div class="day-card">
+      <div class="day-number">Day 129</div>
+      <div class="day-topic">Build a Tool-Using SLM</div>
+      <div class="day-detail">Define 3 tools: web_search, calculator, current_time. Wire your SLM with vLLM to call them. Build a ReAct loop. Test with complex multi-step queries.</div>
+    </div>
+    <div class="day-card">
+      <div class="day-number">Day 130</div>
+      <div class="day-topic">MCP — Model Context Protocol</div>
+      <div class="day-detail">Anthropic's MCP for standardizing tool access. MCP servers and clients. Connect your SLM to an MCP server. Real-world use cases.</div>
+    </div>
+    <div class="day-card">
+      <div class="day-number">Day 131–133</div>
+      <div class="day-topic">Agent Mini-Project</div>
+      <div class="day-detail">Build a domain expert agent: RAG + tools + your fine-tuned SLM. The agent can answer questions and look up current information.</div>
+    </div>
+  </div>
+
+  <div class="resources-row">
+    <a href="https://arxiv.org/abs/2210.03629" class="resource-tag resource-tag-paper" target="_blank" rel="noopener">📄 ReAct Paper</a>
+    <a href="https://modelcontextprotocol.io" class="resource-tag resource-tag-tool" target="_blank" rel="noopener">🔧 MCP Documentation</a>
+    <a href="https://github.com/anthropics/anthropic-mcp" class="resource-tag resource-tag-gh" target="_blank" rel="noopener">⭐ anthropics/mcp</a>
+  </div>
+</div>
+
+<!-- Week 20 -->
+<div class="week-block" id="m5w20">
+  <div class="week-label">Month 5 · Week 20</div>
+  <div class="week-title">Cloud Deployment &amp; Monitoring</div>
+
+  <div class="day-grid">
+    <div class="day-card">
+      <div class="day-number">Day 134–138</div>
+      <div class="day-topic">Deploy to HuggingFace Spaces</div>
+      <div class="day-detail">Gradio or Streamlit demo. Free GPU on Spaces (ZeroGPU). Dockerfile-based Spaces. Share with the world. This becomes your live demo link.</div>
+    </div>
+    <div class="day-card">
+      <div class="day-number">Day 139–140</div>
+      <div class="day-topic">Monitoring &amp; Logging</div>
+      <div class="day-detail">Log every request/response. Track latency, error rate, token usage. Simple SQLite logging → Prometheus in production.</div>
+    </div>
+  </div>
+
+  <div class="milestone-bar">
+    <div class="milestone-emoji">🧠</div>
+    <div>
+      <div class="milestone-text">Month 5 Complete — Full-Stack AI Engineer</div>
+      <div class="milestone-sub">Your SLM has RAG, tool use, and a live demo. You are building things most engineers only read about.</div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════
+     MONTH 6: EXPERT + PRODUCTION + PUBLISH
+══════════════════════════════════════════════════════ -->
+<div class="month-block" id="month-6">
+
+<div class="month-header">
+  <div class="month-title">Month 6 — Expert Projects, Publishing &amp; What's Next</div>
+  <div class="month-subtitle">Goal: Ship a production-quality domain SLM. Publish. Build your reputation.</div>
+  <span class="month-theme">Domain SLM · Model Cards · Licensing · SLM Marketplace · Portfolio · Career</span>
+</div>
+
+<!-- Week 21 -->
+<div class="week-block" id="m6w21">
+  <div class="week-label">Month 6 · Week 21</div>
+  <div class="week-title">Domain SLM — Full Build</div>
+  <div class="week-desc">Everything you've learned comes together. Pick one domain (legal, medical, coding, finance, education, security) and build the best small model in that domain.</div>
+
+  <div class="day-grid">
+    <div class="day-card">
+      <div class="day-number">Day 141–142</div>
+      <div class="day-topic">Project Planning</div>
+      <div class="day-detail">Define the task precisely. Set success criteria. Choose base model. Plan your dataset (1000+ examples). Set a target benchmark score.</div>
+    </div>
+    <div class="day-card">
+      <div class="day-number">Day 143–145</div>
+      <div class="day-topic">Dataset v2.0 — Production Quality</div>
+      <div class="day-detail">1000+ high-quality instruction pairs. Diversity of question types. Multiple-turn conversations. Human review of 10% of samples.</div>
+    </div>
+    <div class="day-card">
+      <div class="day-number">Day 146–147</div>
+      <div class="day-topic">Fine-Tune with Best Practices</div>
+      <div class="day-detail">Phi-3.5-mini or Llama 3.2-3B as base. Unsloth QLoRA. Eval every 50 steps. Stop at best checkpoint. Log everything.</div>
+    </div>
+  </div>
+</div>
+
+<!-- Week 22 -->
+<div class="week-block" id="m6w22">
+  <div class="week-label">Month 6 · Week 22</div>
+  <div class="week-title">Production Polish — Quantization, Benchmarking &amp; Safety</div>
+
+  <div class="day-grid">
+    <div class="day-card">
+      <div class="day-number">Day 148–150</div>
+      <div class="day-topic">Multi-Format Release</div>
+      <div class="day-detail">Release full fp16 model, GGUF Q4_K_M, GGUF Q8_0, and AWQ version. Each for different use cases. All on HuggingFace Hub.</div>
+    </div>
+    <div class="day-card">
+      <div class="day-number">Day 151–153</div>
+      <div class="day-topic">Comprehensive Benchmarking</div>
+      <div class="day-detail">Run your full eval suite. Compare against base model and similar-size models. Create benchmark table. Add to model card.</div>
+    </div>
+    <div class="day-card">
+      <div class="day-number">Day 154</div>
+      <div class="day-topic">Safety &amp; Responsible AI</div>
+      <div class="day-detail">Test for harmful outputs, bias, PII leakage. Document limitations honestly. Choose appropriate license (MIT, Apache 2.0, or custom).</div>
+    </div>
+  </div>
+
+  <div class="resources-row">
+    <a href="https://choosealicense.com/" class="resource-tag resource-tag-tool" target="_blank" rel="noopener">📜 Choose a License</a>
+    <a href="https://huggingface.co/blog/open-source-llms-as-agents" class="resource-tag resource-tag-hf" target="_blank" rel="noopener">🤗 Open-Source LLMs as Agents</a>
+    <a href="https://arxiv.org/abs/2308.10792" class="resource-tag resource-tag-paper" target="_blank" rel="noopener">📄 Safety Testing Framework</a>
+  </div>
+</div>
+
+<!-- Week 23 -->
+<div class="week-block" id="m6w23">
+  <div class="week-label">Month 6 · Week 23</div>
+  <div class="week-title">Publish on SLM Marketplace &amp; Build Your Reputation</div>
+
+  <div class="day-grid">
+    <div class="day-card">
+      <div class="day-number">Day 155–156</div>
+      <div class="day-topic">SLM Marketplace Submission</div>
+      <div class="day-detail">Upload on SLM Marketplace. Fill all metadata: tags, benchmarks, description, use cases, limitations. Link HuggingFace and GitHub.</div>
+    </div>
+    <div class="day-card">
+      <div class="day-number">Day 157–158</div>
+      <div class="day-topic">Write a Technical Blog Post</div>
+      <div class="day-detail">Document your journey. Include architecture decisions, dataset building process, eval results, lessons learned. Post on Medium, Substack, or dev.to.</div>
+    </div>
+    <div class="day-card">
+      <div class="day-number">Day 159–161</div>
+      <div class="day-topic">Community &amp; Networking</div>
+      <div class="day-detail">Share on HuggingFace community, Reddit r/MachineLearning, Twitter AI community. Join Discord servers. Find collaborators. Open issues on GitHub.</div>
+    </div>
+  </div>
+</div>
+
+<!-- Week 24 -->
+<div class="week-block" id="m6w24">
+  <div class="week-label">Month 6 · Week 24</div>
+  <div class="week-title">What's Next — Advanced Topics &amp; Career Paths</div>
+
+  <div class="day-grid">
+    <div class="day-card">
+      <div class="day-number">Day 162–164</div>
+      <div class="day-topic">Continual Learning &amp; Model Updates</div>
+      <div class="day-detail">How to update your model with new data without forgetting. Continual fine-tuning. EWC (Elastic Weight Consolidation). Data flywheel.</div>
+    </div>
+    <div class="day-card">
+      <div class="day-number">Day 165–167</div>
+      <div class="day-topic">Speculative Decoding &amp; Distillation</div>
+      <div class="day-detail">Use a small draft model to speed up a large model. Knowledge distillation: train small model to mimic large model's outputs.</div>
+    </div>
+    <div class="day-card">
+      <div class="day-number">Day 168–170</div>
+      <div class="day-topic">Multimodal SLMs</div>
+      <div class="day-detail">Vision-language models (LLaVA, Phi-3-Vision). Adding image understanding to SLMs. Applications in medical imaging, document parsing.</div>
+    </div>
+    <div class="day-card">
+      <div class="day-number">Day 171–175</div>
+      <div class="day-topic">Career Paths &amp; What to Build Next</div>
+      <div class="day-detail">ML Engineer vs AI Engineer vs Research Engineer. Building a portfolio. Contributing to open-source. Starting a startup with your SLM. The 6-month review.</div>
+    </div>
+    <div class="day-card">
+      <div class="day-number">Day 176–180</div>
+      <div class="day-topic">Month 6 Portfolio Review</div>
+      <div class="day-detail">Review all 6 months of work. Update your GitHub profile. Write a "6-month retrospective" blog post. Plan your next 6 months.</div>
+    </div>
+  </div>
+
+  <div class="resources-row">
+    <a href="https://arxiv.org/abs/2305.07324" class="resource-tag resource-tag-paper" target="_blank" rel="noopener">📄 Distillation Survey (Gou et al.)</a>
+    <a href="https://huggingface.co/llava-hf" class="resource-tag resource-tag-hf" target="_blank" rel="noopener">🤗 LLaVA Models</a>
+    <a href="https://github.com/microsoft/phi-3CookBook" class="resource-tag resource-tag-gh" target="_blank" rel="noopener">⭐ Phi-3 Cookbook (Microsoft)</a>
+  </div>
+
+  <div class="milestone-bar">
+    <div class="milestone-emoji">🏆</div>
+    <div>
+      <div class="milestone-text">Month 6 Complete — SLM Engineer</div>
+      <div class="milestone-sub">You built, evaluated, quantized, deployed, and published a production SLM. You are one of very few people who have done this.</div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- Final Summary -->
+<div style="background:linear-gradient(135deg,#1E2433,#374151);border-radius:16px;padding:36px 40px;margin:48px 0;color:white">
+  <h2 style="color:white;font-size:22px;margin:0 0 12px">🎉 You Did It</h2>
+  <p style="color:rgba(255,255,255,.7);font-size:14px;line-height:1.7;margin-bottom:20px">
+    If you followed this roadmap, you have: Python fluency, PyTorch mastery, a fine-tuned SLM, 
+    a production API, a RAG pipeline, an agent, and a published model on HuggingFace and SLM Marketplace.
+    That's a complete AI engineer portfolio built entirely with free tools.
+  </p>
+  <div style="display:flex;gap:12px;flex-wrap:wrap">
+    <a href="../tutorials/" style="background:#F97316;color:white;padding:10px 22px;border-radius:8px;font-size:14px;font-weight:600;text-decoration:none">Build Your First SLM →</a>
+    <a href="../../upload.html" style="background:rgba(255,255,255,.1);color:white;padding:10px 22px;border-radius:8px;font-size:14px;font-weight:600;text-decoration:none;border:1px solid rgba(255,255,255,.2)">Upload to Marketplace →</a>
+  </div>
+</div>
+
+</main>
+
+<aside class="docs-toc" aria-label="On this page">
+  <div class="toc-title">On this page</div>
+  <a href="#month-1" class="toc-link">Month 1 — Foundations</a>
+  <a href="#m1w1" class="toc-link" style="padding-left:12px;font-size:11px">Week 1: Python &amp; Linux</a>
+  <a href="#m1w2" class="toc-link" style="padding-left:12px;font-size:11px">Week 2: NumPy &amp; Neural Nets</a>
+  <a href="#m1w3" class="toc-link" style="padding-left:12px;font-size:11px">Week 3: Transformers</a>
+  <a href="#m1w4" class="toc-link" style="padding-left:12px;font-size:11px">Week 4: Ollama &amp; Docker</a>
+  <a href="#month-2" class="toc-link">Month 2 — PyTorch &amp; Datasets</a>
+  <a href="#m2w5" class="toc-link" style="padding-left:12px;font-size:11px">Week 5: Training Loops</a>
+  <a href="#m2w6" class="toc-link" style="padding-left:12px;font-size:11px">Week 6: HuggingFace</a>
+  <a href="#m2w7" class="toc-link" style="padding-left:12px;font-size:11px">Week 7: Dataset Building</a>
+  <a href="#month-3" class="toc-link">Month 3 — Fine-Tuning</a>
+  <a href="#m3w9" class="toc-link" style="padding-left:12px;font-size:11px">Week 9: LoRA &amp; QLoRA</a>
+  <a href="#m3w10" class="toc-link" style="padding-left:12px;font-size:11px">Week 10: Evaluation</a>
+  <a href="#month-4" class="toc-link">Month 4 — Quantization</a>
+  <a href="#m4w13" class="toc-link" style="padding-left:12px;font-size:11px">Week 13: GGUF/GPTQ/AWQ</a>
+  <a href="#m4w14" class="toc-link" style="padding-left:12px;font-size:11px">Week 14: vLLM &amp; FastAPI</a>
+  <a href="#month-5" class="toc-link">Month 5 — RAG &amp; Agents</a>
+  <a href="#m5w17" class="toc-link" style="padding-left:12px;font-size:11px">Week 17: RAG Pipeline</a>
+  <a href="#m5w19" class="toc-link" style="padding-left:12px;font-size:11px">Week 19: Agents &amp; MCP</a>
+  <a href="#month-6" class="toc-link">Month 6 — Expert &amp; Publish</a>
+  <a href="#m6w21" class="toc-link" style="padding-left:12px;font-size:11px">Week 21: Domain SLM Build</a>
+  <a href="#m6w23" class="toc-link" style="padding-left:12px;font-size:11px">Week 23: Publish</a>
+  <a href="#m6w24" class="toc-link" style="padding-left:12px;font-size:11px">Week 24: What's Next</a>
+</aside>
+
+</div>
+<script src="../../docs/docs.js"></script>
+</body>
+</html>

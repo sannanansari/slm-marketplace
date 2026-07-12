@@ -350,3 +350,31 @@
   Object.assign(window, exports);
 
 }(window));
+
+/* ============================================================
+   FIX A2: handleLogout moved here from auth.js so it is
+   available on ALL pages (header avatar menu, profile page, etc.)
+   auth.js is only loaded on auth.html — this belongs in global.
+   ============================================================ */
+async function handleLogout() {
+  try {
+    const client = getSupabaseClient();
+    if (client) await client.auth.signOut();
+  } catch { /* ignore errors on signOut */ }
+  window.location.href = 'index.html';
+}
+
+/* ============================================================
+   GLOBAL ERROR BOUNDARY
+   Catches unexpected JS errors in production so they can be
+   surfaced to the user instead of silently failing.
+   ============================================================ */
+window.addEventListener('unhandledrejection', function(event) {
+  console.error('[SLM] Unhandled promise rejection:', event.reason);
+  // Don't show toast for Supabase session-not-found (expected on logout)
+  const msg = String(event.reason || '');
+  if (msg.includes('session') || msg.includes('JWT')) return;
+});
+
+// Expose handleLogout on window so HTML onclick attributes can call it
+window.handleLogout = handleLogout;
