@@ -6,9 +6,10 @@
 
 name = "slm-marketplace"
 compatibility_date = "2024-01-01"
+compatibility_flags = ["nodejs_compat"]
 
 # Pages config
-pages_build_output_dir = "."
+#pages_build_output_dir = "."
 
 # Bindings available in _worker.js as env.*
 # Real values go in .dev.vars (gitignored)
@@ -16,6 +17,9 @@ pages_build_output_dir = "."
 [vars]
 # These are overridden by .dev.vars in local dev
 # and by CF Pages env vars in production
+[assets]
+directory = "./assets"
+
 SUPABASE_URL = ""
 SUPABASE_ANON_KEY = ""
 SITE_URL = "http://localhost:8788"
