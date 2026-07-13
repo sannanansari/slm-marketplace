@@ -1,44 +1,64 @@
 /**
  * supabase.js
  * Creates the Supabase client from window.__SLM_CONFIG
- * (injected by _worker.js at /config.js).
+ * (injected by _worker.js at /config.js on Cloudflare Pages).
  *
- * KEY FIXES:
- *   - No custom storageKey (use Supabase default: sb-PROJECT-auth-token)
- *   - No flowType override (Supabase auto-selects correct flow)
- *   - detectSessionInUrl: true handles OAuth ?code= callbacks
- *   - persistSession: true keeps user logged in across page loads
+ * DIAGNOSTIC: Open browser DevTools → Console to see connection status.
  */
 (function () {
   'use strict';
 
-  let _client = null;
+  var _client = null;
 
   function getConfig() {
-    const cfg = window.__SLM_CONFIG;
-    if (!cfg || !cfg.url || !cfg.key ||
-        cfg.url === '' || cfg.key === '' ||
-        cfg.url.includes('YOUR_PROJECT') || cfg.key.includes('YOUR_ANON')) {
-      return null; // not configured — mock data mode
+    var cfg = window.__SLM_CONFIG;
+
+    // Detailed console diagnostics — helps debug connection issues
+    if (!cfg) {
+      console.error('[SLM] window.__SLM_CONFIG is undefined. config.js did not load.');
+      console.error('[SLM] Fix: make sure the site is deployed as Cloudflare PAGES (not Workers).');
+      return null;
     }
+    if (!cfg.url || cfg.url === '') {
+      console.error('[SLM] SUPABASE_URL is empty. Set it in Cloudflare Pages → Settings → Environment variables.');
+      return null;
+    }
+    if (!cfg.key || cfg.key === '') {
+      console.error('[SLM] SUPABASE_ANON_KEY is empty. Set it in Cloudflare Pages → Settings → Environment variables.');
+      return null;
+    }
+    if (cfg.url.includes('YOUR_PROJECT') || cfg.key.includes('YOUR_ANON')) {
+      console.error('[SLM] config.js still has placeholder values. Replace with real Supabase credentials.');
+      return null;
+    }
+
+    console.log('[SLM] Supabase config loaded. URL:', cfg.url.substring(0, 30) + '...');
     return cfg;
   }
 
   function initSupabase() {
     if (_client) return _client;
-    if (typeof window.supabase === 'undefined') return null;
-    const cfg = getConfig();
-    if (!cfg) return null;
+
+    if (typeof window.supabase === 'undefined') {
+      console.error('[SLM] Supabase CDN script failed to load. Check internet connection and CSP headers.');
+      return null;
+    }
+
+    var cfg = getConfig();
+    if (!cfg) {
+      console.warn('[SLM] Running in demo mode — mock data only, auth disabled.');
+      return null;
+    }
 
     _client = window.supabase.createClient(cfg.url, cfg.key, {
       auth: {
         autoRefreshToken:   true,
         persistSession:     true,
         detectSessionInUrl: true,
-        // NO custom storageKey — use Supabase default
-        // NO flowType override — Supabase picks correct one automatically
       },
     });
+
+    console.log('[SLM] Supabase client created successfully.');
     return _client;
   }
 
@@ -49,7 +69,6 @@
   window.initSupabase      = initSupabase;
   window.getSupabaseClient = getSupabaseClient;
 
-  // Runs synchronously when this deferred script executes.
-  // By this point: config.js and supabase CDN are both done (they are sync).
+  // Init on script execution (after config.js and CDN are both loaded)
   initSupabase();
-})();
+}());
