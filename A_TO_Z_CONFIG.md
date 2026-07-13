@@ -1,4 +1,5 @@
 # SLM Marketplace — Complete A to Z Configuration Guide
+
 ## slm-market.sannan.app · Cloudflare Pages + Supabase
 
 ---
@@ -14,14 +15,14 @@ Browser
   │         │ CNAME → slm-marketplace-xxx.pages.dev
   │         │
   │    [Cloudflare Pages]
-  │         │ _worker.js intercepts /config.js
+  │         │ _worker.js intercepts /js/config.js
   │         │   → reads SUPABASE_URL + SUPABASE_ANON_KEY from CF env vars
   │         │   → returns: window.__SLM_CONFIG = { url, key }
   │         │
   │         │ All other requests → serve static files
   │         │ (_headers applies security headers to everything)
   │
-  ├─ loads config.js (sync)  → window.__SLM_CONFIG set
+  ├─ loads js/config.js (sync)  → window.__SLM_CONFIG set
   ├─ loads supabase.min.js (sync) → window.supabase available
   ├─ loads supabase.js (defer) → creates Supabase client
   ├─ loads global.js (defer) → injects header/footer, checks session
@@ -72,6 +73,7 @@ Anon key:      eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
 Expected: `Success. No rows returned`
 
 This creates:
+
 - `users` table (profiles)
 - `models` table (SLMs)
 - `reviews` table
@@ -95,11 +97,13 @@ Left sidebar → **Table Editor** → you should see all 7 tables listed.
 **Supabase → Authentication → URL Configuration**
 
 **Site URL** field:
+
 ```
 https://slm-market.sannan.app
 ```
 
 **Redirect URLs** — click **Add URL** for EACH one:
+
 ```
 https://slm-market.sannan.app
 https://slm-market.sannan.app/auth
@@ -133,10 +137,10 @@ Click **Save**.
 2. Click **OAuth Apps** → **New OAuth App**
 3. Fill in exactly:
 
-| Field | Value |
-|-------|-------|
-| Application name | `SLM Marketplace` |
-| Homepage URL | `https://slm-market.sannan.app` |
+| Field                      | Value                                                   |
+| -------------------------- | ------------------------------------------------------- |
+| Application name           | `SLM Marketplace`                                       |
+| Homepage URL               | `https://slm-market.sannan.app`                         |
 | Authorization callback URL | `https://YOUR_PROJECT_REF.supabase.co/auth/v1/callback` |
 
 > Replace `YOUR_PROJECT_REF` with the part before `.supabase.co` in your Project URL.
@@ -164,6 +168,7 @@ Click **Save**.
 **Supabase → Authentication → Email Templates → Confirm signup**
 
 Check the confirmation email template. The link inside should redirect to:
+
 ```
 {{ .SiteURL }}/auth
 ```
@@ -173,6 +178,7 @@ If it shows `{{ .SiteURL }}/auth.html` change to `{{ .SiteURL }}/auth`
 **Supabase → Authentication → Email Templates → Reset password**
 
 Same — redirect should go to:
+
 ```
 {{ .SiteURL }}/auth?mode=reset
 ```
@@ -189,6 +195,7 @@ For production use, set up custom SMTP.
 Toggle **Enable Custom SMTP** → ON
 
 Recommended free tier options:
+
 - **Resend** (resend.com) — 100 emails/day free, easy setup
 - **SendGrid** — 100 emails/day free
 
@@ -249,9 +256,9 @@ git push
 | Project name | `slm-marketplace` |
 | Production branch | `main` |
 | Framework preset | **None** |
-| Build command | *(leave empty)* |
+| Build command | _(leave empty)_ |
 | Build output directory | `/` |
-| Root directory | *(leave empty)* |
+| Root directory | _(leave empty)_ |
 
 8. Click **Save and Deploy**
 
@@ -265,9 +272,9 @@ Wait ~60 seconds. You get a URL: `https://slm-marketplace-abc.pages.dev`
 
 Click **Add variable** and add BOTH:
 
-| Variable name | Value | Encrypt |
-|---------------|-------|---------|
-| `SUPABASE_URL` | `https://abcdefghijk.supabase.co` | No |
+| Variable name       | Value                              | Encrypt                 |
+| ------------------- | ---------------------------------- | ----------------------- |
+| `SUPABASE_URL`      | `https://abcdefghijk.supabase.co`  | No                      |
 | `SUPABASE_ANON_KEY` | `eyJhbGci...` (your full anon key) | **YES — click Encrypt** |
 
 Set **Environment** to **Production** for both.
@@ -290,8 +297,8 @@ Click **Save**.
 **Verify DNS was created:**
 CF Dashboard → `sannan.app` → **DNS** → look for:
 
-| Type | Name | Content | Proxy |
-|------|------|---------|-------|
+| Type  | Name         | Content                         | Proxy               |
+| ----- | ------------ | ------------------------------- | ------------------- |
 | CNAME | `slm-market` | `slm-marketplace-abc.pages.dev` | ✅ Proxied (orange) |
 
 If not there, add it manually with those values.
@@ -308,14 +315,14 @@ Set encryption mode to: **Full (strict)**
 
 **CF Dashboard → sannan.app → SSL/TLS → Edge Certificates**
 
-| Setting | Value |
-|---------|-------|
-| Always Use HTTPS | **ON** |
-| Minimum TLS Version | **TLS 1.2** |
-| TLS 1.3 | **ON** |
-| HSTS → Enable | **ON** |
-| HSTS Max Age | **12 months** |
-| HSTS Include Subdomains | **ON** |
+| Setting                 | Value         |
+| ----------------------- | ------------- |
+| Always Use HTTPS        | **ON**        |
+| Minimum TLS Version     | **TLS 1.2**   |
+| TLS 1.3                 | **ON**        |
+| HSTS → Enable           | **ON**        |
+| HSTS Max Age            | **12 months** |
+| HSTS Include Subdomains | **ON**        |
 
 ---
 
@@ -323,14 +330,14 @@ Set encryption mode to: **Full (strict)**
 
 **CF Dashboard → sannan.app → Speed → Optimization**
 
-| Setting | Value |
-|---------|-------|
-| Auto Minify JavaScript | **ON** |
-| Auto Minify CSS | **ON** |
-| Auto Minify HTML | **ON** |
-| Brotli | **ON** |
-| Rocket Loader | **OFF** (breaks JS) |
-| Early Hints | **ON** |
+| Setting                | Value               |
+| ---------------------- | ------------------- |
+| Auto Minify JavaScript | **ON**              |
+| Auto Minify CSS        | **ON**              |
+| Auto Minify HTML       | **ON**              |
+| Brotli                 | **ON**              |
+| Rocket Loader          | **OFF** (breaks JS) |
+| Early Hints            | **ON**              |
 
 ---
 
@@ -338,11 +345,11 @@ Set encryption mode to: **Full (strict)**
 
 **CF Dashboard → sannan.app → Security → Settings**
 
-| Setting | Value |
-|---------|-------|
-| Security Level | **Medium** |
-| Bot Fight Mode | **ON** |
-| Browser Integrity Check | **ON** |
+| Setting                 | Value      |
+| ----------------------- | ---------- |
+| Security Level          | **Medium** |
+| Bot Fight Mode          | **ON**     |
+| Browser Integrity Check | **ON**     |
 
 **WAF Rules (rate limiting):**
 CF Dashboard → sannan.app → **Security → WAF → Rate limiting rules → Create**
@@ -363,30 +370,39 @@ Rule 1 — Protect auth:
 
 Run these checks in order after deployment.
 
-## Check 1 — config.js is working
+## Check 1 — js/config.js is working
+
 Open in browser:
+
 ```
-https://slm-market.sannan.app/config.js
+https://slm-market.sannan.app/js/config.js
 ```
+
 **Must see:**
+
 ```javascript
 window.__SLM_CONFIG = { url: "https://abcdefghijk.supabase.co", key: "eyJ..." };
 ```
+
 **If you see** `url: ""` → env vars not set in CF Pages (redo Step 2.3)
 **If you see** 404 → `_worker.js` not in repo root (check your git push)
 
 ---
 
 ## Check 2 — Site loads
+
 ```
 https://slm-market.sannan.app
 ```
+
 Must show: homepage with models, orange header, search bar.
 
 ---
 
 ## Check 3 — Clean URLs work
+
 All of these must load without `.html`:
+
 ```
 https://slm-market.sannan.app/explore
 https://slm-market.sannan.app/leaderboard
@@ -397,14 +413,17 @@ https://slm-market.sannan.app/auth
 ---
 
 ## Check 4 — 404 page works
+
 ```
 https://slm-market.sannan.app/anything-random-xyz
 ```
+
 Must show your custom 404 page (not a Cloudflare error page).
 
 ---
 
 ## Check 5 — Email signup
+
 1. Go to `/auth` → Sign Up tab
 2. Enter: name, email, password (8+ chars), confirm
 3. Click **Create Account**
@@ -415,11 +434,12 @@ Must show your custom 404 page (not a Cloudflare error page).
 
 **If step 4 fails** → Supabase email provider not enabled (redo Step 1.3b)
 **If step 6 redirects to wrong page** → Redirect URLs wrong (redo Step 1.3a)
-**If step 7 still shows Sign Up** → config.js returning empty (redo Step 2.3)
+**If step 7 still shows Sign Up** → js/config.js returning empty (redo Step 2.3)
 
 ---
 
 ## Check 6 — Email login
+
 1. Go to `/auth` → Log In tab
 2. Enter email + password
 3. Click **Log In**
@@ -431,6 +451,7 @@ Must show your custom 404 page (not a Cloudflare error page).
 ---
 
 ## Check 7 — GitHub OAuth
+
 1. Go to `/auth`
 2. Click **Continue with GitHub**
 3. ✅ Redirected to `github.com` for authorization
@@ -445,6 +466,7 @@ Must show your custom 404 page (not a Cloudflare error page).
 ---
 
 ## Check 8 — Session persists
+
 1. Log in with any method
 2. Click **Explore** in nav
 3. Click **Leaderboard** in nav
@@ -456,12 +478,14 @@ Must show your custom 404 page (not a Cloudflare error page).
 ---
 
 ## Check 9 — Security headers
+
 Go to: **https://securityheaders.com/?q=slm-market.sannan.app**
 Expected grade: **A** or **A+**
 
 ---
 
 ## Check 10 — SSL grade
+
 Go to: **https://www.ssllabs.com/ssltest/analyze.html?d=slm-market.sannan.app**
 Expected grade: **A+**
 
@@ -500,6 +524,7 @@ INSERT INTO models (
 ```
 
 ## Option B — Via Upload form
+
 Go to `/upload` when logged in → fill the form → click **Continue**.
 
 ---
@@ -507,22 +532,27 @@ Go to `/upload` when logged in → fill the form → click **Continue**.
 # PART 5 — ONGOING MAINTENANCE
 
 ## Deploy new code
+
 ```bash
 git add .
 git commit -m "describe your change"
 git push
 ```
+
 CF auto-deploys in ~60 seconds. No manual steps.
 
 ## Check deployment status
+
 CF Pages → slm-marketplace → **Deployments** tab
 Green = deployed. Red = check build logs.
 
 ## View real-time logs
+
 CF Pages → slm-marketplace → **Functions** tab → **Real-time Logs**
-(Shows _worker.js requests including config.js calls)
+(Shows \_worker.js requests including js/config.js calls)
 
 ## Monitor auth issues
+
 Supabase → **Authentication** → **Users** tab
 Shows all registered users, confirmation status, last sign in.
 
@@ -534,28 +564,32 @@ Shows all auth events including failures.
 # QUICK REFERENCE
 
 ## Your URLs
-| URL | What it does |
-|-----|-------------|
-| `https://slm-market.sannan.app` | Homepage |
-| `https://slm-market.sannan.app/explore` | Browse models |
-| `https://slm-market.sannan.app/auth` | Login / Sign up |
-| `https://slm-market.sannan.app/upload` | Upload a model |
-| `https://slm-market.sannan.app/config.js` | Verify Supabase config |
-| `https://slm-market.sannan.app/leaderboard` | Leaderboard |
+
+| URL                                          | What it does           |
+| -------------------------------------------- | ---------------------- |
+| `https://slm-market.sannan.app`              | Homepage               |
+| `https://slm-market.sannan.app/explore`      | Browse models          |
+| `https://slm-market.sannan.app/auth`         | Login / Sign up        |
+| `https://slm-market.sannan.app/upload`       | Upload a model         |
+| `https://slm-market.sannan.app/js/config.js` | Verify Supabase config |
+| `https://slm-market.sannan.app/leaderboard`  | Leaderboard            |
 
 ## Your Supabase URLs
-| URL | What it's for |
-|-----|--------------|
-| `https://supabase.com/dashboard/project/YOUR_REF` | Dashboard |
-| `https://YOUR_REF.supabase.co/auth/v1/callback` | OAuth callback |
+
+| URL                                               | What it's for  |
+| ------------------------------------------------- | -------------- |
+| `https://supabase.com/dashboard/project/YOUR_REF` | Dashboard      |
+| `https://YOUR_REF.supabase.co/auth/v1/callback`   | OAuth callback |
 
 ## CF Pages env vars required
+
 ```
 SUPABASE_URL       = https://YOUR_REF.supabase.co
 SUPABASE_ANON_KEY  = eyJhbGci...
 ```
 
 ## Git commands
+
 ```bash
 git add . && git commit -m "update" && git push   # deploy
 git log --oneline -5                              # check recent commits
@@ -565,16 +599,16 @@ git log --oneline -5                              # check recent commits
 
 # TROUBLESHOOTING TABLE
 
-| Problem | Most likely cause | Fix |
-|---------|------------------|-----|
-| `/config.js` returns empty | Env vars not set | CF Pages → Settings → Env vars → Save → Retry deploy |
-| Login button does nothing | Old DOMContentLoaded bug | Download latest zip and push |
-| Session lost on page change | Old storageKey bug | Download latest zip and push |
-| GitHub OAuth error | Provider not enabled | Supabase → Auth → Providers → GitHub → Enable |
-| GitHub callback fails | Wrong callback URL | Must be `supabase.co/auth/v1/callback` not your site |
-| Email link wrong page | Redirect URL missing | Supabase → Auth → URL Config → add `/auth` |
-| Redirect loop | Bad _redirects rule | Clear all rules from `_redirects` file |
-| 404 on /explore | Wrong _redirects | Clear all rules — CF handles routing natively |
-| Sign Up always shows | Supabase not connected | Check `/config.js` — must show real URL |
-| CORS error | CSP blocking | Check `_headers` — supabase.co in connect-src |
-| Email not received | Supabase rate limit | Add custom SMTP (Step 1.5) |
+| Problem                       | Most likely cause        | Fix                                                  |
+| ----------------------------- | ------------------------ | ---------------------------------------------------- |
+| `/js/config.js` returns empty | Env vars not set         | CF Pages → Settings → Env vars → Save → Retry deploy |
+| Login button does nothing     | Old DOMContentLoaded bug | Download latest zip and push                         |
+| Session lost on page change   | Old storageKey bug       | Download latest zip and push                         |
+| GitHub OAuth error            | Provider not enabled     | Supabase → Auth → Providers → GitHub → Enable        |
+| GitHub callback fails         | Wrong callback URL       | Must be `supabase.co/auth/v1/callback` not your site |
+| Email link wrong page         | Redirect URL missing     | Supabase → Auth → URL Config → add `/auth`           |
+| Redirect loop                 | Bad \_redirects rule     | Clear all rules from `_redirects` file               |
+| 404 on /explore               | Wrong \_redirects        | Clear all rules — CF handles routing natively        |
+| Sign Up always shows          | Supabase not connected   | Check `/js/config.js` — must show real URL           |
+| CORS error                    | CSP blocking             | Check `_headers` — supabase.co in connect-src        |
+| Email not received            | Supabase rate limit      | Add custom SMTP (Step 1.5)                           |

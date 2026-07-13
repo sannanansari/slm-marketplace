@@ -1,4 +1,5 @@
 # SLM Marketplace — Production Memory Card
+
 **Read this before every deployment. Read this when anything breaks.**
 
 ---
@@ -6,13 +7,19 @@
 ## THE ONE THING THAT KILLS EVERYTHING
 
 Visit your live site. Open a new tab. Go to:
+
 ```
-https://slm-market.sannan.app/config.js
+https://slm-market.sannan.app/js/config.js
 ```
 
 You must see:
+
 ```javascript
-window.__SLM_CONFIG = { url: "https://xxxx.supabase.co", key: "eyJ...", siteUrl: "https://slm-market.sannan.app" };
+window.__SLM_CONFIG = {
+  url: "https://xxxx.supabase.co",
+  key: "eyJ...",
+  siteUrl: "https://slm-market.sannan.app",
+};
 ```
 
 If you see `url: ""` — **the entire site is running on mock data.**  
@@ -23,11 +30,11 @@ Fix: Cloudflare Pages → Settings → Environment variables → add the 3 vars 
 
 ## THE 3 ENV VARS (memorise these)
 
-| Variable | Example value | If missing |
-|----------|--------------|------------|
-| `SUPABASE_URL` | `https://abcdefgh.supabase.co` | Site runs on mock data |
-| `SUPABASE_ANON_KEY` | `eyJhbGciOiJIUzI1NiIs...` | Site runs on mock data |
-| `SITE_URL` | `https://slm-market.sannan.app` | OAuth + email links broken |
+| Variable            | Example value                   | If missing                 |
+| ------------------- | ------------------------------- | -------------------------- |
+| `SUPABASE_URL`      | `https://abcdefgh.supabase.co`  | Site runs on mock data     |
+| `SUPABASE_ANON_KEY` | `eyJhbGciOiJIUzI1NiIs...`       | Site runs on mock data     |
+| `SITE_URL`          | `https://slm-market.sannan.app` | OAuth + email links broken |
 
 Set in: **Cloudflare Pages → your project → Settings → Environment variables**  
 Set for both **Production** and **Preview** environments.
@@ -43,7 +50,7 @@ Every HTML page loads scripts in this exact order:
 
 ```html
 <!-- 1. SYNC — must be first, sets window.__SLM_CONFIG -->
-<script src="config.js"></script>
+<script src="js/config.js"></script>
 
 <!-- 2. SYNC — must be second, needs config already set -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.4/..."></script>
@@ -59,10 +66,11 @@ Every HTML page loads scripts in this exact order:
 ```
 
 Rules:
-- `config.js` and supabase CDN are **sync** (no defer, no async). This blocks parsing deliberately.
+
+- `js/config.js` and supabase CDN are **sync** (no defer, no async). This blocks parsing deliberately.
 - Everything else is **defer**. Defer runs in order after DOM is parsed.
 - Never add `async` to any of these. Async = random execution order = broken.
-- `config.js` is not a real file in the repo. It is generated at runtime by `_worker.js`.
+- `js/config.js` is not a real file in the repo. It is generated at runtime by `_worker.js`.
 
 ---
 
@@ -71,11 +79,13 @@ Rules:
 Three places in Supabase must match your domain exactly:
 
 **1. Auth → Settings → Site URL:**
+
 ```
 https://slm-market.sannan.app
 ```
 
 **2. Auth → Settings → Additional Redirect URLs (add ALL of these):**
+
 ```
 https://slm-market.sannan.app/auth
 https://slm-market.sannan.app/auth.html
@@ -84,10 +94,12 @@ http://localhost:8788/auth.html
 ```
 
 **3. Auth → Email Templates (both templates):**
+
 - Confirm signup button URL: `{{ .SiteURL }}/auth`
 - Password reset button URL: `{{ .SiteURL }}/auth?mode=reset`
 
 If GitHub OAuth is enabled:
+
 - GitHub → Settings → Developer settings → OAuth Apps → your app
 - Authorization callback URL: `https://YOUR_PROJECT_REF.supabase.co/auth/v1/callback`
 - This must be the Supabase URL, NOT your site URL.
@@ -96,30 +108,31 @@ If GitHub OAuth is enabled:
 
 ## WHAT EACH FILE DOES (one line each)
 
-| File | Does |
-|------|------|
-| `_worker.js` | Cloudflare Worker. Serves `/config.js` with env vars injected. Routes `/docs` → `/docs/`. Everything else → static. |
-| `_headers` | HTTP headers on every response. Security (CSP, X-Frame), caching (1yr for CSS/JS, no-cache for HTML/config). |
-| `_redirects` | Empty intentionally. CF Pages handles `.html` stripping natively. |
-| `wrangler.toml` | Local dev config for `wrangler pages dev`. Not used in production. |
-| `.dev.vars` | Local dev secrets. Gitignored. Fill with real Supabase values for local auth testing. |
-| `config.example.js` | Documents the shape of `config.js`. Commit this. Never put real values here. |
-| `supabase-schema.sql` | Complete database schema. Run once in Supabase SQL Editor. Idempotent (`IF NOT EXISTS`). |
-| `supabase-schema-fixes.sql` | Run after main schema. Adds missing columns, fixes functions, grants anon access. |
-| `js/supabase.js` | Creates the Supabase JS client singleton. Reads `window.__SLM_CONFIG`. |
-| `js/global.js` | All shared code: utilities, header, footer, session check, mock data, `handleLogout`. |
-| `js/auth.js` | All auth flows: login, signup, OAuth, password reset. Loaded on auth.html only. |
-| `js/explore.js` | Explore page: search, filter, sort, paginate. Full-text search via Supabase `textSearch`. |
-| `js/upload.js` | Upload form: validation, tag management, Supabase insert. |
-| `js/model.js` | Individual model page: load data, reviews, bookmarks, download tracking. |
-| `js/profile.js` | Profile page: user data, their models, activity feed. |
-| `js/leaderboard.js` | Leaderboard: ranked users by score. |
+| File                        | Does                                                                                                                   |
+| --------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
+| `_worker.js`                | Cloudflare Worker. Serves `/js/config.js` with env vars injected. Routes `/docs` → `/docs/`. Everything else → static. |
+| `_headers`                  | HTTP headers on every response. Security (CSP, X-Frame), caching (1yr for CSS/JS, no-cache for HTML/config).           |
+| `_redirects`                | Empty intentionally. CF Pages handles `.html` stripping natively.                                                      |
+| `wrangler.toml`             | Local dev config for `wrangler pages dev`. Not used in production.                                                     |
+| `.dev.vars`                 | Local dev secrets. Gitignored. Fill with real Supabase values for local auth testing.                                  |
+| `config.example.js`         | Documents the shape of `js/config.js`. Commit this. Never put real values here.                                        |
+| `supabase-schema.sql`       | Complete database schema. Run once in Supabase SQL Editor. Idempotent (`IF NOT EXISTS`).                               |
+| `supabase-schema-fixes.sql` | Run after main schema. Adds missing columns, fixes functions, grants anon access.                                      |
+| `js/supabase.js`            | Creates the Supabase JS client singleton. Reads `window.__SLM_CONFIG`.                                                 |
+| `js/global.js`              | All shared code: utilities, header, footer, session check, mock data, `handleLogout`.                                  |
+| `js/auth.js`                | All auth flows: login, signup, OAuth, password reset. Loaded on auth.html only.                                        |
+| `js/explore.js`             | Explore page: search, filter, sort, paginate. Full-text search via Supabase `textSearch`.                              |
+| `js/upload.js`              | Upload form: validation, tag management, Supabase insert.                                                              |
+| `js/model.js`               | Individual model page: load data, reviews, bookmarks, download tracking.                                               |
+| `js/profile.js`             | Profile page: user data, their models, activity feed.                                                                  |
+| `js/leaderboard.js`         | Leaderboard: ranked users by score.                                                                                    |
 
 ---
 
 ## THE DATABASE TRIGGER CHAIN (automatic, never call manually)
 
 When a review is inserted/updated/deleted:
+
 ```
 INSERT into reviews
   → trg_recalc_rating fires
@@ -132,6 +145,7 @@ INSERT into reviews
 ```
 
 When a model is inserted/updated/deleted:
+
 ```
 INSERT/UPDATE/DELETE on models
   → trg_model_score fires
@@ -141,6 +155,7 @@ INSERT/UPDATE/DELETE on models
 ```
 
 When a model is updated:
+
 ```
 UPDATE models
   → trg_models_updated_at fires
@@ -173,6 +188,7 @@ NOBODY:
 ```
 
 If a page is showing empty when it should show data:
+
 1. Check the user is logged in
 2. Check `status = 'published'` on models (drafts are hidden from others)
 3. Check RLS policies haven't been dropped: `SELECT tablename, rowsecurity FROM pg_tables WHERE schemaname='public'`
@@ -182,10 +198,12 @@ If a page is showing empty when it should show data:
 ## PROTECTED ROUTES (redirect to auth if not logged in)
 
 These pages call `requireAuth()` on load:
+
 - `upload.html` — must be logged in to upload
 - `profile.html` — must be logged in to view own profile
 
 `requireAuth()` does:
+
 ```javascript
 const user = await checkSession();
 if (!user) {
@@ -225,13 +243,13 @@ Logging out on one device does not log out other devices (each has its own refre
 
 If `getSupabaseClient()` returns `null` (env vars missing or Supabase down):
 
-| Page | What user sees |
-|------|---------------|
-| Explore | 6 hardcoded model cards (Legal-SLM-3B, Med-SLM-4B, etc.) |
-| Model page | Hardcoded model detail |
-| Leaderboard | 5 hardcoded engineers |
-| Auth | "Running in demo mode" toast, login/signup buttons disabled |
-| Upload | Form shows but submit does nothing real |
+| Page        | What user sees                                              |
+| ----------- | ----------------------------------------------------------- |
+| Explore     | 6 hardcoded model cards (Legal-SLM-3B, Med-SLM-4B, etc.)    |
+| Model page  | Hardcoded model detail                                      |
+| Leaderboard | 5 hardcoded engineers                                       |
+| Auth        | "Running in demo mode" toast, login/signup buttons disabled |
+| Upload      | Form shows but submit does nothing real                     |
 
 Mock data is defined in `global.js` as `MOCK_MODELS`, `MOCK_ENGINEERS`, `MOCK_REVIEWS`.  
 This is intentional — the site always looks real even when Supabase is misconfigured.  
@@ -250,10 +268,10 @@ This is intentional — the site always looks real even when Supabase is misconf
    No build command — it just copies static files
 
 3. Verify after deploy:
-   → Visit /config.js → real URL appears
+   → Visit /js/config.js → real URL appears
    → Visit /explore → real models load (not mock data)
    → Open DevTools → Console → no errors
-   → Open DevTools → Network → check /config.js response header X-Config-Mode = production
+   → Open DevTools → Network → check /js/config.js response header X-Config-Mode = production
 
 4. If CSS/JS not updating (immutable cache):
    → CSS and JS are cached for 1 year in browser
@@ -285,21 +303,23 @@ nano .dev.vars
 wrangler pages dev . --port 8788
 
 # Visit http://localhost:8788
-# /config.js will be served by the worker using .dev.vars values
+# /js/config.js will be served by the worker using .dev.vars values
 # This exactly mirrors production — the only correct way to test auth locally
 ```
 
 Do not use `python3 -m http.server` for auth testing.  
-Without the worker, `/config.js` won't be served, auth won't work, you'll be in mock mode.
+Without the worker, `/js/config.js` won't be served, auth won't work, you'll be in mock mode.
 
 ---
 
 ## WHEN SOMETHING BREAKS — DIAGNOSIS ORDER
 
-**Step 1 — Check /config.js**
+**Step 1 — Check /js/config.js**
+
 ```
-https://your-domain.com/config.js
+https://your-domain.com/js/config.js
 ```
+
 - Real URL + key → Supabase is configured correctly
 - Empty strings → env vars missing in CF Pages
 - File not found → `_worker.js` not deployed or CF Pages not in Advanced Mode
@@ -308,22 +328,24 @@ https://your-domain.com/config.js
 Open DevTools → Console  
 Common errors and what they mean:
 
-| Error | Cause | Fix |
-|-------|-------|-----|
-| `supabase is not defined` | Supabase CDN blocked by CSP or network | Check _headers CSP, check internet |
-| `getSupabaseClient is not defined` | `supabase.js` loaded before `global.js` or failed | Check script order in HTML |
-| `Failed to fetch` on Supabase calls | Wrong URL or CORS | Check SUPABASE_URL is correct |
-| `JWT expired` | Access token expired, refresh failed | User session ended, log in again |
-| `new row violates row-level security` | RLS policy blocking insert | Check user is logged in + engineer_id = auth.uid() |
-| `duplicate key value` on reviews | User already reviewed this model | Expected — show "already reviewed" message |
-| `null` from `checkSession()` | User not logged in | Expected on public pages |
+| Error                                 | Cause                                             | Fix                                                |
+| ------------------------------------- | ------------------------------------------------- | -------------------------------------------------- |
+| `supabase is not defined`             | Supabase CDN blocked by CSP or network            | Check \_headers CSP, check internet                |
+| `getSupabaseClient is not defined`    | `supabase.js` loaded before `global.js` or failed | Check script order in HTML                         |
+| `Failed to fetch` on Supabase calls   | Wrong URL or CORS                                 | Check SUPABASE_URL is correct                      |
+| `JWT expired`                         | Access token expired, refresh failed              | User session ended, log in again                   |
+| `new row violates row-level security` | RLS policy blocking insert                        | Check user is logged in + engineer_id = auth.uid() |
+| `duplicate key value` on reviews      | User already reviewed this model                  | Expected — show "already reviewed" message         |
+| `null` from `checkSession()`          | User not logged in                                | Expected on public pages                           |
 
 **Step 3 — Check Supabase dashboard**
+
 - Authentication → Users: is the test user there?
 - Table Editor → models: is the data there?
 - Logs → API: what requests are coming in and what errors?
 
 **Step 4 — Check Cloudflare**
+
 - Workers & Pages → your project → Deployments: did the latest deploy succeed?
 - Functions → your project: is the worker running? Any errors in real-time logs?
 
@@ -331,14 +353,15 @@ Common errors and what they mean:
 
 ## SUPABASE FREE TIER LIMITS (watch these)
 
-| Limit | Value | Check at |
-|-------|-------|---------|
-| Monthly Active Users | 50,000 | Supabase → Settings → Usage |
-| Database size | 500 MB | Supabase → Settings → Usage |
-| Storage | 1 GB | Supabase → Storage |
-| Concurrent connections | 60 | Supabase → Settings → Database |
+| Limit                  | Value  | Check at                       |
+| ---------------------- | ------ | ------------------------------ |
+| Monthly Active Users   | 50,000 | Supabase → Settings → Usage    |
+| Database size          | 500 MB | Supabase → Settings → Usage    |
+| Storage                | 1 GB   | Supabase → Storage             |
+| Concurrent connections | 60     | Supabase → Settings → Database |
 
 When database hits ~400MB, run:
+
 ```sql
 SELECT pg_size_pretty(pg_database_size(current_database()));
 SELECT schemaname, tablename, pg_size_pretty(pg_total_relation_size(schemaname||'.'||tablename))
@@ -354,7 +377,7 @@ Upgrade path: Supabase Pro = $25/month. Gets you 8GB DB, 100K MAU.
 The `_worker.js` runs on Cloudflare's free Workers tier:  
 **100,000 requests/day** free.
 
-Every single page load hits `/config.js` once = 1 worker invocation.  
+Every single page load hits `/js/config.js` once = 1 worker invocation.  
 100,000 page loads/day on free tier.
 
 At 5 pages/session = 20,000 sessions/day.  
@@ -368,15 +391,15 @@ Upgrade: Cloudflare Workers Paid = $5/month. Gets you 10 million requests/day.
 
 These look like static files but aren't:
 
-| URL | What it is |
-|-----|-----------|
-| `/config.js` | Generated at edge by `_worker.js` on every request |
-| `/explore` | CF Pages serves `explore.html` (strips .html automatically) |
-| `/auth` | CF Pages serves `auth.html` |
-| `/model` | CF Pages serves `model.html` |
+| URL             | What it is                                                  |
+| --------------- | ----------------------------------------------------------- |
+| `/js/config.js` | Generated at edge by `_worker.js` on every request          |
+| `/explore`      | CF Pages serves `explore.html` (strips .html automatically) |
+| `/auth`         | CF Pages serves `auth.html`                                 |
+| `/model`        | CF Pages serves `model.html`                                |
 
-So `/config.js` will never appear in your repo's file listing. That is correct.  
-If you create a real `config.js` in the repo, it will be served as a static file and  
+So `/js/config.js` will never appear in your repo's file listing. That is correct.  
+If you create a real `js/config.js` in the repo, it will be served as a static file and  
 override the worker — **your Supabase key will be in git and visible to everyone.**
 
 ---
@@ -428,8 +451,8 @@ ENV VARS
 [ ] SITE_URL set in CF Pages (production) = your actual domain
 
 VERIFY LIVE
-[ ] /config.js → real URL appears (not empty string)
-[ ] /config.js → X-Config-Mode header = "production" (not "demo")
+[ ] /js/config.js → real URL appears (not empty string)
+[ ] /js/config.js → X-Config-Mode header = "production" (not "demo")
 [ ] Explore page → real models from DB (not mock data)
 [ ] Sign up with test email → confirmation email arrives
 [ ] Click confirmation link → lands on /auth, session created
@@ -439,7 +462,7 @@ VERIFY LIVE
 [ ] Submit a review → model rating updates (trigger working)
 [ ] Password reset → reset email arrives, link works, password updates
 [ ] GitHub OAuth → redirects to GitHub, back to site, profile created
-[ ] /config.js never appears in GitHub repo (gitignored)
+[ ] /js/config.js never appears in GitHub repo (gitignored)
 
 SECURITY
 [ ] No console errors mentioning security or CSP violations
@@ -450,7 +473,7 @@ SECURITY
 PERFORMANCE
 [ ] CSS/JS files have Cache-Control: immutable in Network tab
 [ ] HTML files have Cache-Control: must-revalidate in Network tab
-[ ] config.js has Cache-Control: no-store in Network tab
+[ ] js/config.js has Cache-Control: no-store in Network tab
 [ ] Explore page loads in under 2 seconds on mobile (test with throttling)
 
 DATABASE

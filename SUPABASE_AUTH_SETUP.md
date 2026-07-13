@@ -1,4 +1,5 @@
 # Supabase Auth Setup — slm-market.sannan.app
+
 Complete guide for Email + GitHub OAuth to work in production.
 
 ---
@@ -8,11 +9,13 @@ Complete guide for Email + GitHub OAuth to work in production.
 Supabase → Authentication → URL Configuration
 
 **Site URL** (set to exactly this):
+
 ```
 https://slm-market.sannan.app
 ```
 
 **Redirect URLs** (add ALL of these — click Add URL for each):
+
 ```
 https://slm-market.sannan.app
 https://slm-market.sannan.app/auth
@@ -47,6 +50,7 @@ Click **Register application**.
 Then click **Generate a new client secret**.
 
 Copy both:
+
 - **Client ID** (public)
 - **Client Secret** (secret — shown once)
 
@@ -57,6 +61,7 @@ Supabase → Authentication → Providers → GitHub
 Toggle **Enable GitHub** ON
 
 Paste:
+
 - Client ID → into Client ID field
 - Client Secret → into Client Secret field
 
@@ -69,16 +74,20 @@ Click **Save**.
 Supabase → Authentication → Email Templates
 
 ### Confirmation email template
+
 Change the redirect URL in the template from the default to:
+
 ```
 https://slm-market.sannan.app/auth
 ```
 
 ### SMTP (optional but recommended)
+
 By default Supabase sends emails from their own domain.
 For production, use your own SMTP:
 
 Supabase → Project Settings → Authentication → SMTP Settings:
+
 - Enable custom SMTP
 - Use SendGrid, Resend, or AWS SES
 - From email: `noreply@sannan.app`
@@ -94,6 +103,7 @@ With custom SMTP: unlimited.
 Supabase → SQL Editor → paste entire supabase-schema.sql → Run
 
 This creates:
+
 - users, models, reviews, bookmarks, downloads, activity, follows tables
 - All RLS policies
 - Triggers (rating recalc, score recalc)
@@ -105,10 +115,10 @@ This creates:
 
 CF Pages → slm-marketplace → Settings → Environment Variables
 
-| Variable | Value | Encrypt |
-|---|---|---|
-| SUPABASE_URL | https://xxxx.supabase.co | No |
-| SUPABASE_ANON_KEY | eyJhbGci... | Yes |
+| Variable          | Value                    | Encrypt |
+| ----------------- | ------------------------ | ------- |
+| SUPABASE_URL      | https://xxxx.supabase.co | No      |
+| SUPABASE_ANON_KEY | eyJhbGci...              | Yes     |
 
 Both in **Production** AND **Preview** environments.
 
@@ -119,6 +129,7 @@ After saving → Retry deployment.
 ## STEP 6 — Verify Auth Works
 
 ### Test email signup:
+
 1. Go to `https://slm-market.sannan.app/auth`
 2. Click Sign Up
 3. Fill in name, email, password
@@ -128,6 +139,7 @@ After saving → Retry deployment.
 7. Should see "Email confirmed! Welcome" toast → auto redirect to homepage
 
 ### Test GitHub OAuth:
+
 1. Go to `https://slm-market.sannan.app/auth`
 2. Click "Continue with GitHub"
 3. Authorise on GitHub
@@ -136,12 +148,15 @@ After saving → Retry deployment.
 6. Header shows your avatar initial
 
 ### If GitHub OAuth fails with "provider not enabled":
+
 → Go back to Step 2b and enable GitHub in Supabase providers
 
 ### If email link goes to wrong page:
+
 → Check Step 1 — Redirect URLs must include `https://slm-market.sannan.app/auth`
 
-### If /config.js returns empty:
+### If /js/config.js returns empty:
+
 → Check Step 5 — env vars must be set AND redeployment triggered
 
 ---
@@ -151,7 +166,8 @@ After saving → Retry deployment.
 Open browser DevTools → Network tab → go to /auth
 
 You should see:
-- `config.js` → response contains your Supabase URL ✓
+
+- `js/config.js` → response contains your Supabase URL ✓
 - `supabase.min.js` → 200 from jsdelivr ✓
 - No red requests in Network tab ✓
 

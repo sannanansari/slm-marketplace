@@ -1,5 +1,5 @@
 # Runtime config — contains Supabase keys, never commit
-config.js
+js/config.js
 .dev.vars
 
 # OS / editor

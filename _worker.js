@@ -1,7 +1,7 @@
 /**
  * _worker.js — Cloudflare Pages Advanced Mode Worker
  *
- * Handles ONE route: GET /config.js
+ * Handles ONE route: GET /js/config.js
  * Injects SUPABASE_URL, SUPABASE_ANON_KEY, and SITE_URL from CF Pages
  * env vars so no secrets ever appear in git.
  *
@@ -16,7 +16,7 @@ export default {
     const url = new URL(request.url);
 
     // ── Inject runtime config ──────────────────────────────────
-    if (url.pathname === '/config.js') {
+    if (url.pathname === '/js/config.js') {
       const supabaseUrl = env.SUPABASE_URL      || '';
       const supabaseKey = env.SUPABASE_ANON_KEY || '';
       const siteUrl     = env.SITE_URL          || url.origin;

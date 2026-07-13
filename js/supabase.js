@@ -1,7 +1,7 @@
 /**
  * supabase.js
  * Creates the Supabase client from window.__SLM_CONFIG
- * (injected by _worker.js at /config.js on Cloudflare Pages).
+ * (injected by _worker.js at /js/config.js on Cloudflare Pages).
  *
  * DIAGNOSTIC: Open browser DevTools → Console to see connection status.
  */
@@ -15,7 +15,7 @@
 
     // Detailed console diagnostics — helps debug connection issues
     if (!cfg) {
-      console.error('[SLM] window.__SLM_CONFIG is undefined. config.js did not load.');
+      console.error('[SLM] window.__SLM_CONFIG is undefined. js/config.js did not load.');
       console.error('[SLM] Fix: make sure the site is deployed as Cloudflare PAGES (not Workers).');
       return null;
     }
@@ -28,7 +28,7 @@
       return null;
     }
     if (cfg.url.includes('YOUR_PROJECT') || cfg.key.includes('YOUR_ANON')) {
-      console.error('[SLM] config.js still has placeholder values. Replace with real Supabase credentials.');
+      console.error('[SLM] js/config.js still has placeholder values. Replace with real Supabase credentials.');
       return null;
     }
 
@@ -69,6 +69,6 @@
   window.initSupabase      = initSupabase;
   window.getSupabaseClient = getSupabaseClient;
 
-  // Init on script execution (after config.js and CDN are both loaded)
+  // Init on script execution (after js/config.js and CDN are both loaded)
   initSupabase();
 }());

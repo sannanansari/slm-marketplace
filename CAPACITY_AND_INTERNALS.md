@@ -1,4 +1,5 @@
 # SLM Marketplace — Complete Capacity, Internals & Memory Guide
+
 **Everything the system does, every limit it has, every flow from click to database.**
 
 ---
@@ -7,16 +8,16 @@
 
 ### Free Tier Limits (what you're on at launch)
 
-| Service | Limit | What breaks when hit |
-|---------|-------|----------------------|
-| **Supabase — MAU** | 50,000 monthly active users | New logins stop working; existing sessions still work |
-| **Supabase — Database size** | 500 MB | Inserts fail with storage errors |
-| **Supabase — API requests** | Unlimited, but rate-limited at ~500 req/s per project | Requests queue then timeout under extreme burst |
-| **Supabase — Realtime connections** | 200 concurrent | Not currently used — no realtime in this app |
-| **Supabase — Storage** | 1 GB | File uploads fail (model files not stored here currently) |
-| **Cloudflare Pages — Requests** | Unlimited | Nothing — CF Pages has no request cap |
-| **Cloudflare Pages — Bandwidth** | Unlimited | Nothing |
-| **Cloudflare Workers — Requests** | 100,000/day free, then $0.50/million | `/config.js` is served by the worker on every page load |
+| Service                             | Limit                                                 | What breaks when hit                                       |
+| ----------------------------------- | ----------------------------------------------------- | ---------------------------------------------------------- |
+| **Supabase — MAU**                  | 50,000 monthly active users                           | New logins stop working; existing sessions still work      |
+| **Supabase — Database size**        | 500 MB                                                | Inserts fail with storage errors                           |
+| **Supabase — API requests**         | Unlimited, but rate-limited at ~500 req/s per project | Requests queue then timeout under extreme burst            |
+| **Supabase — Realtime connections** | 200 concurrent                                        | Not currently used — no realtime in this app               |
+| **Supabase — Storage**              | 1 GB                                                  | File uploads fail (model files not stored here currently)  |
+| **Cloudflare Pages — Requests**     | Unlimited                                             | Nothing — CF Pages has no request cap                      |
+| **Cloudflare Pages — Bandwidth**    | Unlimited                                             | Nothing                                                    |
+| **Cloudflare Workers — Requests**   | 100,000/day free, then $0.50/million                  | `/js/config.js` is served by the worker on every page load |
 
 ### Realistic Concurrent User Capacity
 
@@ -28,20 +29,20 @@ Limited by Supabase API throughput (~500 req/s on free tier).
 At 1 request per action, that is ~500 authenticated actions per second = ~30,000/minute.  
 In practice: comfortably handles **5,000–10,000 daily active users** with normal usage patterns.
 
-**The `/config.js` Cloudflare Worker:**  
+**The `/js/config.js` Cloudflare Worker:**  
 Every page load hits this once. At 100K requests/day free tier that is ~70 page loads/minute continuously.  
 At typical 5 pages/session: ~14 sessions/minute = ~840 sessions/hour = **~20,000 daily sessions on free**.  
 Upgrade to Cloudflare Workers Paid ($5/month): unlimited.
 
 ### When to Upgrade
 
-| Milestone | Action |
-|-----------|--------|
-| 1,000 MAU | Still on free — no action |
-| 10,000 MAU | Watch Supabase dashboard — still free |
+| Milestone               | Action                                     |
+| ----------------------- | ------------------------------------------ |
+| 1,000 MAU               | Still on free — no action                  |
+| 10,000 MAU              | Watch Supabase dashboard — still free      |
 | 20,000 daily page loads | Upgrade Cloudflare Workers to Paid ($5/mo) |
-| 50,000 MAU | Upgrade Supabase to Pro ($25/mo) |
-| Database hits 400MB | Upgrade Supabase or archive old data |
+| 50,000 MAU              | Upgrade Supabase to Pro ($25/mo)           |
+| Database hits 400MB     | Upgrade Supabase or archive old data       |
 
 ---
 
@@ -59,8 +60,8 @@ Cloudflare edge server (nearest to user)
 
 Browser parses HTML, encounters scripts in this order:
 
-  1. <script src="config.js">          ← SYNC, blocks parsing
-     → Cloudflare Worker intercepts /config.js
+  1. <script src="js/config.js">          ← SYNC, blocks parsing
+     → Cloudflare Worker intercepts /js/config.js
      → Reads env vars: SUPABASE_URL, SUPABASE_ANON_KEY, SITE_URL
      → Returns: window.__SLM_CONFIG = { url: "...", key: "...", siteUrl: "..." }
      → Cache-Control: no-store (always fresh)
@@ -548,7 +549,7 @@ TABLE: follows
 Runtime config chain:
   Cloudflare env var SUPABASE_URL
     → _worker.js reads it at edge
-    → Serves /config.js with:
+    → Serves /js/config.js with:
         window.__SLM_CONFIG = { url, key, siteUrl }
     → supabase.js reads window.__SLM_CONFIG
     → Creates Supabase client with url + key
@@ -559,7 +560,7 @@ For local dev with wrangler:
   .dev.vars (gitignored) → same chain as above
 
 For local dev without wrangler (demo mode):
-  No config.js served → __SLM_CONFIG = { url:"", key:"", siteUrl:"" }
+  No js/config.js served → __SLM_CONFIG = { url:"", key:"", siteUrl:"" }
   → getSupabaseClient() returns null
   → All pages fall back to MOCK_MODELS
   → Auth forms show "Demo mode" toasts
@@ -567,22 +568,22 @@ For local dev without wrangler (demo mode):
 
 ### Full Environment Variable Reference
 
-| Variable | Required | Where set | Used by |
-|----------|----------|-----------|---------|
-| `SUPABASE_URL` | Yes | CF Pages env vars + `.dev.vars` | `_worker.js` → `config.js` → `supabase.js` |
-| `SUPABASE_ANON_KEY` | Yes | CF Pages env vars + `.dev.vars` | `_worker.js` → `config.js` → `supabase.js` |
-| `SITE_URL` | Yes for auth | CF Pages env vars + `.dev.vars` | `_worker.js` → `config.js` → `auth.js getSiteUrl()` |
+| Variable            | Required     | Where set                       | Used by                                                |
+| ------------------- | ------------ | ------------------------------- | ------------------------------------------------------ |
+| `SUPABASE_URL`      | Yes          | CF Pages env vars + `.dev.vars` | `_worker.js` → `js/config.js` → `supabase.js`          |
+| `SUPABASE_ANON_KEY` | Yes          | CF Pages env vars + `.dev.vars` | `_worker.js` → `js/config.js` → `supabase.js`          |
+| `SITE_URL`          | Yes for auth | CF Pages env vars + `.dev.vars` | `_worker.js` → `js/config.js` → `auth.js getSiteUrl()` |
 
 ### Supabase Auth Settings That Must Match
 
-| Setting | Value | Where |
-|---------|-------|-------|
-| Site URL | `https://slm-market.sannan.app` | Supabase → Auth → Settings |
-| Redirect URLs | `https://slm-market.sannan.app/auth` | Supabase → Auth → Settings |
-| Redirect URLs | `http://localhost:8788/auth` | Supabase → Auth → Settings |
-| GitHub callback | `https://xxxx.supabase.co/auth/v1/callback` | GitHub OAuth App settings |
-| Email confirm redirect | `{{ .SiteURL }}/auth` | Supabase → Auth → Email Templates |
-| Password reset redirect | `{{ .SiteURL }}/auth?mode=reset` | Supabase → Auth → Email Templates |
+| Setting                 | Value                                       | Where                             |
+| ----------------------- | ------------------------------------------- | --------------------------------- |
+| Site URL                | `https://slm-market.sannan.app`             | Supabase → Auth → Settings        |
+| Redirect URLs           | `https://slm-market.sannan.app/auth`        | Supabase → Auth → Settings        |
+| Redirect URLs           | `http://localhost:8788/auth`                | Supabase → Auth → Settings        |
+| GitHub callback         | `https://xxxx.supabase.co/auth/v1/callback` | GitHub OAuth App settings         |
+| Email confirm redirect  | `{{ .SiteURL }}/auth`                       | Supabase → Auth → Email Templates |
+| Password reset redirect | `{{ .SiteURL }}/auth?mode=reset`            | Supabase → Auth → Email Templates |
 
 ---
 
@@ -603,7 +604,7 @@ CACHED BY CLOUDFLARE (edge CDN):
   /docs/docs.js       → 1 year immutable
 
 NOT CACHED:
-  /config.js          → Cache-Control: no-store
+  /js/config.js          → Cache-Control: no-store
                         Fetched fresh on every single page load
                         This is correct — it contains the Supabase key
 
@@ -658,22 +659,22 @@ In model.js, profile.js, upload.js:
 
 ## PART 8 — SECURITY CHECKLIST (WHAT PROTECTS WHAT)
 
-| Attack | Protection | Where |
-|--------|-----------|-------|
-| XSS via user content | `sanitize(str)` escapes all HTML before innerHTML | `global.js:sanitize()` |
-| Open redirect after login | `safeRedirect()` only allows paths starting with `/` | `global.js:safeRedirect()` |
-| CSRF on API calls | Supabase uses Bearer token auth (not cookies) — CSRF doesn't apply | Supabase design |
-| Supabase key in git | Key never in repo — injected at edge by `_worker.js` | `_worker.js` |
-| Anon key exposure (expected) | Anon key is safe by design — RLS enforces authorization | Supabase RLS |
-| Row access without auth | RLS on every table — queries return only permitted rows | `supabase-schema.sql` |
-| Clickjacking | `X-Frame-Options: DENY` | `_headers` |
-| MIME sniffing | `X-Content-Type-Options: nosniff` | `_headers` |
-| XSS via external scripts | CSP `script-src 'self' cdn.jsdelivr.net` only | `_headers` |
-| Supabase WS hijack | CSP `connect-src *.supabase.co wss://*.supabase.co` | `_headers` |
-| Password brute force | Supabase built-in rate limiting on `/auth/v1/token` | Supabase |
-| Replay with expired token | `autoRefreshToken: true`, server invalidates on signOut | Supabase SDK |
-| User uploads bad model data | Form validation + Supabase column constraints | `upload.js` + schema |
-| SQL injection | Supabase JS SDK uses parameterised queries — not possible | Supabase SDK |
+| Attack                       | Protection                                                         | Where                      |
+| ---------------------------- | ------------------------------------------------------------------ | -------------------------- |
+| XSS via user content         | `sanitize(str)` escapes all HTML before innerHTML                  | `global.js:sanitize()`     |
+| Open redirect after login    | `safeRedirect()` only allows paths starting with `/`               | `global.js:safeRedirect()` |
+| CSRF on API calls            | Supabase uses Bearer token auth (not cookies) — CSRF doesn't apply | Supabase design            |
+| Supabase key in git          | Key never in repo — injected at edge by `_worker.js`               | `_worker.js`               |
+| Anon key exposure (expected) | Anon key is safe by design — RLS enforces authorization            | Supabase RLS               |
+| Row access without auth      | RLS on every table — queries return only permitted rows            | `supabase-schema.sql`      |
+| Clickjacking                 | `X-Frame-Options: DENY`                                            | `_headers`                 |
+| MIME sniffing                | `X-Content-Type-Options: nosniff`                                  | `_headers`                 |
+| XSS via external scripts     | CSP `script-src 'self' cdn.jsdelivr.net` only                      | `_headers`                 |
+| Supabase WS hijack           | CSP `connect-src *.supabase.co wss://*.supabase.co`                | `_headers`                 |
+| Password brute force         | Supabase built-in rate limiting on `/auth/v1/token`                | Supabase                   |
+| Replay with expired token    | `autoRefreshToken: true`, server invalidates on signOut            | Supabase SDK               |
+| User uploads bad model data  | Form validation + Supabase column constraints                      | `upload.js` + schema       |
+| SQL injection                | Supabase JS SDK uses parameterised queries — not possible          | Supabase SDK               |
 
 ---
 
@@ -693,7 +694,7 @@ In model.js, profile.js, upload.js:
 
 7. **No email after signup via GitHub OAuth** — `engineer_name` may be null if GitHub doesn't share it. The fallback chain handles this: `full_name → name → user_name → email prefix`.
 
-8. **`config.js` loaded synchronously** — blocks HTML parsing on every page load. It's a ~100-byte file served from CF edge so it's fast, but it's a render-blocking script by design (required so Supabase SDK has config before it loads).
+8. **`js/config.js` loaded synchronously** — blocks HTML parsing on every page load. It's a ~100-byte file served from CF edge so it's fast, but it's a render-blocking script by design (required so Supabase SDK has config before it loads).
 
 9. **No pagination on profile page** — a user with 500 models will load all 500 at once. Add `.limit(20)` and pagination in `profile.js` before this becomes a problem.
 
@@ -704,6 +705,7 @@ In model.js, profile.js, upload.js:
 ## QUICK REFERENCE — JS Functions by File
 
 ### global.js (available on every page)
+
 ```
 sanitize(str)              → escape HTML for safe innerHTML
 formatNumber(n)            → 1500 → "1.5K"
@@ -723,12 +725,14 @@ renderModelIcon(letter, cat)→ colored avatar square HTML
 ```
 
 ### supabase.js (available on every page)
+
 ```
 getSupabaseClient()        → Supabase client | null
 initSupabase()             → create client from __SLM_CONFIG
 ```
 
 ### auth.js (auth.html only)
+
 ```
 handleLogin()              → email/password sign in
 handleSignup()             → create account
@@ -741,6 +745,7 @@ getSiteUrl()               → reads __SLM_CONFIG.siteUrl
 ```
 
 ### explore.js (explore.html only)
+
 ```
 initExplorePage()          → boot: header, filters, load
 loadModels()               → Supabase query or mock fallback
@@ -753,6 +758,7 @@ clearAllFilters()          → reset all state + reload
 ```
 
 ### upload.js (upload.html only)
+
 ```
 initUploadPage()           → boot: header, requireAuth, wireForm
 validateForm()             → returns { valid, errors }

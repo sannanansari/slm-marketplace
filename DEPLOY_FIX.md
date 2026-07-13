@@ -3,6 +3,7 @@
 ## What Went Wrong
 
 Cloudflare deployed your project as a **Worker** instead of **Pages**.
+
 - Workers don't serve static files → every URL 404s
 - The `wrangler.toml` file in the repo caused this
 - Cloudflare saw `wrangler.toml` and treated it as a Worker project
@@ -41,27 +42,28 @@ git push
 4. Select your `slm-marketplace` GitHub repository
 5. Configure build settings:
 
-| Setting | Value |
-|---------|-------|
-| Project name | `slm-marketplace` |
-| Production branch | `main` |
-| Framework preset | `None` |
-| Build command | *(leave completely empty)* |
-| Build output directory | `/` |
+| Setting                | Value                      |
+| ---------------------- | -------------------------- |
+| Project name           | `slm-marketplace`          |
+| Production branch      | `main`                     |
+| Framework preset       | `None`                     |
+| Build command          | _(leave completely empty)_ |
+| Build output directory | `/`                        |
 
 6. Click **Save and Deploy**
 
 ### Step 4 — Add environment variables
 
 After deploy succeeds:
+
 1. Pages project → **Settings** → **Environment variables**
 2. Add these 3 variables for **Production**:
 
-| Variable | Value |
-|----------|-------|
-| `SUPABASE_URL` | `https://your-project.supabase.co` |
-| `SUPABASE_ANON_KEY` | `eyJhbGci...` (your anon key) |
-| `SITE_URL` | `https://slm-market.sannan.app` |
+| Variable            | Value                              |
+| ------------------- | ---------------------------------- |
+| `SUPABASE_URL`      | `https://your-project.supabase.co` |
+| `SUPABASE_ANON_KEY` | `eyJhbGci...` (your anon key)      |
+| `SITE_URL`          | `https://slm-market.sannan.app`    |
 
 3. Click **Save**
 4. Go to **Deployments** → three dots on latest → **Retry deployment**
@@ -75,21 +77,21 @@ Visit these URLs after deploy:
 ```
 ✅ https://slm-market.sannan.app/           → home page loads
 ✅ https://slm-market.sannan.app/explore    → explore page loads
-✅ https://slm-market.sannan.app/config.js  → shows your Supabase URL
+✅ https://slm-market.sannan.app/js/config.js  → shows your Supabase URL
 ```
 
-If `/config.js` shows your real Supabase URL — everything is working.
+If `/js/config.js` shows your real Supabase URL — everything is working.
 
 ---
 
 ## Why This Happened
 
-| File | Purpose | Should be in git? |
-|------|---------|-------------------|
-| `_worker.js` | Cloudflare Pages edge function (auto-detected by Pages) | ✅ YES |
-| `_headers` | HTTP security headers for Pages | ✅ YES |
-| `_redirects` | URL redirects for Pages | ✅ YES |
-| `wrangler.toml` | Local dev config — **breaks Pages if pushed** | ❌ NO (now gitignored) |
+| File            | Purpose                                                 | Should be in git?      |
+| --------------- | ------------------------------------------------------- | ---------------------- |
+| `_worker.js`    | Cloudflare Pages edge function (auto-detected by Pages) | ✅ YES                 |
+| `_headers`      | HTTP security headers for Pages                         | ✅ YES                 |
+| `_redirects`    | URL redirects for Pages                                 | ✅ YES                 |
+| `wrangler.toml` | Local dev config — **breaks Pages if pushed**           | ❌ NO (now gitignored) |
 
 The `_worker.js` in the root is how Cloudflare Pages knows to run custom logic.
 It is NOT the same as a standalone Worker. Pages detects it automatically.
@@ -108,7 +110,7 @@ Cloudflare WORKER (what you had — wrong):
 
 Cloudflare PAGES (what you need — correct):
   → Serves static files from your GitHub repo
-  → ALSO runs _worker.js for /config.js
+  → ALSO runs _worker.js for /js/config.js
   → URL: pages.dev/... or your custom domain
   → Result: site works correctly
 ```

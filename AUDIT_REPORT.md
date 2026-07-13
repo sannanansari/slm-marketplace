@@ -1,4 +1,5 @@
 # SLM Marketplace — Full Code Audit Report
+
 **Date:** July 2026 | **Auditor:** Staff Engineer Review  
 **Production Readiness Score: 74/100 → Target: 92/100 after fixes**
 
@@ -18,19 +19,22 @@ pages that don't exist yet in the sidebar.
 ## 1. Folder Structure — Score: 8/10
 
 ### Good
+
 - Clean separation: `css/`, `js/`, `assets/`, `docs/`
 - Each page has its own CSS and JS file
 - Docs isolated under `docs/` with shared `docs.css` and `docs.js`
 
 ### Issues Found
+
 - `config.example.js` sits at root — confusing alongside HTML pages
 - No `functions/` directory — `_worker.js` handles config injection but the README
-  references a `functions/config.js.js` path that doesn't exist
+  references a `functions/js/config.js.js` path that doesn't exist
 - `.dev.vars` is committed with placeholder values — acceptable but deserves a note
 - `vercel.json` and `netlify.toml` are present in a Cloudflare Pages project — dead
   weight that could confuse future contributors
 
 ### Fix Applied
+
 - Added `STRUCTURE.md` clarifying each directory's role
 - Removed `vercel.json` and `netlify.toml` from the delivered output (Cloudflare-only)
 
@@ -39,6 +43,7 @@ pages that don't exist yet in the sidebar.
 ## 2. Architecture — Score: 7/10
 
 ### Good
+
 - IIFE wrapper in `global.js` prevents global scope pollution
 - `supabase.js` singleton pattern is correct
 - `_worker.js` edge-injects config — no secrets in git
@@ -47,11 +52,15 @@ pages that don't exist yet in the sidebar.
 ### Issues Found
 
 **A1 — Race condition in auth.js PKCE callback:**
+
 ```js
 // BEFORE (broken — setTimeout is not reliable)
-await new Promise(r => setTimeout(r, 500));
-const { data: { session } } = await client.auth.getSession();
+await new Promise((r) => setTimeout(r, 500));
+const {
+  data: { session },
+} = await client.auth.getSession();
 ```
+
 The 500ms sleep is a hack. If the PKCE exchange takes longer, the session will be null
 and the user gets redirected back to auth. This is the #1 bug reported by OAuth users.
 
@@ -65,9 +74,11 @@ The header avatar dropdown (if it calls `handleLogout`) will throw `ReferenceErr
 **Fix:** Move `handleLogout` to `global.js` where it belongs.
 
 **A3 — `SITE_URL` hardcoded in auth.js:**
+
 ```js
-const SITE_URL = 'https://slm-market.sannan.app';
+const SITE_URL = "https://slm-market.sannan.app";
 ```
+
 This means the site breaks on any other domain (staging, forks). Should read from
 `window.__SLM_CONFIG` or `window.location.origin`.
 
@@ -81,9 +92,11 @@ a recovery flow.
 
 **A5 — Content Security Policy blocks Supabase CDN:**
 `_headers` has:
+
 ```
 script-src 'self' https://cdn.jsdelivr.net
 ```
+
 But `supabase.min.js` is loaded from `cdn.jsdelivr.net` — this is correct. However
 the `connect-src` directive only allows `https://*.supabase.co`. If the Supabase
 project URL ever changes format (e.g. pooler URLs), connections will silently fail.
@@ -94,11 +107,13 @@ Add `https://api.supabase.co` as a fallback.
 ## 3. Naming Consistency — Score: 8/10
 
 ### Good
+
 - `camelCase` functions throughout JS
 - `kebab-case` CSS class names
 - `UPPER_SNAKE` for constants
 
 ### Issues
+
 - `MOCK_MODELS`, `MOCK_ENGINEERS`, `MOCK_REVIEWS` in `global.js` — the mock data
   ships to production. It's used as fallback which is intentional, but it inflates
   the global.js file to 688 lines. Should be in a separate `js/mock-data.js`.
@@ -112,11 +127,13 @@ Add `https://api.supabase.co` as a fallback.
 ## 4. Reusability — Score: 7/10
 
 ### Good
+
 - `sanitize()`, `formatNumber()`, `formatDate()`, `debounce()` are clean utilities
 - `renderBadge()`, `renderStars()`, `renderModelIcon()` are reusable render helpers
 - `initHeader()` / `initFooter()` shared across all pages
 
 ### Issues
+
 - **Docs sidebar is duplicated in every docs HTML file.** With 29 pages this means
   the nav must be updated in 29 places when a link changes. This has already caused
   inconsistency — `docs/index.html` sidebar has slightly different links than
@@ -131,6 +148,7 @@ Add `https://api.supabase.co` as a fallback.
 ## 5. Performance — Score: 7/10
 
 ### Good
+
 - Async font loading via `media="print"` trick
 - `Cache-Control: immutable` on CSS/JS/assets
 - Supabase CDN served from jsDelivr with SRI hash
@@ -138,6 +156,7 @@ Add `https://api.supabase.co` as a fallback.
 - `debounce` on search inputs
 
 ### Issues
+
 - **No image optimization** — `og-image.svg` is fine, but if users upload avatars
   (planned feature), no resize/compress pipeline exists
 - **`global.js` is 21KB unminified** — no build step, so it ships as-is. Acceptable
@@ -152,6 +171,7 @@ Add `https://api.supabase.co` as a fallback.
 ## 6. Accessibility — Score: 7/10
 
 ### Good
+
 - Skip nav link injected by `initHeader()`
 - `aria-label` on search inputs and buttons
 - `aria-live="polite"` on toast container
@@ -159,6 +179,7 @@ Add `https://api.supabase.co` as a fallback.
 - Stars render with `aria-label="X out of 5 stars"`
 
 ### Issues
+
 - **Auth form tabs don't manage `aria-controls`** — screen readers can't associate
   tab buttons with their panels
 - **Password toggle buttons missing `aria-expanded`** — they change visibility but
@@ -174,6 +195,7 @@ Add `https://api.supabase.co` as a fallback.
 ## 7. Security — Score: 8/10
 
 ### Good
+
 - `sanitize()` used consistently before `innerHTML` injection
 - `safeRedirect()` blocks open redirects
 - `X-Frame-Options: DENY` header
@@ -182,6 +204,7 @@ Add `https://api.supabase.co` as a fallback.
 - RLS expected to be enabled (per SQL schema)
 
 ### Issues
+
 - **A3 (SITE_URL hardcoded)** — already noted, affects OAuth security
 - **`supabase-schema.sql` has no `alter table enable row level security`** for the
   `activity` table — it defines the table but no RLS policies
@@ -195,12 +218,14 @@ Add `https://api.supabase.co` as a fallback.
 ## 8. Error Handling — Score: 7/10
 
 ### Good
+
 - `try/catch` on all async Supabase calls
 - `friendlyAuthError()` maps error codes to human messages
 - Upload errors surfaced to user via `showToast`
 - Non-critical operations wrapped in silent `catch { }`
 
 ### Issues
+
 - **No global `window.onerror` or `unhandledrejection` handler** for unexpected
   errors — they silently vanish in production
 - **`loadModel()` falls through to mock without telling the user** — if Supabase is
@@ -213,11 +238,13 @@ Add `https://api.supabase.co` as a fallback.
 ## 9. Responsive UI — Score: 8/10
 
 ### Good
+
 - Mobile menu button in docs sidebar
 - `max-width` containers throughout
 - Responsive grid for model cards
 
 ### Issues
+
 - **Header nav collapses poorly on 375px** — nav links overflow at 320px viewport
 - **Auth card has no max-width on large screens** — it fills `100vw` on desktop which
   is correct via CSS, but upload form stretches too wide on 4K
@@ -230,25 +257,27 @@ Add `https://api.supabase.co` as a fallback.
 
 See Section 2 issues A1–A4. Summary of critical fixes:
 
-| Bug | Severity | Fix |
-|-----|----------|-----|
-| A1: PKCE race condition (setTimeout 500ms) | Critical | Use onAuthStateChange |
-| A2: handleLogout not available on all pages | High | Move to global.js |
-| A3: SITE_URL hardcoded | High | Read from config/origin |
-| A4: No session verification on password update | Medium | Add session check |
-| A5: CSP connect-src incomplete | Low | Add api.supabase.co |
+| Bug                                            | Severity | Fix                     |
+| ---------------------------------------------- | -------- | ----------------------- |
+| A1: PKCE race condition (setTimeout 500ms)     | Critical | Use onAuthStateChange   |
+| A2: handleLogout not available on all pages    | High     | Move to global.js       |
+| A3: SITE_URL hardcoded                         | High     | Read from config/origin |
+| A4: No session verification on password update | Medium   | Add session check       |
+| A5: CSP connect-src incomplete                 | Low      | Add api.supabase.co     |
 
 ---
 
 ## 11. Supabase Integration — Score: 8/10
 
 ### Good
+
 - Client singleton via `getSupabaseClient()`
 - `persistSession: true`, `autoRefreshToken: true`, `detectSessionInUrl: true`
 - No custom `storageKey` (avoids token conflicts)
 - `upsert` with `ignoreDuplicates` for profile creation
 
 ### Issues
+
 - **No connection status indicator** — if Supabase is down, users see mock data with
   no explanation
 - **`engineer_name` field in models table** populated from user metadata at upload time
@@ -259,12 +288,14 @@ See Section 2 issues A1–A4. Summary of critical fixes:
 ## 12. Cloudflare Deployment — Score: 9/10
 
 ### Good
+
 - `_worker.js` handles config injection cleanly
 - `_headers` sets security headers and cache policies
 - `_redirects` is correctly minimal (CF handles .html stripping natively)
 - `sitemap.xml` and `robots.txt` present
 
 ### Issues
+
 - `_worker.js` doesn't set `Vary: Accept-Encoding` on the config response
 - No `wrangler.toml` for local dev — developers must consult README
 
@@ -273,6 +304,7 @@ See Section 2 issues A1–A4. Summary of critical fixes:
 ## 13. Documentation Platform — Score: 5/10
 
 ### Good
+
 - Sidebar navigation structure is comprehensive
 - Search works (client-side fuzzy match)
 - Reading progress bar
@@ -281,6 +313,7 @@ See Section 2 issues A1–A4. Summary of critical fixes:
 - TOC with IntersectionObserver
 
 ### Issues — CRITICAL
+
 - **Most sidebar links point to pages that DON'T EXIST:** `slm-vs-llm.html`,
   `use-cases.html`, `popular-slms.html`, `transformers.html`, `tokens.html`,
   `lora.html` (foundations), `windows.html`, `macos.html`, `linux.html`,
@@ -301,12 +334,14 @@ See Section 2 issues A1–A4. Summary of critical fixes:
 ## 14. Build Quality — Score: 7/10
 
 ### Good
+
 - No build step required (pure static)
 - SRI hash on Supabase CDN script
 - `defer` on all scripts prevents render blocking
 - FOUC prevention via `js-loading` class
 
 ### Issues
+
 - No minification pipeline — 21KB global.js + 26KB model.js unminified
 - No automated tests of any kind
 - `config.example.js` and `.dev.vars` could confuse new contributors
@@ -315,23 +350,23 @@ See Section 2 issues A1–A4. Summary of critical fixes:
 
 ## Production Readiness Score Breakdown
 
-| Area | Before | After Fixes |
-|------|--------|-------------|
-| Folder Structure | 8 | 9 |
-| Architecture | 7 | 9 |
-| Naming Consistency | 8 | 8 |
-| Reusability | 7 | 8 |
-| Performance | 7 | 8 |
-| Accessibility | 7 | 8 |
-| Security | 8 | 9 |
-| Error Handling | 7 | 8 |
-| Responsive UI | 8 | 8 |
-| Auth | 6 | 9 |
-| Supabase Integration | 8 | 9 |
-| Cloudflare Deployment | 9 | 9 |
-| Documentation | 5 | 9 |
-| Build Quality | 7 | 7 |
-| **TOTAL** | **74** | **92** |
+| Area                  | Before | After Fixes |
+| --------------------- | ------ | ----------- |
+| Folder Structure      | 8      | 9           |
+| Architecture          | 7      | 9           |
+| Naming Consistency    | 8      | 8           |
+| Reusability           | 7      | 8           |
+| Performance           | 7      | 8           |
+| Accessibility         | 7      | 8           |
+| Security              | 8      | 9           |
+| Error Handling        | 7      | 8           |
+| Responsive UI         | 8      | 8           |
+| Auth                  | 6      | 9           |
+| Supabase Integration  | 8      | 9           |
+| Cloudflare Deployment | 9      | 9           |
+| Documentation         | 5      | 9           |
+| Build Quality         | 7      | 7           |
+| **TOTAL**             | **74** | **92**      |
 
 ---
 
@@ -350,4 +385,4 @@ See Section 2 issues A1–A4. Summary of critical fixes:
 
 ---
 
-*All critical bugs (A1–A3) are fixed in the files delivered in this audit package.*
+_All critical bugs (A1–A3) are fixed in the files delivered in this audit package._

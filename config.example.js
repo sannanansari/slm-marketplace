@@ -4,9 +4,9 @@
  * ─────────────────────────────────────────────────────────────
  * ON CLOUDFLARE PAGES (production / preview):
  * ─────────────────────────────────────────────────────────────
- *   config.js is served by _worker.js at runtime.
+ *   js/config.js is served by _worker.js at runtime.
  *   It injects your env vars from CF Pages → Settings → Environment Variables.
- *   You do NOT need to create config.js manually.
+ *   You do NOT need to create js/config.js manually.
  *
  *   Required env vars (set in CF Pages dashboard):
  *     SUPABASE_URL      = https://xxxx.supabase.co
@@ -21,14 +21,14 @@
  *   3. wrangler pages dev . --port 8788
  *   4. Visit http://localhost:8788
  *
- *   The worker reads .dev.vars and serves /config.js automatically.
+ *   The worker reads .dev.vars and serves /js/config.js automatically.
  *   This exactly mirrors what happens in production.
  *
  * ─────────────────────────────────────────────────────────────
  * FALLBACK — plain static server (demo/mock data only):
  * ─────────────────────────────────────────────────────────────
- *   1. cp config.example.js config.js
- *   2. Fill in real values below (config.js is gitignored)
+ *   1. cp config.example.js js/config.js
+ *   2. Fill in real values below (js/config.js is gitignored)
  *   3. python3 -m http.server 8000
  *
  *   Note: OAuth and email redirects will not work correctly
