@@ -1,5 +1,5 @@
 window.__SLM_CONFIG = {
   url:     'https://tfvxxgtlygqzvethnopx.supabase.co',
-  key:     'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRmdnh4Z3RseWdxenZldGhub3B4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDJpYXQiOjE3NDJpYXQiOjE3NDJ....',
+  key:     'sb_publishable_sBWkp2p1la_VLeGjiTLw9w_oFe6xDxz',
   siteUrl: 'https://slm-marketplace.sannan.app'
 };
